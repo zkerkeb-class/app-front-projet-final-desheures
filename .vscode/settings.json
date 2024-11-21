@@ -1,5 +1,8 @@
 {
   "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   "prettier.printWidth": 80,
   "prettier.semi": true,
   "prettier.tabWidth": 2,
