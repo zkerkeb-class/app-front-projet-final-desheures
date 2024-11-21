@@ -1,0 +1,73 @@
+// ------------------------------+
+//
+//            FONT
+//
+// ------------------------------+
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+// ------------------------------+
+//
+//            VARIABLE
+//
+// ------------------------------+
+
+:root {
+  /* Colors */
+  --white-color: #f8f8ff;
+  --white-color-rgba: rgba(248, 248, 255, 0.6);
+  --black-color: #2A2F35;
+  --text-color: #25455B;
+  --main-color: #4999D7;
+  --second-color: #D2B395;
+  --third-color: #87A5A7;
+  --gradient-color-to-right: linear-gradient(to right, var(--main-color), var(--text-color));
+  --gradient-color-to-bottom: linear-gradient(to bottom, var(--main-color), var(--text-color));
+
+  /* Borders */
+  --small-border-radius: 4px;
+  --border-radius: 10px;
+  --border-radius-big: 40px;
+  --circle-border-radius: 50%;
+  --border-width: 1px;
+  --border-width-big: 2px;
+
+  /* Fonts */
+  --first-font: 'Cinzel', serif;
+  --second-font: 'Lexend', sans-serif;
+
+  /* Font Weight */
+  --font-weight-regular: normal;
+  --font-weight-bold: 600;
+  --font-weight-extrabold: 900;
+
+  /* Font Size */
+  --small-small-font-size: 12px;
+  --small-font-size: 14px;
+  --font-size: 16px;
+  --medium-font-size: 18px;
+  --big-font-size: 24px;
+  --title-font-size: 32px;
+
+  /* Text */
+  --text-indent: 20px;
+  --letter-spacing: normal;
+  --line-height: normal;
+
+  /* Animations */
+  --transition: 0.6s all;
+  --transition-time: 0.6s;
+  --big-transition-time: 2.8s;
+
+  /* Margin & Padding */
+  --small-margin-padding: 10px;
+  --margin-padding: 20px;
+  --big-margin-padding: 40px;
+
+  /* Opacity */
+  --less-opacity: 0.6;
+
+  /* zIndex */
+  --top-zindex: 100;
+}
