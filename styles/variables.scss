@@ -4,7 +4,6 @@
 //
 // ------------------------------+
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
 // ------------------------------+
@@ -16,14 +15,19 @@
 :root {
   /* Colors */
   --white-color: #f8f8ff;
-  --white-color-rgba: rgba(248, 248, 255, 0.6);
-  --black-color: #2A2F35;
-  --text-color: #25455B;
-  --main-color: #4999D7;
-  --second-color: #D2B395;
-  --third-color: #87A5A7;
-  --gradient-color-to-right: linear-gradient(to right, var(--main-color), var(--text-color));
-  --gradient-color-to-bottom: linear-gradient(to bottom, var(--main-color), var(--text-color));
+  --black-color: #1c1c1c;
+  --main-color: darkblue;
+  --second-color: purple;
+  --gradient-color-to-right: linear-gradient(
+    to right,
+    var(--main-color),
+    var(--second-color)
+  );
+  --gradient-color-to-bottom: linear-gradient(
+    to bottom,
+    var(--main-color),
+    var(--second-color)
+  );
 
   /* Borders */
   --small-border-radius: 4px;
@@ -34,8 +38,7 @@
   --border-width-big: 2px;
 
   /* Fonts */
-  --first-font: 'Cinzel', serif;
-  --second-font: 'Lexend', sans-serif;
+  --first-font: 'Lexend', sans-serif;
 
   /* Font Weight */
   --font-weight-regular: normal;
@@ -58,7 +61,6 @@
   /* Animations */
   --transition: 0.6s all;
   --transition-time: 0.6s;
-  --big-transition-time: 2.8s;
 
   /* Margin & Padding */
   --small-margin-padding: 10px;
