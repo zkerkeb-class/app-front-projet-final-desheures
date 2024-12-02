@@ -7,13 +7,7 @@ export default function NavBar({ darkMode, toggleDarkMode }) {
   return (
     <div className={style.navBar}>
       <div className={style.logo}>
-        <Image
-          // src={`/images/cover${index + 1}.jpg`}
-          src={Logo.src}
-          alt={`DesHeures`}
-          width={20}
-          height={0}
-        />
+        <Image src={Logo.src} alt={`DesHeures`} width={20} height={0} />
         <span>Des Heures</span>
       </div>
 

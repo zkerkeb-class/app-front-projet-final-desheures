@@ -7,17 +7,25 @@
 .global_container {
   width: 100vw;
   height: 100vh;
-  transition:
-    background-color var(--transition-time) ease,
-    color var(--transition-time) ease;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .webgl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+    z-index: 1;
+  }
 }
 
-.global_container.dark {
-  background-color: var(--black-color);
-  color: var(--white-color);
-}
+// .global_container.dark {
+//   color: var(--white-color);
+// }
 
-.global_container.light {
-  background-color: var(--white-color);
-  color: var(--black-color);
-}
+// .global_container.light {
+//   color: var(--black-color);
+// }

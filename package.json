@@ -10,9 +10,12 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "dat.gui": "^0.7.9",
+    "gsap": "^3.12.5",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
-    "sass": "^1.81.0"
+    "sass": "^1.81.0",
+    "three": "^0.171.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.9",

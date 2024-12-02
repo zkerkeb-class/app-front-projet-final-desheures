@@ -31,7 +31,6 @@ a {
 
 h1 {
   font-family: var(--first-font);
-  font-weight: var(--font-weight-extrabold);
 }
 
 h2,
@@ -41,6 +40,6 @@ h5,
 h6,
 span,
 p {
-  font-family: var(--first-font);
+  font-family: var(--second-font);
   font-weight: var(--font-weight-regular);
 }
