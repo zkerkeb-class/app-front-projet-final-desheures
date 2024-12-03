@@ -11,34 +11,50 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
 import style from 'styles/page.module.scss';
-import NavBar from 'components/Layouts/NavBar/page';
+import NavBar from 'components/Layouts/NavBar/page.js';
+import Loader from 'components/Layouts/Loading_Page/page.js';
 
 const Home = () => {
+  // Loader
+  const [isLoading, setLoader] = useState(true);
+
   // Handle Dark or Light Mode
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+  const [rgbColor, setRGBColor] = useState(0.04);
 
   // Color
-  const white_color = '#f8f8ff';
-  const black_color = '#1c1c1c';
-
-  useEffect(() => {}, [darkMode]);
-
-  const world = {
-    // initial color
-    initialColorGui: {
-      Red: 0,
-      Green: 0,
-      Blue: 0.4,
-    },
-    // color when hover
-    hoverColorGui: {
-      Red: 0,
-      Green: 0,
-      Blue: 1,
-    },
-  };
+  const light_color = '#f8f8ff';
+  const black_color = '#0a0a0a';
 
   useEffect(() => {
+    console.log('dark ' + darkMode);
+    console.log('dark rgb ' + rgbColor);
+    if (darkMode) {
+      setRGBColor(0.04);
+    } else {
+      setRGBColor(2);
+    }
+  }, [darkMode]);
+
+  useEffect(() => {
+    console.log('wall ' + darkMode);
+    console.log('wall rgb ' + rgbColor);
+
+    const world = {
+      // initial color
+      initialColorGui: {
+        Red: rgbColor,
+        Green: rgbColor,
+        Blue: rgbColor,
+      },
+      // color when hover
+      hoverColorGui: {
+        Red: 0,
+        Green: 0,
+        Blue: 0.4,
+      },
+    };
+
     //--------------------------------------------------+
     //
     // Canva - Scene
@@ -50,7 +66,7 @@ const Home = () => {
     const scene = new THREE.Scene();
 
     // Background color update on dark mode toggle
-    scene.background = new THREE.Color(darkMode ? white_color : black_color);
+    scene.background = new THREE.Color(darkMode ? black_color : light_color);
 
     //--------------------------------------------------+
     //
@@ -268,7 +284,6 @@ const Home = () => {
       if (intersects.length > 0) {
         const { color } = intersects[0].object.geometry.attributes;
         // color when not hover
-        // color when not hover
         const initialColor = {
           r: world.initialColorGui.Red,
           g: world.initialColorGui.Green,
@@ -307,7 +322,7 @@ const Home = () => {
       renderer.dispose();
       composer.dispose();
     };
-  }, []);
+  }, [rgbColor]);
 
   return (
     <div
@@ -318,13 +333,20 @@ const Home = () => {
       {/* 3D Container */}
       <canvas className={style.webgl} id="webgl"></canvas>
 
-      {/* Page Content */}
+      {/* Loader */}
+      {isLoading ? (
+        <Loader setLoader={setLoader} />
+      ) : (
+        <>
+          {/* Page Content */}
 
-      {/* Navigation Bar */}
-      <NavBar
-        darkMode={darkMode}
-        toggleDarkMode={() => setDarkMode(!darkMode)}
-      />
+          {/* Navigation Bar */}
+          <NavBar
+            darkMode={darkMode}
+            toggleDarkMode={() => setDarkMode(!darkMode)}
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -29,17 +29,23 @@ a {
   text-decoration: none;
 }
 
-h1 {
-  font-family: var(--first-font);
-}
-
-h2,
-h3,
-h4,
-h5,
-h6,
 span,
 p {
   font-family: var(--second-font);
-  font-weight: var(--font-weight-regular);
+}
+
+// ------------------------------+
+//
+//          SELECTION
+//
+// ------------------------------+
+
+*::selection {
+  background-color: var(--second-color);
+  color: var(--main-color);
+}
+
+*::-moz-selection {
+  background-color: var(--second-color);
+  color: var(--main-color);
 }

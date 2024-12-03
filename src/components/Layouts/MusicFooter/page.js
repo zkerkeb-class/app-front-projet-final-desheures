@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './page.module.scss';
 
-export default function MusicFooter() {
+const MusicFooter = () => {
   return (
     <footer className={style.footer}>
       <div className={style.trackDetails}>
@@ -29,4 +29,6 @@ export default function MusicFooter() {
       </div>
     </footer>
   );
-}
+};
+
+export default MusicFooter;
