@@ -25,21 +25,9 @@
     var(--main-color),
     var(--second-color)
   );
-  --gradient-color-main: linear-gradient(
-    to bottom right,
-    var(--main-color) 0%,
-    var(--black-color) 20% 80%,
-    var(--main-color) 100%
-  );
-  --gradient-color-second: linear-gradient(
-    to bottom left,
-    var(--second-color) 0%,
-    var(--black-color) 20% 80%,
-    var(--second-color) 100%
-  );
 
   /* Borders */
-  --border-radius: 10px;
+  --border-radius: 20px;
   --border-radius-big: 40px;
   --circle-border-radius: 50%;
   --border-width: 1px;

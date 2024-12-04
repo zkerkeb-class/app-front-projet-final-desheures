@@ -13,16 +13,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  // background: var(--gradient-color-main), var(--gradient-color-second);
-  // background-color: var(--black-color);
-  background: radial-gradient(
-    var(--black-color) 20%,
-    var(--main-color) 20% 22%,
-    var(--black-color) 22% 40%,
-    var(--second-color) 40% 42%,
-    var(--black-color) 42%
-  );
-  background-blend-mode: difference;
+  background-color: var(--black-color);
   z-index: var(--top-zindex);
   overflow: hidden;
 

@@ -21,24 +21,27 @@ const Home = () => {
   // Handle Dark or Light Mode
   const [darkMode, setDarkMode] = useState(true);
   const [rgbColor, setRGBColor] = useState(0.04);
+  // const [rgbColorHover, setRGBColorHover] = useState(0.4);
 
   // Color
   const light_color = '#f8f8ff';
   const black_color = '#0a0a0a';
 
   useEffect(() => {
-    console.log('dark ' + darkMode);
-    console.log('dark rgb ' + rgbColor);
+    // console.log('dark ' + darkMode);
+    // console.log('dark rgb ' + rgbColor);
     if (darkMode) {
       setRGBColor(0.04);
+      // setRGBColorHover(1);
     } else {
       setRGBColor(2);
+      // setRGBColorHover(1);
     }
   }, [darkMode]);
 
   useEffect(() => {
-    console.log('wall ' + darkMode);
-    console.log('wall rgb ' + rgbColor);
+    // console.log('wall ' + darkMode);
+    // console.log('wall rgb ' + rgbColor);
 
     const world = {
       // initial color
@@ -339,12 +342,15 @@ const Home = () => {
       ) : (
         <>
           {/* Page Content */}
-
-          {/* Navigation Bar */}
-          <NavBar
-            darkMode={darkMode}
-            toggleDarkMode={() => setDarkMode(!darkMode)}
-          />
+          <div className={style.app_wrapper}>
+            <div className={style.custom_corner_right}></div>
+            <div className={style.custom_corner_left}></div>
+            {/* Navigation Bar */}
+            <NavBar
+              darkMode={darkMode}
+              toggleDarkMode={() => setDarkMode(!darkMode)}
+            />
+          </div>
         </>
       )}
     </div>
