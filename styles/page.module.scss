@@ -29,8 +29,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url(../public/images/background/dark_background.png);
-    background-size: cover;
+    // background-image: url(../public/images/background/dark_background.png);
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     border-radius: var(--border-radius);
     transition:
@@ -69,7 +69,7 @@
 
   .custom_corner_left,
   .custom_corner_right {
-    background: var(--black-color);
+    // background: var(--black-color);
   }
 }
 
@@ -78,7 +78,7 @@
 
   .custom_corner_left,
   .custom_corner_right {
-    background: var(--white-color);
+    // background: var(--white-color);
   }
 
   .app_wrapper {

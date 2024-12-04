@@ -343,8 +343,8 @@ const Home = () => {
         <>
           {/* Page Content */}
           <div className={style.app_wrapper}>
-            <div className={style.custom_corner_right}></div>
-            <div className={style.custom_corner_left}></div>
+            {/* <div className={style.custom_corner_right}></div>
+            <div className={style.custom_corner_left}></div> */}
             {/* Navigation Bar */}
             <NavBar
               darkMode={darkMode}
