@@ -40,7 +40,6 @@ const Loader = (props) => {
       <div className={style.loader_wrapper}>
         <p>Listen to music during</p>
         <h2>DES HEURES</h2>
-
         <div className={style.progress_container}>
           <div
             className={style.progress_bar}

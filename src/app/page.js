@@ -21,7 +21,7 @@ const Home = () => {
   // Handle Dark or Light Mode
   const [darkMode, setDarkMode] = useState(true);
   const [rgbColor, setRGBColor] = useState(0.04);
-  // const [rgbColorHover, setRGBColorHover] = useState(0.4);
+  const [rgbColorHover, setRGBColorHover] = useState([0.8, 2]);
 
   // Color
   const light_color = '#f8f8ff';
@@ -32,10 +32,10 @@ const Home = () => {
     // console.log('dark rgb ' + rgbColor);
     if (darkMode) {
       setRGBColor(0.04);
-      // setRGBColorHover(1);
+      setRGBColorHover([0.8, 2]);
     } else {
       setRGBColor(2);
-      // setRGBColorHover(1);
+      setRGBColorHover([0, 1]);
     }
   }, [darkMode]);
 
@@ -53,8 +53,8 @@ const Home = () => {
       // color when hover
       hoverColorGui: {
         Red: 0,
-        Green: 0,
-        Blue: 0.4,
+        Green: rgbColorHover[0],
+        Blue: rgbColorHover[1],
       },
     };
 
@@ -83,8 +83,8 @@ const Home = () => {
     // Plane
     var PlaneWidth = 400;
     var PlaneHeight = 400;
-    var PlaneWidthSegments = 50;
-    var PlaneHeightSegments = 50;
+    var PlaneWidthSegments = 60;
+    var PlaneHeightSegments = 60;
 
     if (isMobile) {
       PlaneWidth = 50;
@@ -343,8 +343,9 @@ const Home = () => {
         <>
           {/* Page Content */}
           <div className={style.app_wrapper}>
-            {/* <div className={style.custom_corner_right}></div>
-            <div className={style.custom_corner_left}></div> */}
+            {/* Background Image */}
+            <div className={style.background_img}></div>
+
             {/* Navigation Bar */}
             <NavBar
               darkMode={darkMode}

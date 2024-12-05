@@ -16,13 +16,14 @@
 :root {
   /* Colors */
   --white-color: #f8f8ff;
-  --black-color: #0a0a0a;
+  --black-color: #010101;
   --main-color: darkblue;
   --second-color: purple;
   --third-color: deepskyblue;
   --gradient-color-to-right: linear-gradient(
     to right,
     var(--main-color),
+    var(--third-color),
     var(--second-color)
   );
 
@@ -58,13 +59,17 @@
   --transition: 0.6s all;
   --transition-time: 0.6s;
 
+  --text-animation: 1s;
+  --text-animation-margin: 26px;
+  --text-animation-negative-margin: -26px;
+
   /* Margin & Padding */
   --small-margin-padding: 10px;
   --margin-padding: 20px;
   --big-margin-padding: 40px;
 
   /* Opacity */
-  --less-opacity: 0.6;
+  --less-opacity: 0.2;
 
   /* zIndex */
   --top-zindex: 100;
