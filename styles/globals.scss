@@ -29,6 +29,11 @@ a {
   text-decoration: none;
 }
 
+h2,
+h1 {
+  font-family: var(--first-font);
+}
+
 span,
 p {
   font-family: var(--second-font);

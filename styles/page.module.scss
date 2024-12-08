@@ -30,7 +30,7 @@ $padding_multiplicator: 2;
     height: calc(100% - (var(--big-margin-padding) * $padding_multiplicator));
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     border-radius: var(--border-radius);
 
     .background_img {
@@ -66,7 +66,9 @@ $dark_background: '/images/background/dark_background.png';
 $light_background: '/images/background/light_background.png';
 
 .global_container.dark {
-  color: var(--white-color);
+  p {
+    color: var(--white-color);
+  }
 
   .background_img {
     background: url(#{$dark_background}) no-repeat center center;
@@ -75,7 +77,9 @@ $light_background: '/images/background/light_background.png';
 }
 
 .global_container.light {
-  color: var(--black-color);
+  p {
+    color: var(--black-color);
+  }
 
   .background_img {
     background: url(#{$light_background}) no-repeat center center;

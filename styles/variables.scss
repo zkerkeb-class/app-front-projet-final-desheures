@@ -26,6 +26,16 @@
     var(--third-color),
     var(--second-color)
   );
+  --gradient-color-to-right-light: linear-gradient(
+    to right,
+    var(--main-color),
+    var(--second-color)
+  );
+  --gradient-color-to-right-dark: linear-gradient(
+    to right,
+    var(--third-color),
+    var(--second-color)
+  );
 
   /* Borders */
   --border-radius: 20px;
@@ -47,11 +57,10 @@
   --small-font-size: 14px;
   --font-size: 16px;
   --medium-font-size: 18px;
-  --big-font-size: 24px;
+  --big-font-size: 32px;
   --title-font-size: 48px;
 
   /* Text */
-  --text-indent: 20px;
   --letter-spacing: normal;
   --line-height: normal;
 
