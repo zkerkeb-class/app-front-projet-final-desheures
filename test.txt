@@ -1,0 +1,53 @@
+      {/* Contenu principal */}
+      {/* <main className={style.main}>
+        <section>
+          <h2>Dernières sorties</h2>
+          <div className={style.scrollableRow}>
+            {[...Array(10)].map((_, index) => (
+              <div key={index} className={style.item}>
+                <Image
+                  // src={`/images/cover${index + 1}.jpg`}
+                  src={Img_Background.src}
+                  alt={`Cover ${index + 1}`}
+                  width={100}
+                  height={100}
+                />
+                <p>Titre {index + 1}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2>Artistes populaires</h2>
+          <div className={style.scrollableRow}>
+            {[...Array(10)].map((_, index) => (
+              <div key={index} className={style.item}>
+                <img
+                  src={`/images/artist${index + 1}.jpg`}
+                  alt={`Artiste ${index + 1}`}
+                />
+                <p>Artiste {index + 1}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2>Albums récents</h2>
+          <div className={style.scrollableRow}>
+            {[...Array(10)].map((_, index) => (
+              <div key={index} className={style.item}>
+                <img
+                  src={`/images/album${index + 1}.jpg`}
+                  alt={`Album ${index + 1}`}
+                />
+                <p>Album {index + 1}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main> */}
+
+      {/* Footer musique */}
+      {/* <MusicFooter /> */}

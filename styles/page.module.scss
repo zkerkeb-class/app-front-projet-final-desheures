@@ -1,55 +1,90 @@
 // ------------------------------+
 //
-//            Login
+//        Global Page
 //
 // ------------------------------+
 
-.container {
+$padding_multiplicator: 2;
+
+.global_container {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
-  .image_wrapper {
+  .webgl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+    z-index: 1;
+  }
+
+  .app_wrapper {
     position: relative;
-    width: 75%;
-    height: calc(100% - (var(--big-margin-padding) * 2));
-    margin-left: var(--big-margin-padding);
+    z-index: 4;
+    width: calc(100% - (var(--big-margin-padding) * $padding_multiplicator));
+    height: calc(100% - (var(--big-margin-padding) * $padding_multiplicator));
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    border-radius: var(--border-radius);
 
-    .image {
-      border-radius: 80px;
-      object-fit: cover;
-    }
-
-    .logo_wrapper {
+    .background_img {
+      width: 100%;
+      height: 100%;
+      transition:
+        background-image var(--transition-time),
+        color var(--transition-time);
+      opacity: var(--less-opacity);
+      border-radius: var(--border-radius);
+      animation: fadeIn var(--text-animation) ease-in-out;
       position: absolute;
-      top: 40px;
-      left: 40px;
-      z-index: 2;
 
-      .logo {
-        object-fit: contain;
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: var(--less-opacity);
+        }
       }
     }
+  }
+}
 
-    .text_wrapper {
-      position: absolute;
-      bottom: 100px;
-      background-color: var(--white-color-rgba);
-      padding: 40px 20px;
-      border-radius: 0 var(--border-radius) var(--border-radius) 0;
-      z-index: 2;
+// ------------------------------+
+//
+//        Light Dark Mode
+//
+// ------------------------------+
 
-      .title {
-        margin: 0;
-        font-size: 2rem;
-      }
+$dark_background: '/images/background/dark_background.png';
+$light_background: '/images/background/light_background.png';
 
-      .subtitle {
-        margin: 0;
-        font-size: 1rem;
-      }
-    }
+.global_container.dark {
+  p {
+    color: var(--white-color);
+  }
+
+  .background_img {
+    // background: url(#{$dark_background}) no-repeat center center;
+    background-size: cover;
+    background-image: var(--gradient-color-to-right-dark);
+  }
+}
+
+.global_container.light {
+  p {
+    color: var(--black-color);
+  }
+
+  .background_img {
+    // background: url(#{$light_background}) no-repeat center center;
+    background-size: cover;
+    background-image: var(--gradient-color-to-right-light);
   }
 }

@@ -1,0 +1,202 @@
+// ------------------------------+
+//
+//        Nav Bar
+//
+// ------------------------------+
+
+$toggle_height: 40px;
+$toggle_width: 80px;
+$search_logo_light: '/images/navbar/search_light.svg';
+$search_logo_dark: '/images/navbar/search_dark.svg';
+
+.nav_bar {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--margin-padding);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  z-index: var(--top-zindex);
+
+  .title_app {
+    font-size: var(--big-font-size);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    overflow: hidden;
+  }
+
+  .search {
+    width: 25%;
+    height: $toggle_height;
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+
+    .search_input {
+      height: $toggle_height;
+      width: 100%;
+      padding-left: var(--big-margin-padding);
+      border-radius: var(--border-radius);
+      border: none;
+      outline: none;
+      font-size: var(--font-size);
+    }
+
+    &::before {
+      height: 24px;
+      width: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+  }
+
+  .nav_bar_button_wrapper {
+    width: 200px;
+    gap: var(--margin-padding);
+    height: $toggle_height;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .select_language {
+      font-family: var(--first-font);
+      font-size: var(--font-size);
+      height: $toggle_height;
+      width: $toggle_width;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: var(--border-radius);
+      background-color: var(--white-color);
+      transition: var(--transition);
+      outline: none;
+      border: none;
+      text-indent: var(--small-margin-padding);
+      cursor: pointer;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      align-items: center;
+      display: flex;
+      align-items: center;
+      height: $toggle_height;
+      width: $toggle_width;
+
+      input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+
+        &:checked + .slider {
+          background: var(--gradient-color-to-right-dark);
+        }
+
+        &:checked + .slider:before {
+          transform: translate(40px, -50%);
+        }
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--gradient-color-to-right-light);
+        transition: var(--transition);
+        border-radius: var(--border-radius);
+
+        &:before {
+          height: 30px;
+          width: 30px;
+          border-radius: var(--circle-border-radius);
+          position: absolute;
+          top: 50%;
+          left: 5px;
+          transform: translate(0%, -50%);
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+// ------------------------------+
+//
+//        Light Dark Mode
+//
+// ------------------------------+
+
+$dark_logo: '/images/navbar/moon.svg';
+$light_logo: '/images/navbar/sun.svg';
+
+.nav_bar.dark {
+  .title_app {
+    background-image: var(--gradient-color-to-right-dark);
+  }
+
+  .search {
+    .search_input {
+      background-color: var(--black-color);
+      color: var(--white-color);
+    }
+    &::before {
+      content: url(#{$search_logo_dark});
+    }
+  }
+
+  .select_language {
+    background-color: var(--black-color);
+    color: var(--white-color);
+  }
+
+  .slider {
+    &:before {
+      content: url(#{$dark_logo});
+      background-color: var(--black-color);
+    }
+  }
+}
+
+.nav_bar.light {
+  .title_app {
+    background-image: var(--gradient-color-to-right-light);
+  }
+
+  .search {
+    .search_input {
+      background-color: var(--white-color);
+      color: var(--black-color);
+    }
+    &::before {
+      content: url(#{$search_logo_light});
+    }
+  }
+
+  .select_language {
+    background-color: var(--white-color);
+    color: var(--black-color);
+  }
+
+  .slider {
+    &:before {
+      content: url(#{$light_logo});
+      background-color: var(--white-color);
+    }
+  }
+}
