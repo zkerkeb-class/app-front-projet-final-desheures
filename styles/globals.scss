@@ -1,0 +1,56 @@
+@import './variables.scss';
+
+// ------------------------------+
+//
+//            GLOBAL
+//
+// ------------------------------+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  letter-spacing: var(--letter-spacing);
+  line-height: var(--line-height);
+}
+
+// ------------------------------+
+//
+//            TEXT
+//
+// ------------------------------+
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h2,
+h1 {
+  font-family: var(--first-font);
+}
+
+span,
+p {
+  font-family: var(--second-font);
+}
+
+// ------------------------------+
+//
+//          SELECTION
+//
+// ------------------------------+
+
+*::selection {
+  background-color: var(--second-color);
+  color: var(--main-color);
+}
+
+*::-moz-selection {
+  background-color: var(--second-color);
+  color: var(--main-color);
+}
