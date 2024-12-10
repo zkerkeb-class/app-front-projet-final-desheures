@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import style from './page.module.scss';
+import { useTheme } from '@/app/ThemeContext.js';
+// import { useRouter } from 'next/router';
 
-const NavBar = ({ darkMode, toggleDarkMode }) => {
+const NavBar = () => {
+  // const router = useRouter();
+
   const [language, setLanguage] = useState('FR');
 
-  const handleLanguageChange = (e) => {
-    setLanguage(e.target.value.toUpperCase());
-  };
+  const { darkMode, toggleDarkMode } = useTheme();
+
+  // useEffect(() => {
+  //   const { pathname, asPath, query } = router;
+  //   router.push({ pathname, query }, asPath, { locale: language });
+  // }, [language]);
 
   return (
     <div className={`${style.nav_bar} ${darkMode ? style.dark : style.light}`}>
       {/* App title */}
-      <h1 className={style.title_app}>Des Heures #{language}</h1>
+      <h1 className={style.title_app}>Des Heures</h1>
 
       {/* Search Bar */}
       <div className={style.search}>
@@ -24,16 +31,15 @@ const NavBar = ({ darkMode, toggleDarkMode }) => {
 
       <div className={style.nav_bar_button_wrapper}>
         {/* Toggle for Language change */}
-        <div className={style.language_selector}>
-          <select
-            className={style.select_language}
-            onChange={handleLanguageChange}
-          >
-            <option value="FR">FR</option>
-            <option value="EN">EN</option>
-            <option value="PT">PT</option>
-          </select>
-        </div>
+        <select
+          className={style.select_language}
+          onChange={(e) => setLanguage(e.target.value.toUpperCase())}
+        >
+          <option value="fr">FR</option>
+          <option value="en">EN</option>
+          <option value="pt">PT</option>
+          <option value="ar">AR</option>
+        </select>
 
         {/* Toggle for Dark and Light mode */}
         <label className={style.switch}>

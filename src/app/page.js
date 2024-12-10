@@ -1,9 +1,8 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-// Render
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
@@ -13,44 +12,35 @@ import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import style from 'styles/page.module.scss';
 import NavBar from 'components/Layouts/NavBar/page.js';
 import Loader from 'components/Layouts/Loading_Page/page.js';
+import { useTheme } from '@/app/ThemeContext.js';
+
+// import { useTranslation } from 'next-i18next';
 
 const Home = () => {
-  // Loader
-  const [isLoading, setLoader] = useState(true);
+  const { darkMode } = useTheme();
+  const { isLoading, setLoader } = useTheme();
+  // const { t } = useTranslation('common');
 
-  // Handle Dark or Light Mode
-  const [darkMode, setDarkMode] = useState(true);
-  const [rgbColor, setRGBColor] = useState(0.04);
-  const [rgbColorHover, setRGBColorHover] = useState([0.8, 2]);
-
-  // Color
-  const light_color = '#f8f8ff';
-  const black_color = '#0a0a0a';
+  const darkModeRef = useRef(darkMode);
 
   useEffect(() => {
-    // console.log('dark ' + darkMode);
-    // console.log('dark rgb ' + rgbColor);
-    if (darkMode) {
-      setRGBColor(0.04);
-      setRGBColorHover([0.8, 2]);
-    } else {
-      setRGBColor(2);
-      setRGBColorHover([0, 1]);
-    }
+    darkModeRef.current = darkMode;
   }, [darkMode]);
 
   useEffect(() => {
-    // console.log('wall ' + darkMode);
-    // console.log('wall rgb ' + rgbColor);
+    let rgbColor;
+    let rgbColorHover;
+
+    if (darkModeRef.current) {
+      rgbColor = 0.04;
+      rgbColorHover = [0.8, 2];
+    } else {
+      rgbColor = 2;
+      rgbColorHover = [0, 1];
+    }
 
     const world = {
-      // initial color
-      initialColorGui: {
-        Red: rgbColor,
-        Green: rgbColor,
-        Blue: rgbColor,
-      },
-      // color when hover
+      initialColorGui: { Red: rgbColor, Green: rgbColor, Blue: rgbColor },
       hoverColorGui: {
         Red: 0,
         Green: rgbColorHover[0],
@@ -58,43 +48,24 @@ const Home = () => {
       },
     };
 
-    //--------------------------------------------------+
-    //
-    // Canva - Scene
-    //
-    //--------------------------------------------------+
-
     const canvas = document.querySelector('#webgl');
-
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#f8f8ff');
 
-    // Background color update on dark mode toggle
-    scene.background = new THREE.Color(darkMode ? black_color : light_color);
-
-    //--------------------------------------------------+
-    //
-    // Geometry
-    //
-    //--------------------------------------------------+
-
-    // Check if screen width is less than 1000px
     const isMobile = window.innerWidth < 1000;
-
-    // Plane
-    var PlaneWidth = 400;
-    var PlaneHeight = 400;
-    var PlaneWidthSegments = 60;
-    var PlaneHeightSegments = 60;
+    let PlaneWidth = 300,
+      PlaneHeight = 300,
+      PlaneWidthSegments = 30,
+      PlaneHeightSegments = 30;
 
     if (isMobile) {
       PlaneWidth = 50;
       PlaneHeight = 50;
-      PlaneWidthSegments = 10;
-      PlaneHeightSegments = 10;
+      PlaneWidthSegments = 20;
+      PlaneHeightSegments = 20;
     }
 
-    // Create Plane geometry
-    var planeGeometry = new THREE.PlaneGeometry(
+    let planeGeometry = new THREE.PlaneGeometry(
       PlaneWidth,
       PlaneHeight,
       PlaneWidthSegments,
@@ -103,7 +74,6 @@ const Home = () => {
     planeGeometry = mergeVertices(planeGeometry);
     planeGeometry.computeTangents();
 
-    // Create Plane material
     const planeMaterial = new THREE.MeshPhongMaterial({
       side: THREE.DoubleSide,
       flatShading: true,
@@ -112,7 +82,6 @@ const Home = () => {
     const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
     scene.add(planeMesh);
 
-    // Function to Generate Plane Geometry
     const generatePlane = () => {
       planeMesh.geometry.dispose();
       planeMesh.geometry = new THREE.PlaneGeometry(
@@ -134,7 +103,6 @@ const Home = () => {
       planeMesh.geometry.attributes.position.randomValues = randomValues;
       planeMesh.geometry.attributes.position.originalPosition = array;
 
-      // Set initial color based on dark mode
       const colors = [];
       for (let i = 0; i < planeMesh.geometry.attributes.position.count; i++) {
         colors.push(
@@ -143,19 +111,13 @@ const Home = () => {
           world.initialColorGui.Blue
         );
       }
-
       planeMesh.geometry.setAttribute(
         'color',
         new THREE.BufferAttribute(new Float32Array(colors), 3)
       );
     };
-    generatePlane();
 
-    //--------------------------------------------------+
-    //
-    // Lights
-    //
-    //--------------------------------------------------+
+    generatePlane();
 
     const light = new THREE.DirectionalLight('white', 1);
     light.position.set(0, 1, 1);
@@ -165,12 +127,6 @@ const Home = () => {
     backLight.position.set(0, 0, -1);
     scene.add(backLight);
 
-    //--------------------------------------------------+
-    //
-    // Sizes
-    //
-    //--------------------------------------------------+
-
     const sizes = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -178,25 +134,10 @@ const Home = () => {
     };
 
     window.addEventListener('resize', () => {
-      // Update sizes
       sizes.width = window.innerWidth;
       sizes.height = window.innerHeight;
       sizes.pixelRatio = Math.min(window.devicePixelRatio, 2);
-
-      // Update camera
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-
-      // Update renderer
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(sizes.pixelRatio);
     });
-
-    //--------------------------------------------------+
-    //
-    // Camera
-    //
-    //--------------------------------------------------+
 
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -204,35 +145,19 @@ const Home = () => {
       0.1,
       100
     );
-
-    // Camera Position
     camera.position.set(0, 0, 50);
     scene.add(camera);
-
-    //--------------------------------------------------+
-    //
-    // Renderer
-    //
-    //--------------------------------------------------+
 
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
     });
-
-    // width / height
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1;
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(sizes.pixelRatio);
-
-    //--------------------------------------------------+
-    //
-    // Mouse event
-    //
-    //--------------------------------------------------+
 
     const raycaster = new THREE.Raycaster();
     const mouse = { x: undefined, y: undefined };
@@ -241,12 +166,6 @@ const Home = () => {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     });
-
-    //--------------------------------------------------+
-    //
-    // Post-processing
-    //
-    //--------------------------------------------------+
 
     const composer = new EffectComposer(renderer);
     const renderPass = new RenderPass(scene, camera);
@@ -258,18 +177,22 @@ const Home = () => {
     bloomPass.threshold = 0.8;
     composer.addPass(bloomPass);
 
-    // ------------------------------+
-    //
-    //        Animation Loop
-    //
-    // ------------------------------+
-
     let frame = 0;
-    const animate = () => {
+    let lastFrameTime = 0;
+    const targetFPS = 60;
+    const frameInterval = 1000 / targetFPS;
+
+    const animate = (time) => {
       requestAnimationFrame(animate);
+
+      const deltaTime = time - lastFrameTime;
+      if (deltaTime < frameInterval) {
+        return;
+      }
+
+      lastFrameTime = time;
       frame += 0.01;
 
-      // Plane vertex animation
       const { array, originalPosition, randomValues } =
         planeMesh.geometry.attributes.position;
       for (let i = 0; i < array.length; i += 3) {
@@ -280,20 +203,16 @@ const Home = () => {
       }
       planeMesh.geometry.attributes.position.needsUpdate = true;
 
-      // Raycaster interaction
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObject(planeMesh);
-
       if (intersects.length > 0) {
         const { color } = intersects[0].object.geometry.attributes;
-        // color when not hover
-        const initialColor = {
+        let initialColor = {
           r: world.initialColorGui.Red,
           g: world.initialColorGui.Green,
           b: world.initialColorGui.Blue,
         };
-        // color when hover
-        const hoverColor = {
+        let hoverColor = {
           r: world.hoverColorGui.Red,
           g: world.hoverColorGui.Green,
           b: world.hoverColorGui.Blue,
@@ -317,6 +236,7 @@ const Home = () => {
 
       renderer.render(scene, camera);
     };
+
     animate();
 
     return () => {
@@ -325,34 +245,25 @@ const Home = () => {
       renderer.dispose();
       composer.dispose();
     };
-  }, [rgbColor]);
+  }, [darkMode]);
 
   return (
     <div
-      className={`${style.global_container} ${
-        darkMode ? style.dark : style.light
-      }`}
+      className={`${style.global_container} ${darkMode ? style.dark : style.light}`}
     >
-      {/* 3D Container */}
       <canvas className={style.webgl} id="webgl"></canvas>
-
-      {/* Loader */}
       {isLoading ? (
         <Loader setLoader={setLoader} />
       ) : (
-        <>
-          {/* Page Content */}
-          <div className={style.app_wrapper}>
-            {/* Background Image */}
-            <div className={style.background_img}></div>
-
-            {/* Navigation Bar */}
-            <NavBar
-              darkMode={darkMode}
-              toggleDarkMode={() => setDarkMode(!darkMode)}
-            />
-          </div>
-        </>
+        <div className={style.app_wrapper}>
+          <div className={style.background_img}></div>
+          <NavBar />
+          {/* <div>
+            <h1>{t('title')}</h1>
+            <p>{t('welcome')}</p>
+            <p>{t('description')}</p>
+          </div> */}
+        </div>
       )}
     </div>
   );

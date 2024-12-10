@@ -2,9 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import style from './page.module.scss';
 
-const Loader = (props) => {
+import { useTheme } from '@/app/ThemeContext.js';
+
+const Loader = () => {
   const [percentage, setPercentage] = useState(0);
   const loaderRef = useRef(null);
+  const { setLoader } = useTheme();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,13 +30,13 @@ const Loader = (props) => {
         duration: 2,
         ease: 'power2.inOut',
         onComplete: () => {
-          props.setLoader(false);
+          setLoader(false);
         },
       });
     }
 
     return () => clearInterval(interval);
-  }, [percentage, props]);
+  }, [percentage]);
 
   return (
     <div className={style.loader_cont} ref={loaderRef}>

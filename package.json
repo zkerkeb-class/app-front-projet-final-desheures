@@ -7,11 +7,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "start:prod": "node app.js | pino-pretty"
   },
   "dependencies": {
     "dat.gui": "^0.7.9",
     "gsap": "^3.12.5",
+    "i18next": "^24.0.5",
+    "next-i18next": "^15.4.0",
+    "pino": "^9.5.0",
+    "pino-pretty": "^13.0.0",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "sass": "^1.81.0",

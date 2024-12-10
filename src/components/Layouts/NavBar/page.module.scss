@@ -6,8 +6,8 @@
 
 $toggle_height: 40px;
 $toggle_width: 80px;
-$search_logo_light: '/images/navbar/sun.svg';
-$search_logo_dark: '/images/navbar/moon.svg';
+$search_logo_light: '/images/navbar/search_light.svg';
+$search_logo_dark: '/images/navbar/search_dark.svg';
 
 .nav_bar {
   width: 100%;
@@ -33,6 +33,7 @@ $search_logo_dark: '/images/navbar/moon.svg';
     position: relative;
     display: flex;
     align-items: center;
+    transition: var(--transition);
 
     .search_input {
       height: $toggle_height;
@@ -66,25 +67,21 @@ $search_logo_dark: '/images/navbar/moon.svg';
     align-items: center;
     justify-content: flex-end;
 
-    .language_selector {
-      display: inline-block;
-
-      .select_language {
-        font-family: var(--first-font);
-        font-size: var(--font-size);
-        height: $toggle_height;
-        width: $toggle_width;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: var(--border-radius);
-        background-color: var(--white-color);
-        transition: var(--transition);
-        outline: none;
-        border: none;
-        text-indent: var(--small-margin-padding);
-        cursor: pointer;
-      }
+    .select_language {
+      font-family: var(--first-font);
+      font-size: var(--font-size);
+      height: $toggle_height;
+      width: $toggle_width;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: var(--border-radius);
+      background-color: var(--white-color);
+      transition: var(--transition);
+      outline: none;
+      border: none;
+      text-indent: var(--small-margin-padding);
+      cursor: pointer;
     }
 
     .switch {
@@ -163,11 +160,9 @@ $light_logo: '/images/navbar/sun.svg';
     }
   }
 
-  .language_selector {
-    .select_language {
-      background-color: var(--black-color);
-      color: var(--white-color);
-    }
+  .select_language {
+    background-color: var(--black-color);
+    color: var(--white-color);
   }
 
   .slider {
@@ -193,11 +188,9 @@ $light_logo: '/images/navbar/sun.svg';
     }
   }
 
-  .language_selector {
-    .select_language {
-      background-color: var(--white-color);
-      color: var(--black-color);
-    }
+  .select_language {
+    background-color: var(--white-color);
+    color: var(--black-color);
   }
 
   .slider {

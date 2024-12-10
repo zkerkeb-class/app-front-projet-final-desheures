@@ -71,8 +71,9 @@ $light_background: '/images/background/light_background.png';
   }
 
   .background_img {
-    background: url(#{$dark_background}) no-repeat center center;
+    // background: url(#{$dark_background}) no-repeat center center;
     background-size: cover;
+    background-image: var(--gradient-color-to-right-dark);
   }
 }
 
@@ -82,7 +83,8 @@ $light_background: '/images/background/light_background.png';
   }
 
   .background_img {
-    background: url(#{$light_background}) no-repeat center center;
+    // background: url(#{$light_background}) no-repeat center center;
     background-size: cover;
+    background-image: var(--gradient-color-to-right-light);
   }
 }
