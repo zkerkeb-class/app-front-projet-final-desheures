@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
 
@@ -11,6 +11,7 @@ import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
 import style from 'styles/page.module.scss';
 import NavBar from 'components/Layouts/NavBar/page.js';
+import SectionAccueil from 'components/Sections/SectionAccueil/page.js';
 import Loader from 'components/Layouts/Loading_Page/page.js';
 import { useTheme } from '@/app/ThemeContext.js';
 
@@ -32,11 +33,11 @@ const Home = () => {
     let rgbColorHover;
 
     if (darkModeRef.current) {
-      rgbColor = 0.04;
-      rgbColorHover = [0.8, 2];
-    } else {
       rgbColor = 2;
       rgbColorHover = [0, 1];
+    } else {
+      rgbColor = 0.04;
+      rgbColorHover = [0.8, 2];
     }
 
     const world = {
@@ -258,11 +259,7 @@ const Home = () => {
         <div className={style.app_wrapper}>
           <div className={style.background_img}></div>
           <NavBar />
-          {/* <div>
-            <h1>{t('title')}</h1>
-            <p>{t('welcome')}</p>
-            <p>{t('description')}</p>
-          </div> */}
+          <SectionAccueil />
         </div>
       )}
     </div>
