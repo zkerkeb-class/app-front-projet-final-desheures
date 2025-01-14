@@ -60,7 +60,7 @@ const Home = () => {
 
     if (isMobile) {
       PlaneWidth = 50;
-      PlaneHeight = 50;
+      PlaneHeight = 100;
       PlaneWidthSegments = 20;
       PlaneHeightSegments = 20;
     }
@@ -255,15 +255,10 @@ const Home = () => {
       {isLoading ? (
         <Loader setLoader={setLoader} />
       ) : (
-        <div className={style.app_wrapper}>
-          <div className={style.background_img}></div>
+        <>
           <NavBar />
-          {/* <div>
-            <h1>{t('title')}</h1>
-            <p>{t('welcome')}</p>
-            <p>{t('description')}</p>
-          </div> */}
-        </div>
+          <div className={style.app_wrapper}></div>
+        </>
       )}
     </div>
   );
