@@ -28,7 +28,8 @@ $padding_multiplicator: 2;
     width: calc(100% - (var(--big-margin-padding) * $padding_multiplicator));
     height: calc(100% - (var(--big-margin-padding) * $padding_multiplicator));
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: flex-start;
     border-radius: var(--border-radius);
   }
@@ -41,6 +42,9 @@ $padding_multiplicator: 2;
 // ------------------------------+
 
 .global_container.dark {
+  h4,
+  h3,
+  h2,
   p {
     color: var(--white-color);
   }
