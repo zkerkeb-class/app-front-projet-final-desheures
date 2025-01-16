@@ -5,42 +5,65 @@
 // ------------------------------+
 
 .container {
-  width: 100%;
-  height: 80%;
+  width: 60%;
+  height: auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  align-items: flex-start;
 
   .section {
-    width: 90%;
-    height: 220px;
-    margin-top: 10px;
+    width: 100%;
+    height: auto;
+    margin-top: var(--big-margin-padding);
+    padding-left: var(--big-margin-padding);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    margin-left: var(--margin-padding);
-    margin-top: var(--margin-padding);
 
     .section_title {
-      font-size: var(--medium-font-size);
+      font-size: var(--big-font-size);
       margin-bottom: var(--small-margin-padding);
       font-weight: var(--font-weight-regular);
+      animation: fadeIn var(--text-animation) ease-in-out;
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateX(var(--text-animation-negative-margin));
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     }
 
     .items_container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: var(--small-margin-padding);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--margin-padding);
       width: 100%;
       height: auto;
-      overflow-x: scroll;
-      overflow: hidden;
 
       .item {
+        height: 200px;
+        width: 160px;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
+        justify-content: flex-start;
+        align-items: center;
+        border-radius: var(--small-border-radius);
+        padding-top: var(--small-margin-padding);
+        backdrop-filter: blur(10px);
+        animation: appear var(--text-animation) ease-in-out;
+
+        @keyframes appear {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
       }
 
       .item_image {

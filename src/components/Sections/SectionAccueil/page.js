@@ -3,7 +3,7 @@ import Image from 'next/image';
 import style from './page.module.scss';
 import { useTheme } from '@/app/ThemeContext.js';
 
-import Backaground_Img from 'images/background/shadow_lion.png'
+import Backaground_Img from 'images/background/shadow_lion.png';
 
 const SectionAccueil = () => {
   const { darkMode } = useTheme();
@@ -15,6 +15,11 @@ const SectionAccueil = () => {
     { title: 'Album 3', imageUrl: Backaground_Img },
     { title: 'Album 4', imageUrl: Backaground_Img },
     { title: 'Album 5', imageUrl: Backaground_Img },
+    { title: 'Album 6', imageUrl: Backaground_Img },
+    { title: 'Album 7', imageUrl: Backaground_Img },
+    { title: 'Album 8', imageUrl: Backaground_Img },
+    { title: 'Album 9', imageUrl: Backaground_Img },
+    { title: 'Album 10', imageUrl: Backaground_Img },
   ];
 
   const topTracks = [
