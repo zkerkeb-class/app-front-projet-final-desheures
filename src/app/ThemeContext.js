@@ -7,7 +7,8 @@ export const ThemeProvider = ({ children }) => {
   const [darkMode, setDarkMode] = useState(true);
   const [isLoading, setLoader] = useState(true);
   const [sectionName, setSectionName] = useState('');
-  const [selectedId, setSelectedId] = useState(0);
+  const [selectedId, setSelectedId] = useState('');
+  const [selectedMusicId, setSelectedMusicId] = useState('');
 
   // Log l'état initial du thème et du loader lors du montage
   useEffect(() => {
@@ -15,6 +16,7 @@ export const ThemeProvider = ({ children }) => {
     logger.info(`Loader initialized: ${isLoading ? 'Active' : 'Inactive'}`);
     logger.info(`Section initialized: ${sectionName}`);
     logger.info(`Selected ID initialized: ${selectedId}`);
+    logger.info(`Selected Music ID initialized: ${selectedMusicId}`);
   }, []);
 
   const toggleDarkMode = () => {
@@ -45,6 +47,12 @@ export const ThemeProvider = ({ children }) => {
     setSelectedId(id);
   };
 
+  // Log les changements de l'ID Music sélectionné
+  const setSelectedMusicIdWithLog = (id) => {
+    logger.info(`Selected Music ID changed to: ${id}`);
+    setSelectedMusicId(id);
+  };
+
   return (
     <ThemeContext.Provider
       value={{
@@ -56,6 +64,8 @@ export const ThemeProvider = ({ children }) => {
         setSectionName: setSectionNameWithLog,
         selectedId,
         setSelectedId: setSelectedIdWithLog,
+        selectedMusicId,
+        setSelectedMusicId: setSelectedMusicIdWithLog,
       }}
     >
       {children}

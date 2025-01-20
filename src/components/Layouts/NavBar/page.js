@@ -4,11 +4,21 @@ import { useTheme } from '@/app/ThemeContext.js';
 
 const NavBar = () => {
   const { darkMode, toggleDarkMode } = useTheme();
+  const { setLanguage } = useTheme();
+  const { setSectionName } = useTheme();
+  const { setSelectedId } = useTheme();
+
+  const handleResetSection = () => {
+    setSectionName('');
+    setSelectedId('');
+  };
 
   return (
     <div className={`${style.nav_bar} ${darkMode ? style.dark : style.light}`}>
       {/* App title */}
-      <h1 className={style.title_app}>Des Heures</h1>
+      <h1 onClick={handleResetSection} className={style.title_app}>
+        Des Heures
+      </h1>
 
       {/* Search Bar */}
       <div className={style.search}>
@@ -24,16 +34,16 @@ const NavBar = () => {
               d="M10.7599 13.24C8.41988 10.9 8.41988 7.09999 10.7599 4.74999C13.0999 2.41 16.8999 2.41 19.2499 4.74999C21.5899 7.08999 21.5899 10.89 19.2499 13.24C16.9099 15.58 13.1099 15.58 10.7599 13.24Z"
               fill="#00008B"
               stroke="#00008B"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
             <path
               d="M10.5 13.5L3 21"
               stroke="#00008B"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </div>

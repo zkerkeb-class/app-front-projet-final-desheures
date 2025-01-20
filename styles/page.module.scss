@@ -12,6 +12,7 @@ $padding_multiplicator: 2;
   position: relative;
   display: flex;
   flex-direction: column;
+  padding-bottom: var(--margin-padding);
 
   .webgl {
     position: fixed;
@@ -47,8 +48,8 @@ $padding_multiplicator: 2;
     color: var(--white-color);
   }
   svg path {
-    fill: var(--second-color);
-    stroke: var(--second-color);
+    fill: var(--third-color);
+    stroke: var(--third-color);
   }
 }
 

@@ -18,8 +18,11 @@
   --white-color: #f8f8ff;
   --black-color: #010101;
   --main-color: darkblue;
+  --main-color-opacity: rgba(0, 0, 139, 0.5);
   --second-color: purple;
+  --second-color-opacity: rgba(128, 0, 128, 0.5);
   --third-color: deepskyblue;
+  --third-color-opacity: rgba(0, 191, 255, 0.5);
   --gradient-color-to-right: linear-gradient(
     to right,
     var(--main-color),

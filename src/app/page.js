@@ -12,6 +12,7 @@ import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import style from 'styles/page.module.scss';
 import NavBar from 'components/Layouts/NavBar/page.js';
 import SectionAccueil from 'components/Sections/SectionAccueil/page.js';
+import SectionDescription from 'components/Sections/SectionDescription/page.js';
 import Loader from 'components/Layouts/Loading_Page/page.js';
 import { useTheme } from '@/app/ThemeContext.js';
 
@@ -20,6 +21,8 @@ import { useTheme } from '@/app/ThemeContext.js';
 const Home = () => {
   const { darkMode } = useTheme();
   const { isLoading, setLoader } = useTheme();
+  const { sectionName } = useTheme();
+
   // const { t } = useTranslation('common');
 
   const darkModeRef = useRef(darkMode);
@@ -259,7 +262,7 @@ const Home = () => {
         <>
           <NavBar />
           <div className={style.app_wrapper}>
-            <SectionAccueil />
+            {sectionName != '' ? <SectionDescription /> : <SectionAccueil />}
           </div>
         </>
       )}
