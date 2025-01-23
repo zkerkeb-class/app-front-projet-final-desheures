@@ -10,11 +10,13 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
 import style from 'styles/page.module.scss';
+import { useTheme } from '@/app/ThemeContext.js';
+
 import NavBar from 'components/Layouts/NavBar/page.js';
 import SectionAccueil from 'components/Sections/SectionAccueil/page.js';
 import SectionDescription from 'components/Sections/SectionDescription/page.js';
 import Loader from 'components/Layouts/Loading_Page/page.js';
-import { useTheme } from '@/app/ThemeContext.js';
+import MusicSection from '@/components/Layouts/MusicSection/page';
 
 // import { useTranslation } from 'next-i18next';
 
@@ -263,6 +265,7 @@ const Home = () => {
           <NavBar />
           <div className={style.app_wrapper}>
             {sectionName != '' ? <SectionDescription /> : <SectionAccueil />}
+            <MusicSection />
           </div>
         </>
       )}
