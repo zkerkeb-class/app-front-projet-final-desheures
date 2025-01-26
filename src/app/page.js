@@ -24,6 +24,7 @@ const Home = () => {
   const { darkMode } = useTheme();
   const { isLoading, setLoader } = useTheme();
   const { sectionName } = useTheme();
+  const { isExpanded } = useTheme();
 
   // const { t } = useTranslation('common');
 
@@ -262,7 +263,7 @@ const Home = () => {
         <Loader setLoader={setLoader} />
       ) : (
         <>
-          <NavBar />
+          {!isExpanded && <NavBar />}
           <div className={style.app_wrapper}>
             {sectionName != '' ? <SectionDescription /> : <SectionAccueil />}
             <MusicSection />

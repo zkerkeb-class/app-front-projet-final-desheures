@@ -44,6 +44,7 @@ $padding_multiplicator: 2;
   h4,
   h3,
   h2,
+  span,
   p {
     color: var(--white-color);
   }
@@ -54,6 +55,10 @@ $padding_multiplicator: 2;
 }
 
 .global_container.light {
+  h4,
+  h3,
+  h2,
+  span,
   p {
     color: var(--black-color);
   }

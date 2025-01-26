@@ -9,6 +9,7 @@ export const ThemeProvider = ({ children }) => {
   const [sectionName, setSectionName] = useState('');
   const [selectedId, setSelectedId] = useState('');
   const [selectedMusicId, setSelectedMusicId] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Log l'état initial du thème et du loader lors du montage
   useEffect(() => {
@@ -17,6 +18,7 @@ export const ThemeProvider = ({ children }) => {
     logger.info(`Section initialized: ${sectionName}`);
     logger.info(`Selected ID initialized: ${selectedId}`);
     logger.info(`Selected Music ID initialized: ${selectedMusicId}`);
+    logger.info(`Is Expanded: ${isExpanded}`);
   }, []);
 
   const toggleDarkMode = () => {
@@ -35,8 +37,8 @@ export const ThemeProvider = ({ children }) => {
     setLoader(state);
   };
 
-   // Log les changements de la section
-   const setSectionNameWithLog = (name) => {
+  // Log les changements de la section
+  const setSectionNameWithLog = (name) => {
     logger.info(`Section name changed to: ${name}`);
     setSectionName(name);
   };
@@ -53,6 +55,12 @@ export const ThemeProvider = ({ children }) => {
     setSelectedMusicId(id);
   };
 
+  // Log la mise en plein ecran
+  const setIsExpandedLog = (bool) => {
+    logger.info(`Is Expanded changed to: ${bool}`);
+    setIsExpanded(bool);
+  };
+
   return (
     <ThemeContext.Provider
       value={{
@@ -66,6 +74,8 @@ export const ThemeProvider = ({ children }) => {
         setSelectedId: setSelectedIdWithLog,
         selectedMusicId,
         setSelectedMusicId: setSelectedMusicIdWithLog,
+        isExpanded,
+        setIsExpanded : setIsExpandedLog,
       }}
     >
       {children}
