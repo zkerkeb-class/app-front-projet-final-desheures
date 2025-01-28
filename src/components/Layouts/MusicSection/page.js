@@ -1,22 +1,73 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import style from './page.module.scss';
 import Image from 'next/image';
-
 import { useTheme } from '@/app/ThemeContext.js';
-import Backaground_Img from 'images/background/shadow_lion.png';
+import { getAudioById } from '@/services/api/audio.api';
+
+const baseUrl = 'http://localhost:3030';
 
 const MusicSection = () => {
-  const { selectedMusicId } = useTheme();
   const { darkMode } = useTheme();
   const { isExpanded, setIsExpanded } = useTheme();
+  const [audio, setAudio] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [volume, setVolume] = useState(50);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const fetchAudio = async () => {
+      try {
+        const data = await getAudioById('6797869d6b1c1eedf0845384');
+        setAudio(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération de l'audio:", error);
+      }
+    };
+
+    fetchAudio();
+  }, []);
 
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
   };
 
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleProgressChange = (e) => {
+    const newTime = (e.target.value / 100) * audioRef.current.duration;
+    audioRef.current.currentTime = newTime;
+    setProgress(e.target.value);
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = e.target.value / 100;
+    audioRef.current.volume = newVolume;
+    setVolume(e.target.value);
+  };
+
   useEffect(() => {
-    return () => {};
-  }, [selectedMusicId]);
+    if (audioRef.current) {
+      const updateProgress = () => {
+        setProgress(
+          (audioRef.current.currentTime / audioRef.current.duration) * 100
+        );
+      };
+      audioRef.current.addEventListener('timeupdate', updateProgress);
+      return () => {
+        audioRef.current.removeEventListener('timeupdate', updateProgress);
+      };
+    }
+  }, []);
 
   return (
     <div className={`${style.container} ${isExpanded ? style.expanded : ''}`}>
@@ -26,46 +77,76 @@ const MusicSection = () => {
         <button onClick={toggleExpand} className={style.expandButton}>
           {isExpanded ? 'Réduire' : 'Agrandir'}
         </button>
-        <div className={style.music_CD}>
-          <Image
-            src={Backaground_Img}
-            alt={'CD'}
-            width={120}
-            height={120}
-            className={style.image_CD}
-          />
+
+        <div className={`${style.music_CD} ${isPlaying ? style.spinning : ''}`}>
+          {audio && (
+            <Image
+              src={
+                audio.album?.coverUrl
+                  ? `${baseUrl}/${audio.album.coverUrl}`
+                  : '/images/default-placeholder.png'
+              }
+              alt={audio.title}
+              width={120}
+              height={120}
+              className={style.image_CD}
+            />
+          )}
         </div>
+
         <div className={style.trackDetails}>
-          <div>
-            <p className={style.trackTitle}>Titre de la musique</p>
-            <p className={style.artist}>Nom de l&apos;artiste</p>
-          </div>
+          <p className={style.trackTitle}>
+            {audio ? audio.title : 'Titre de la musique'}
+          </p>
+          <p className={style.artist}>
+            {audio ? audio.artist?.name : "Nom de l'artiste"}
+          </p>
         </div>
+
+        <audio ref={audioRef}>
+          {audio && (
+            <source src={`${baseUrl}/${audio.audioUrl}`} type="audio/wav" />
+          )}
+        </audio>
 
         <div className={style.controls}>
           <button>&lt;&lt;</button>
-          <button> || </button>
+          <button onClick={togglePlayPause}>{isPlaying ? '⏸' : '▶️'}</button>
           <button>&gt;&gt;</button>
         </div>
 
         <div className={style.progress}>
-          <span>01:08</span>
-          <input type="range" min="0" max="100" />
-          <span>04:08</span>
+          <span>
+            {new Date(
+              (progress / 100) * (audioRef.current?.duration || 0) * 1000
+            )
+              .toISOString()
+              .substr(14, 5)}
+          </span>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={progress}
+            onChange={handleProgressChange}
+          />
+          <span>
+            {new Date((audioRef.current?.duration || 0) * 1000)
+              .toISOString()
+              .substr(14, 5)}
+          </span>
         </div>
 
         <div className={style.sound}>
-          <span>
-            <Image
-              src={Backaground_Img}
-              alt={'CD'}
-              width={40}
-              height={40}
-              className={style.item_image}
-            />
-          </span>
-          <input type="range" min="0" max="100" />
-          <span>100</span>
+          <span>🔊</span>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={volume}
+            onChange={handleVolumeChange}
+          />
+          <span>{volume}</span>
         </div>
       </div>
     </div>

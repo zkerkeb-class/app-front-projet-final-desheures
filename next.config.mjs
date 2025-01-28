@@ -5,6 +5,9 @@
 
 const nextConfig = {
   reactStrictMode: false,
+  images: {
+    domains: ['localhost'], // Ajouter localhost ici pour autoriser l'usage des images en local
+  },
   // i18n,
 };
 
