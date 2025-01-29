@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import style from './page.module.scss';
 import Image from 'next/image';
-import { useTheme } from '@/app/ThemeContext.js';
+import { useTheme } from '@/context/ThemeContext.js';
 import { getAudioById } from '@/services/api/audio.api';
+import logger from '@/utils/logger';
 
-const baseUrl = 'http://localhost:3030';
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const MusicSection = () => {
-  const { darkMode } = useTheme();
-  const { isExpanded, setIsExpanded } = useTheme();
+  const { darkMode, isExpanded, setIsExpanded, selectedMusicId } = useTheme();
   const [audio, setAudio] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -16,17 +16,32 @@ const MusicSection = () => {
   const audioRef = useRef(null);
 
   useEffect(() => {
+    if (!selectedMusicId) return;
+
     const fetchAudio = async () => {
       try {
-        const data = await getAudioById('6797869d6b1c1eedf0845384');
+        const data = await getAudioById(selectedMusicId);
         setAudio(data);
       } catch (error) {
-        console.error("Erreur lors de la récupération de l'audio:", error);
+        logger.error("Erreur lors de la récupération de l'audio:", error);
       }
     };
 
     fetchAudio();
-  }, []);
+  }, [selectedMusicId]);
+
+  useEffect(() => {
+    if (audio && audioRef.current) {
+      audioRef.current.load(); // Recharge l'audio avec la nouvelle source
+      setIsPlaying(false); // Remet en pause par défaut
+    }
+  }, [audio]);
+
+  useEffect(() => {
+    if (audio && isPlaying) {
+      audioRef.current.play();
+    }
+  }, [audio]);
 
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
@@ -59,12 +74,18 @@ const MusicSection = () => {
     if (audioRef.current) {
       const updateProgress = () => {
         setProgress(
-          (audioRef.current.currentTime / audioRef.current.duration) * 100
+          audioRef.current.duration
+            ? (audioRef.current.currentTime / audioRef.current.duration) * 100
+            : 0
         );
       };
+
       audioRef.current.addEventListener('timeupdate', updateProgress);
+
       return () => {
-        audioRef.current.removeEventListener('timeupdate', updateProgress);
+        if (audioRef.current) {
+          audioRef.current.removeEventListener('timeupdate', updateProgress);
+        }
       };
     }
   }, []);
@@ -117,17 +138,18 @@ const MusicSection = () => {
 
         <div className={style.progress}>
           <span>
-            {new Date(
-              (progress / 100) * (audioRef.current?.duration || 0) * 1000
-            )
-              .toISOString()
-              .substr(14, 5)}
+            {audioRef.current?.duration
+              ? new Date((progress / 100) * audioRef.current.duration * 1000)
+                  .toISOString()
+                  .slice(14, 19)
+              : '00:00'}
           </span>
+
           <input
             type="range"
             min="0"
             max="100"
-            value={progress}
+            value={isNaN(progress) ? 0 : progress}
             onChange={handleProgressChange}
           />
           <span>

@@ -6,7 +6,7 @@ import 'styles/variables.scss';
 
 // import { appWithTranslation } from 'next-i18next';
 // import { useRouter } from 'next/router';
-import { ThemeProvider } from '@/app/ThemeContext';
+import { ThemeProvider } from '@/context/ThemeContext.js';
 import logger from '@/utils/logger';
 import Head from './head.js';
 

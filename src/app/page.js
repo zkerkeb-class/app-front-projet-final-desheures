@@ -10,7 +10,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
 import style from 'styles/page.module.scss';
-import { useTheme } from '@/app/ThemeContext.js';
+import { useTheme } from '@/context/ThemeContext.js';
 
 import NavBar from 'components/Layouts/NavBar/page.js';
 import SectionAccueil from 'components/Sections/SectionAccueil/page.js';

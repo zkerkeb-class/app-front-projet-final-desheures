@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import style from './page.module.scss';
-import { useTheme } from '@/app/ThemeContext.js';
+import { useTheme } from '@/context/ThemeContext.js';
 
 import {
   getAudiosSortedByPopularity,
@@ -10,7 +10,8 @@ import {
 } from '@/services/api/sort.api';
 
 const SectionAccueil = () => {
-  const { darkMode, setSectionName, setSelectedId } = useTheme();
+  const { darkMode, setSectionName, setSelectedId, setSelectedMusicId } =
+    useTheme();
   const [topAlbums, setTopAlbums] = useState([]);
   const [topTracks, setTopTracks] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
@@ -90,7 +91,11 @@ const SectionAccueil = () => {
 
   const handleItemClick = (type, id) => {
     setSectionName(type);
-    setSelectedId(id);
+    if (type === 'Titre') {
+      setSelectedMusicId(id);
+    } else {
+      setSelectedId(id);
+    }
   };
 
   const renderSection = (title, data, type) => {
