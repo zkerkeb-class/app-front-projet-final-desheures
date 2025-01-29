@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import style from './page.module.scss';
 
-import { useTheme } from '@/app/ThemeContext.js';
+import { useTheme } from '@/app/[locale]/ThemeContext.js';
 
 const Loader = () => {
   const [percentage, setPercentage] = useState(0);

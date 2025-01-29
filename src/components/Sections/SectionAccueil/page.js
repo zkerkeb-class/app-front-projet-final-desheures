@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import style from './page.module.scss';
-import { useTheme } from '@/app/ThemeContext.js';
+import { useTheme } from '@/app/[locale]/ThemeContext.js';
 
 import {
   getAudiosSortedByPopularity,

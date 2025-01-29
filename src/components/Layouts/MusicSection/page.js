@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import style from './page.module.scss';
 import Image from 'next/image';
-import { useTheme } from '@/app/ThemeContext.js';
+import { useTheme } from '@/app/[locale]/ThemeContext.js';
 import { getAudioById } from '@/services/api/audio.api';
 
 const baseUrl = 'http://localhost:3030';

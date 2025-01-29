@@ -6,11 +6,15 @@ import 'styles/variables.scss';
 
 // import { appWithTranslation } from 'next-i18next';
 // import { useRouter } from 'next/router';
-import { ThemeProvider } from '@/app/ThemeContext';
+import { ThemeProvider } from '@/app/[locale]/ThemeContext.js';
 import logger from '@/utils/logger';
 import Head from './head.js';
 
-export default function RootLayout({ children }) {
+export async function generateStaticParams() {
+  return [{ lang: 'fr' }, { lang: 'en' }, { lang: 'ar' }, { lang: 'pt' }];
+}
+
+export default function RootLayout({ children, params }) {
   // const { locale } = useRouter();
   // const isRtl = locale === 'ar'; // Vérifie si la langue est arabe
 
@@ -23,7 +27,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <html>
+    <html lang={params.lang}>
       {/* <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'}> */}
       <body>
         <Head />

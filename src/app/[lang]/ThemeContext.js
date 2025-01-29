@@ -75,7 +75,7 @@ export const ThemeProvider = ({ children }) => {
         selectedMusicId,
         setSelectedMusicId: setSelectedMusicIdWithLog,
         isExpanded,
-        setIsExpanded : setIsExpandedLog,
+        setIsExpanded: setIsExpandedLog,
       }}
     >
       {children}

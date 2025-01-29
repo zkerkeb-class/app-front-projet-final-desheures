@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
 
@@ -10,26 +10,57 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
 import style from 'styles/page.module.scss';
-import { useTheme } from '@/app/ThemeContext.js';
+import { useTheme } from '@/app/[locale]/ThemeContext.js';
 
 import NavBar from 'components/Layouts/NavBar/page.js';
 import SectionAccueil from 'components/Sections/SectionAccueil/page.js';
 import SectionDescription from 'components/Sections/SectionDescription/page.js';
 import Loader from 'components/Layouts/Loading_Page/page.js';
 import MusicSection from '@/components/Layouts/MusicSection/page';
-
+import { useParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
+import { initI18next } from '../i18n';
 // import { useTranslation } from 'next-i18next';
 
 const Home = () => {
+  const { locale } = useParams('fr');
+
   const { darkMode } = useTheme();
   const { isLoading, setLoader } = useTheme();
   const { sectionName } = useTheme();
   const { isExpanded } = useTheme();
 
   // const { t } = useTranslation('common');
+  const [isI18nInitialized, setIsI18nInitialized] = useState(false);
 
   const darkModeRef = useRef(darkMode);
+  useEffect(() => {
+    const loadTranslations = async () => {
+      const translations = await fetch(`/locales/${lang}/common.json`).then(
+        (r) => r.json()
+      );
+      i18next.use(initReactI18next).init({
+        resources: {
+          [lang]: {
+            common: translations,
+          },
+        },
+        lng: lang,
+        fallbackLng: 'fr',
+        interpolation: {
+          escapeValue: false,
+        },
+      });
+      setIsI18nInitialized(true);
+    };
+    loadTranslations();
+  }, [lang]);
 
+  const { t } = useTranslation();
+
+  if (!isI18nInitialized) {
+    return <div>Loading...</div>;
+  }
   useEffect(() => {
     darkModeRef.current = darkMode;
   }, [darkMode]);
@@ -265,6 +296,9 @@ const Home = () => {
         <>
           {!isExpanded && <NavBar />}
           <div className={style.app_wrapper}>
+            <h1>{t('welcome')}</h1>
+            <h2>{t('title')}</h2>
+            <p>{t('description')}</p>
             {sectionName != '' ? <SectionDescription /> : <SectionAccueil />}
             <MusicSection />
           </div>

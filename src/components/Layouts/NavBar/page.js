@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './page.module.scss';
-import { useTheme } from '@/app/ThemeContext.js';
+import { useTheme } from '@/app/[locale]/ThemeContext.js';
 
 const NavBar = () => {
   const { darkMode, toggleDarkMode } = useTheme();
