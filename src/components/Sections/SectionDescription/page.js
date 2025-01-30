@@ -12,6 +12,7 @@ const SectionDescription = () => {
   const { sectionName } = useTheme();
 
   const [audios, setAudios] = useState([]);
+  
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
   useEffect(() => {
     getAllAudios()

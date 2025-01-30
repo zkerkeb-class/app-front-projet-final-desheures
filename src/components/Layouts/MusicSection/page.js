@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useTheme } from '@/context/ThemeContext.js';
 import { getAudioById } from '@/services/api/audio.api';
 import logger from '@/utils/logger';
+import SectionRoomMulti from '@/components/Sections/SectionRoom';
 
 const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -69,7 +70,14 @@ const MusicSection = () => {
     audioRef.current.volume = newVolume;
     setVolume(e.target.value);
   };
-
+  const handleRoomTrackChange = async (audioId) => {
+    try {
+      const data = await getAudioById(audioId);
+      setAudio(data);
+    } catch (error) {
+      logger.error('Erreur lors du changement de piste:', error);
+    }
+  };
   useEffect(() => {
     if (audioRef.current) {
       const updateProgress = () => {
@@ -170,6 +178,13 @@ const MusicSection = () => {
           />
           <span>{volume}</span>
         </div>
+        <SectionRoomMulti
+          audio={audio}
+          audioRef={audioRef}
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+          onTrackChange={handleRoomTrackChange}
+        />
       </div>
     </div>
   );
