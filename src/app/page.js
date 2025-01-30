@@ -17,6 +17,8 @@ import SectionAccueil from 'components/Sections/SectionAccueil/page.js';
 import SectionDescription from 'components/Sections/SectionDescription/page.js';
 import Loader from 'components/Layouts/Loading_Page/page.js';
 import MusicSection from '@/components/Layouts/MusicSection/page';
+import SectionAlbum from '@/components/Sections/SectionAlbum';
+import SectionArtist from '@/components/Sections/SectionArtist';
 
 // import { useTranslation } from 'next-i18next';
 
@@ -24,6 +26,8 @@ const Home = () => {
   const { darkMode } = useTheme();
   const { isLoading, setLoader } = useTheme();
   const { sectionName } = useTheme();
+  console.log(sectionName);
+
   const { isExpanded } = useTheme();
 
   // const { t } = useTranslation('common');
@@ -265,7 +269,11 @@ const Home = () => {
         <>
           {!isExpanded && <NavBar />}
           <div className={style.app_wrapper}>
-            {sectionName != '' ? <SectionDescription /> : <SectionAccueil />}
+            {sectionName === 'Album' && <SectionAlbum />}
+            {sectionName === 'Artiste' && <SectionArtist />}
+            {sectionName === 'Description' && <SectionDescription />}
+            {sectionName === '' && <SectionAccueil />}
+
             <MusicSection />
           </div>
         </>

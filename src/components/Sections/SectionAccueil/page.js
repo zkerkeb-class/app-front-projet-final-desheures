@@ -90,10 +90,10 @@ const SectionAccueil = () => {
   }, []);
 
   const handleItemClick = (type, id) => {
-    setSectionName(type);
     if (type === 'Titre') {
       setSelectedMusicId(id);
     } else {
+      setSectionName(type);
       setSelectedId(id);
     }
   };
