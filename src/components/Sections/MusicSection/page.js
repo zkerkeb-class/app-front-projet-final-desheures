@@ -1,44 +1,81 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
-import { useTheme } from '@/context/ThemeContext.js';
+import { useTheme } from '@/context/ThemeContext';
 import { getAudioById } from '@/services/api/audio.api';
 import logger from '@/utils/logger';
+import WaveformVisualizer from '../../Layouts/WaveformVisualizer';
 import Backaground_Img from 'images/background/shadow_lion.png';
-import style from './page.module.scss';
+import styles from './page.module.scss';
+import { useAudioContext } from '@/hooks/useAudioContext';
+
+const KEYBOARD_SHORTCUTS = {
+  SPACE: ' ',
+  ARROW_LEFT: 'ArrowLeft',
+  ARROW_RIGHT: 'ArrowRight',
+  ARROW_UP: 'ArrowUp',
+  ARROW_DOWN: 'ArrowDown',
+  M: 'm',
+  R: 'r',
+  F: 'f',
+  ESCAPE: 'Escape',
+};
 
 const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const MusicSection = () => {
   const { darkMode, isExpanded, setIsExpanded, selectedMusicId } = useTheme();
 
-  // États audio
+  // Audio states
   const [audio, setAudio] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(50);
-  const [isMuted, setIsMuted] = useState(false);
+  const [visualizerError, setVisualizerError] = useState(null);
+  const [volume, setVolume] = useState(() => {
+    return localStorage.getItem('audioVolume')
+      ? parseInt(localStorage.getItem('audioVolume'))
+      : 50;
+  });
 
-  // États playlist
+  const [isMuted, setIsMuted] = useState(false);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [displayRemaining, setDisplayRemaining] = useState(false);
+
+  // Playlist states
   const [playlist, setPlaylist] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [playbackMode, setPlaybackMode] = useState('normal'); // 'normal', 'repeat-one', 'repeat-all', 'shuffle'
+  const [playbackMode, setPlaybackMode] = useState(() => {
+    return localStorage.getItem('playbackMode') || 'normal';
+  });
 
   // Refs
   const audioRef = useRef(null);
-  const previousVolume = useRef(50);
+  const previousVolume = useRef(volume);
 
-  // Chargement initial de l'audio
+  // Save preferences
+  useEffect(() => {
+    localStorage.setItem('audioVolume', volume.toString());
+  }, [volume]);
+
+  useEffect(() => {
+    localStorage.setItem('playbackMode', playbackMode);
+  }, [playbackMode]);
+
+  // Load initial audio
   useEffect(() => {
     if (!selectedMusicId) return;
 
-    // Pause la musique actuelle
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
+    const loadAudio = async () => {
+      setIsLoading(true);
+      setError(null);
 
-    const fetchAudio = async () => {
       try {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }
+
         const data = await getAudioById(selectedMusicId);
         setAudio(data);
         setPlaylist((prev) => {
@@ -47,53 +84,169 @@ const MusicSection = () => {
           }
           return prev;
         });
-        // Démarre la nouvelle musique après chargement
-        setIsPlaying(true);
+        setProgress(0);
+        setTimeout(() => {
+          if (audioRef.current) {
+            audioRef.current.load();
+          }
+        }, 0);
       } catch (error) {
+        setError("Erreur lors du chargement de l'audio");
         logger.error("Erreur lors de la récupération de l'audio:", error);
+        setAudio(null);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchAudio();
+    loadAudio();
   }, [selectedMusicId]);
-  // Gestion de l'audio
+
+  // Handle audio events
   useEffect(() => {
-    if (!audio || !audioRef.current) return;
+    if (!audioRef.current) return;
 
     const handleTimeUpdate = () => {
-      setProgress(
-        audioRef.current.duration
-          ? (audioRef.current.currentTime / audioRef.current.duration) * 100
-          : 0
-      );
+      if (!audioRef.current) return;
+      const currentTime = audioRef.current.currentTime;
+      const duration = audioRef.current.duration;
+
+      if (duration > 0) {
+        setProgress((currentTime / duration) * 100);
+      }
     };
 
-    const handleTrackEnd = () => {
-      playNextTrack();
+    const handleError = (e) => {
+      setError("Erreur lors de la lecture de l'audio");
+      logger.error('Erreur de lecture audio:', e);
+      setIsPlaying(false);
     };
 
-    audioRef.current.load();
+    const handleLoadStart = () => {
+      setIsLoading(true);
+    };
+
+    const handleCanPlay = () => {
+      setIsLoading(false);
+      audioRef.current.volume = volume / 100;
+    };
+
+    const handleEnded = () => {
+      setIsPlaying(false);
+      setProgress(0);
+    };
+
     audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
-    audioRef.current.addEventListener('ended', handleTrackEnd);
+    audioRef.current.addEventListener('error', handleError);
+    audioRef.current.addEventListener('loadstart', handleLoadStart);
+    audioRef.current.addEventListener('canplay', handleCanPlay);
+    audioRef.current.addEventListener('ended', handleEnded);
+
+    // Set initial volume
+    audioRef.current.volume = volume / 100;
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('timeupdate', handleTimeUpdate);
-        audioRef.current.removeEventListener('ended', handleTrackEnd);
+      const audio = audioRef.current;
+      if (audio) {
+        audio.removeEventListener('timeupdate', handleTimeUpdate);
+        audio.removeEventListener('error', handleError);
+        audio.removeEventListener('loadstart', handleLoadStart);
+        audio.removeEventListener('canplay', handleCanPlay);
+        audio.removeEventListener('ended', handleEnded);
       }
     };
-  }, [audio]);
+  }, [audio, volume]);
 
-  // Auto-play lors du changement d'état de lecture
+  // Handle play state changes
   useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
+    if (!audioRef.current || !audio) return;
+
+    const playAudio = async () => {
+      try {
+        if (isPlaying) {
+          await audioRef.current.play();
+        } else {
+          audioRef.current.pause();
+        }
+      } catch (error) {
+        logger.error('Error controlling audio playback:', error);
+        setIsPlaying(false);
       }
-    }
-  }, [isPlaying]);
+    };
+
+    playAudio();
+  }, [isPlaying, audio]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      // Handle Escape key globally
+      if (e.key === KEYBOARD_SHORTCUTS.ESCAPE && isExpanded) {
+        e.preventDefault();
+        setIsExpanded(false);
+        return;
+      }
+
+      if (e.target.tagName === 'INPUT') return;
+
+      let newVolume;
+
+      switch (e.key) {
+        case KEYBOARD_SHORTCUTS.SPACE:
+          e.preventDefault();
+          if (audio) {
+            togglePlayPause();
+          }
+          break;
+        case KEYBOARD_SHORTCUTS.ARROW_LEFT:
+          e.preventDefault();
+          if (audioRef.current) {
+            const newTime = Math.max(0, audioRef.current.currentTime - 5);
+            audioRef.current.currentTime = newTime;
+            setProgress((newTime / audioRef.current.duration) * 100);
+          }
+          break;
+        case KEYBOARD_SHORTCUTS.ARROW_RIGHT:
+          e.preventDefault();
+          if (audioRef.current) {
+            const newTime = Math.min(
+              audioRef.current.duration,
+              audioRef.current.currentTime + 5
+            );
+            audioRef.current.currentTime = newTime;
+            setProgress((newTime / audioRef.current.duration) * 100);
+          }
+          break;
+        case KEYBOARD_SHORTCUTS.ARROW_UP:
+          e.preventDefault();
+          newVolume = Math.min(volume + 5, 100);
+          handleVolumeChange({ target: { value: newVolume } });
+          break;
+        case KEYBOARD_SHORTCUTS.ARROW_DOWN:
+          e.preventDefault();
+          newVolume = Math.max(volume - 5, 0);
+          handleVolumeChange({ target: { value: newVolume } });
+          break;
+        case KEYBOARD_SHORTCUTS.M:
+          e.preventDefault();
+          toggleMute();
+          break;
+        case KEYBOARD_SHORTCUTS.R:
+          e.preventDefault();
+          if (audio) {
+            restartTrack();
+          }
+          break;
+        case KEYBOARD_SHORTCUTS.F:
+          e.preventDefault();
+          setIsExpanded((prev) => !prev);
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [volume, audio, isExpanded, setIsExpanded]);
 
   // Handlers
   const handlePlaybackModeChange = () => {
@@ -103,8 +256,17 @@ const MusicSection = () => {
     setPlaybackMode(modes[nextIndex]);
   };
 
+  const restartTrack = () => {
+    if (!audioRef.current) return;
+    audioRef.current.currentTime = 0;
+    setProgress(0);
+    if (!isPlaying) {
+      setIsPlaying(true);
+    }
+  };
   const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
+    if (!audio) return;
+    setIsPlaying((prev) => !prev);
   };
 
   const toggleExpand = () => {
@@ -126,65 +288,55 @@ const MusicSection = () => {
   };
 
   const handleProgressChange = (e) => {
-    if (!audioRef.current) return;
-    const newTime = (e.target.value / 100) * audioRef.current.duration;
-    audioRef.current.currentTime = newTime;
-    setProgress(e.target.value);
+    if (!audioRef.current || !audioRef.current.duration) return;
+
+    const newValue = parseFloat(e.target.value);
+    const newTime = (newValue / 100) * audioRef.current.duration;
+
+    if (!isNaN(newTime) && isFinite(newTime)) {
+      audioRef.current.currentTime = newTime;
+      setProgress(newValue);
+    }
   };
 
   const handleVolumeChange = (e) => {
     if (!audioRef.current) return;
-    const newVolume = e.target.value / 100;
-    audioRef.current.volume = newVolume;
-    setVolume(e.target.value);
-    if (newVolume > 0) setIsMuted(false);
+
+    const newVolume = parseInt(e.target.value);
+    if (!isNaN(newVolume) && isFinite(newVolume)) {
+      audioRef.current.volume = newVolume / 100;
+      setVolume(newVolume);
+      if (newVolume > 0) setIsMuted(false);
+    }
   };
 
-  // Navigation dans la playlist
   const playNextTrack = () => {
-    if (playlist.length === 0) return;
-
-    if (playbackMode === 'repeat-one') {
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        setIsPlaying(true);
-      }
-      return;
-    }
-
-    let nextIndex;
-    if (playbackMode === 'shuffle') {
-      nextIndex = Math.floor(Math.random() * playlist.length);
-    } else {
-      nextIndex = (currentTrackIndex + 1) % playlist.length;
-    }
-
-    if (
-      nextIndex === 0 &&
-      playbackMode !== 'repeat-all' &&
-      playbackMode !== 'shuffle'
-    ) {
-      setIsPlaying(false);
-      return;
-    }
-
-    setCurrentTrackIndex(nextIndex);
-    setAudio(playlist[nextIndex]);
+    return null;
   };
 
   const playPreviousTrack = () => {
-    if (playlist.length === 0) return;
+    return null;
+  };
 
-    let prevIndex;
-    if (playbackMode === 'shuffle') {
-      prevIndex = Math.floor(Math.random() * playlist.length);
-    } else {
-      prevIndex =
-        currentTrackIndex === 0 ? playlist.length - 1 : currentTrackIndex - 1;
+  const formatTime = (timeInSeconds) => {
+    if (!timeInSeconds || isNaN(timeInSeconds)) return '00:00';
+    return new Date(timeInSeconds * 1000).toISOString().slice(14, 19);
+  };
+
+  const toggleTimeDisplay = () => {
+    setDisplayRemaining(!displayRemaining);
+  };
+
+  const getTimeDisplay = () => {
+    if (!audioRef.current?.duration) return '00:00';
+
+    const currentTime = audioRef.current.currentTime;
+    const duration = audioRef.current.duration;
+
+    if (displayRemaining) {
+      return '-' + formatTime(duration - currentTime);
     }
-
-    setCurrentTrackIndex(prevIndex);
-    setAudio(playlist[prevIndex]);
+    return formatTime(currentTime);
   };
 
   const getPlaybackModeIcon = () => {
@@ -201,20 +353,37 @@ const MusicSection = () => {
         return '🔄';
     }
   };
-  console.log(audioRef.current);
-
-  // Rendu du composanta
+  const analyzer = useAudioContext(audioRef);
   return (
-    <div className={`${style.container} ${isExpanded ? style.expanded : ''}`}>
+    <div className={`${styles.container} ${isExpanded ? styles.expanded : ''}`}>
       <div
-        className={`${style.music_section} ${darkMode ? style.dark : style.light}`}
+        className={`${styles.music_section} ${darkMode ? styles.dark : styles.light}`}
       >
-        <button onClick={toggleExpand} className={style.expandButton}>
+        <button onClick={toggleExpand} className={styles.expandButton}>
           {isExpanded ? 'Réduire' : 'Agrandir'}
         </button>
 
-        {/* CD et Visualisation */}
-        <div className={`${style.music_CD} ${isPlaying ? style.spinning : ''}`}>
+        {error && (
+          <div className={styles.error}>
+            {error}
+            <button onClick={() => setError(null)}>×</button>
+          </div>
+        )}
+
+        {isExpanded && analyzer && (
+          <div className={styles.waveformContainer}>
+            <WaveformVisualizer
+              analyzer={analyzer}
+              isPlaying={isPlaying}
+              darkMode={darkMode}
+            />
+          </div>
+        )}
+
+        <div
+          className={`${styles.music_CD} ${isPlaying && !isLoading ? styles.spinning : ''}`}
+        >
+          {isLoading && <div className={styles.loader}>Chargement...</div>}
           <Image
             src={
               audio?.album?.coverUrl
@@ -224,27 +393,25 @@ const MusicSection = () => {
             alt={audio?.title || 'Album cover'}
             width={isExpanded ? 400 : 240}
             height={isExpanded ? 400 : 240}
-            className={style.image_CD}
+            className={styles.image_CD}
             priority
             formats={['webp', 'jpeg', 'avif']}
           />
         </div>
 
-        {/* Informations de la piste */}
-        <div className={style.trackDetails}>
-          <p className={style.trackTitle}>
+        <div className={styles.trackDetails}>
+          <p className={styles.trackTitle}>
             {audio?.title || 'Titre de la musique'}
           </p>
-          <p className={style.artist}>
+          <p className={styles.artist}>
             {audio?.artist?.name || "Nom de l'artiste"}
           </p>
           {isExpanded && audio?.album && (
-            <p className={style.album}>{audio.album.name}</p>
+            <p className={styles.album}>{audio.album.name}</p>
           )}
         </div>
 
-        {/* Élément audio */}
-        <audio ref={audioRef}>
+        <audio ref={audioRef} crossOrigin="anonymous">
           {audio && (
             <>
               <source src={`${baseUrl}/${audio.audioUrl}`} type="audio/wav" />
@@ -253,44 +420,38 @@ const MusicSection = () => {
           )}
         </audio>
 
-        {/* Contrôles de lecture */}
-        <div className={style.controls}>
-          <button onClick={playPreviousTrack}>&lt;&lt;</button>
-          <button onClick={togglePlayPause}>{isPlaying ? '⏸' : '▶️'}</button>
-          <button onClick={playNextTrack}>&gt;&gt;</button>
-          <button onClick={handlePlaybackModeChange}>
+        <div className={styles.controls}>
+          <button onClick={playPreviousTrack} disabled={isLoading}>
+            &lt;&lt;
+          </button>
+          <button onClick={togglePlayPause} disabled={isLoading || !audio}>
+            {isPlaying ? '⏸' : '▶️'}
+          </button>
+          <button onClick={playNextTrack} disabled={isLoading}>
+            &gt;&gt;
+          </button>
+          <button onClick={handlePlaybackModeChange} disabled={isLoading}>
             {getPlaybackModeIcon()}
           </button>
         </div>
 
-        {/* Barre de progression */}
-        <div className={style.progress}>
-          <span>
-            {audioRef.current?.duration
-              ? new Date((progress / 100) * audioRef.current.duration * 1000)
-                  .toISOString()
-                  .slice(14, 19)
-              : '00:00'}
-          </span>
+        <div className={styles.progress}>
+          <button onClick={toggleTimeDisplay} className={styles.timeDisplay}>
+            {getTimeDisplay()}
+          </button>
           <input
             type="range"
             min="0"
             max="100"
             value={isNaN(progress) ? 0 : progress}
             onChange={handleProgressChange}
-            className={style.progressBar}
+            className={styles.progressBar}
+            disabled={isLoading}
           />
-          <span>
-            {audioRef.current?.duration
-              ? new Date(audioRef.current.duration * 1000)
-                  .toISOString()
-                  .substr(14, 5)
-              : '00:00'}
-          </span>
+          <span>{formatTime(audioRef.current?.duration || 0)}</span>
         </div>
 
-        {/* Contrôle du volume */}
-        <div className={style.sound}>
+        <div className={styles.sound}>
           <button onClick={toggleMute}>
             {isMuted || volume === 0 ? '🔇' : volume < 50 ? '🔉' : '🔊'}
           </button>
@@ -300,7 +461,7 @@ const MusicSection = () => {
             max="100"
             value={volume}
             onChange={handleVolumeChange}
-            className={style.volumeBar}
+            className={styles.volumeBar}
           />
           <span>{volume}</span>
         </div>

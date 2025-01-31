@@ -18,7 +18,7 @@
     position: fixed;
     width: 100vw;
     height: 100vh;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     z-index: 100;
 
@@ -40,23 +40,17 @@
         .waveformContainer {
           width: 600px;
           height: 600px;
+
+          .waveform-canvas {
+            width: 600px;
+            height: 600px;
+            transform: scale(1.2);
+          }
         }
 
         .image_CD {
           width: 80%;
           height: 80%;
-        }
-      }
-
-      .trackDetails {
-        .trackTitle {
-          font-size: 2rem;
-        }
-        .artist {
-          font-size: 1.5rem;
-        }
-        .album {
-          font-size: 1.2rem;
         }
       }
     }
@@ -75,17 +69,6 @@
     animation: fadeIn var(--text-animation) ease-in-out;
     transition: var(--transition);
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateX(var(--text-animation-margin));
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     .music_CD {
       position: relative;
       height: 300px;
@@ -99,19 +82,8 @@
       transition: var(--transition);
       overflow: visible;
 
-      &.spinning {
-        .image_CD {
-          animation: spin 20s linear infinite;
-        }
-      }
-
-      @keyframes spin {
-        from {
-          transform: rotate(0);
-        }
-        to {
-          transform: rotate(360deg);
-        }
+      &.spinning .image_CD {
+        animation: spin 20s linear infinite;
       }
 
       .image_CD {
@@ -134,9 +106,17 @@
         height: 400px;
         z-index: 1;
         pointer-events: none;
+
+        .waveform-canvas {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          transition: var(--transition);
+        }
       }
     }
-
     .trackDetails {
       display: flex;
       flex-direction: column;
