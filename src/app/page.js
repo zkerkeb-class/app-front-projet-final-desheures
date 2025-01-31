@@ -16,7 +16,7 @@ import NavBar from 'components/Layouts/NavBar/page.js';
 import SectionAccueil from 'components/Sections/SectionAccueil/page.js';
 import SectionDescription from 'components/Sections/SectionDescription/page.js';
 import Loader from 'components/Layouts/Loading_Page/page.js';
-import MusicSection from '@/components/Layouts/MusicSection/page';
+import MusicSection from '@/components/Sections/MusicSection/page';
 import SectionAlbum from '@/components/Sections/SectionAlbum';
 import SectionArtist from '@/components/Sections/SectionArtist';
 

@@ -5,5 +5,5 @@ export const getAllAudios = async () => {
 };
 
 export const getAudioById = async (id) => {
-  return await fetchAPI(`/audio/${id}`);
+  return await fetchAPI(`audio/${id}`);
 };

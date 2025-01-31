@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import style from './page.module.scss';
 import { useTheme } from '@/context/ThemeContext.js';
-
 import {
   getAudiosSortedByPopularity,
   getAlbumsSortedByPopularity,
   getArtistsSortedByPopularity,
 } from '@/services/api/sort.api';
+import { getAudioById } from '@/services/api/audio.api';
+import socketService from '@/services/sockets/socketsService';
 
 const SectionAccueil = () => {
   const { darkMode, setSectionName, setSelectedId, setSelectedMusicId } =
@@ -15,6 +16,8 @@ const SectionAccueil = () => {
   const [topAlbums, setTopAlbums] = useState([]);
   const [topTracks, setTopTracks] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
+  const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
+  const [mostPlayedTracks, setMostPlayedTracks] = useState([]);
 
   const normalizeItem = (item, type) => {
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
@@ -35,8 +38,13 @@ const SectionAccueil = () => {
         return {
           id: item._id,
           title: item.title,
-          imageUrl: getFullImageUrl(item.imageUrl || item.albumCoverUrl),
-          albumId: item.albumId,
+          // Priorité à l'image de l'album, puis à l'image de l'artiste, puis placeholder
+          imageUrl: getFullImageUrl(
+            item.album?.coverUrl ||
+              item.artist?.imageUrl ||
+              '/images/default-placeholder.png'
+          ),
+          albumId: item.album?._id,
         };
       case 'Artiste':
         return {
@@ -50,11 +58,15 @@ const SectionAccueil = () => {
   };
 
   useEffect(() => {
+    const socket = socketService.connect();
+
     const fetchData = async () => {
       try {
-        const albums = await getAlbumsSortedByPopularity('desc');
-        const tracks = await getAudiosSortedByPopularity('desc');
-        const artists = await getArtistsSortedByPopularity('desc');
+        const [albums, tracks, artists] = await Promise.all([
+          getAlbumsSortedByPopularity('desc'),
+          getAudiosSortedByPopularity('desc'),
+          getArtistsSortedByPopularity('desc'),
+        ]);
 
         const albumMap = albums.reduce((acc, album) => {
           acc[album._id] = normalizeItem(album, 'Album');
@@ -68,7 +80,6 @@ const SectionAccueil = () => {
         setTopTracks(
           tracks.slice(0, 10).map((track) => {
             const normalizedTrack = normalizeItem(track, 'Titre');
-            // Ajouter l'image de l'album si elle n'existe pas
             if (!track.imageUrl && track.album) {
               normalizedTrack.imageUrl =
                 albumMap[track.album]?.imageUrl ||
@@ -82,55 +93,106 @@ const SectionAccueil = () => {
           artists.slice(0, 10).map((artist) => normalizeItem(artist, 'Artiste'))
         );
       } catch (error) {
-        console.error('Erreur lors de la récupération des données :', error);
+        console.error('Erreur lors de la récupération des données:', error);
       }
     };
 
     fetchData();
+
+    socket.on('recentlyPlayedUpdated', () => {
+      socket.emit('getRecentlyPlayed');
+    });
+    socket.on('recentlyPlayedTracks', async (tracks) => {
+      try {
+        if (Array.isArray(tracks)) {
+          // Les tracks ont déjà les informations de base, on a juste besoin des informations complètes
+          const tracksData = await Promise.all(
+            tracks.map((track) => getAudioById(track._id))
+          );
+          setRecentlyPlayedTracks(
+            tracksData.map((track) => normalizeItem(track, 'Titre'))
+          );
+        } else {
+          setRecentlyPlayedTracks([]);
+        }
+      } catch (error) {
+        console.error('Erreur récupération dernières écoutes:', error);
+        setRecentlyPlayedTracks([]);
+      }
+    });
+
+    socket.on('mostPlayedUpdated', () => {
+      socket.emit('getMostPlayed');
+    });
+
+    socket.on('mostPlayedTracks', async (tracks) => {
+      try {
+        if (Array.isArray(tracks)) {
+          const tracksData = await Promise.all(
+            tracks.map((track) => getAudioById(track._id))
+          );
+          setMostPlayedTracks(
+            tracksData.map((track) => normalizeItem(track, 'Titre'))
+          );
+        } else {
+          setMostPlayedTracks([]);
+        }
+      } catch (error) {
+        console.error('Erreur récupération titres plus écoutés:', error);
+        setMostPlayedTracks([]);
+      }
+    });
+
+    socket.emit('getRecentlyPlayed');
+    socket.emit('getMostPlayed');
+
+    return () => {
+      socketService.disconnect();
+    };
   }, []);
 
   const handleItemClick = (type, id) => {
     if (type === 'Titre') {
       setSelectedMusicId(id);
+      socketService.emit('playTrack', id);
+      console.log('Track joué:', id);
     } else {
       setSectionName(type);
       setSelectedId(id);
     }
   };
 
-  const renderSection = (title, data, type) => {
-    return (
-      <div
-        className={`${style.section} ${darkMode ? style.dark : style.light}`}
-      >
-        <h2 className={style.section_title}>{title}</h2>
-        <div className={style.items_container}>
-          {data.map((item, index) => (
-            <button
-              className={style.item}
-              key={index}
-              onClick={() => handleItemClick(type, item.id)}
-            >
-              <Image
-                src={item.imageUrl}
-                alt={item.title}
-                width={140}
-                height={140}
-                className={style.item_image}
-              />
-              <p className={style.item_title}>{item.title}</p>
-            </button>
-          ))}
-        </div>
+  const renderSection = (title, data, type) => (
+    <div className={`${style.section} ${darkMode ? style.dark : style.light}`}>
+      <h2 className={style.section_title}>{title}</h2>
+      <div className={style.items_container}>
+        {data.map((item, index) => (
+          <button
+            className={style.item}
+            key={index}
+            onClick={() => handleItemClick(type, item.id)}
+          >
+            <Image
+              src={item.imageUrl}
+              alt={item.title}
+              width={140}
+              height={140}
+              className={style.item_image}
+            />
+            <p className={style.item_title}>{item.title}</p>
+          </button>
+        ))}
       </div>
-    );
-  };
+    </div>
+  );
 
   return (
     <div className={style.container}>
       {renderSection('Top 10 Albums', topAlbums, 'Album')}
       {renderSection('Top 10 Titres', topTracks, 'Titre')}
       {renderSection('Top 10 Artistes', topArtists, 'Artiste')}
+      {renderSection('Dernières écoutes', recentlyPlayedTracks, 'Titre')}
+      {renderSection('Les plus écoutées', mostPlayedTracks, 'Titre')}
     </div>
   );
 };

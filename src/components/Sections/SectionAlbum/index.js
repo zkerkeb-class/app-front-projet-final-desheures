@@ -5,24 +5,50 @@ import style from './index.module.scss';
 import Image from 'next/image';
 import { getAlbumById } from '@/services/api/album.api';
 import Backaground_Img from 'images/background/shadow_lion.png';
-
+import socketService from '@/services/sockets/socketsService';
 const SectionAlbum = () => {
   const { darkMode, selectedId, setSelectedMusicId } = useTheme();
   const [album, setAlbum] = useState(null);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
 
   useEffect(() => {
+    const socket = socketService.connect();
+
+    // Gérer la connexion socket
+    socket.on('connect', () => {
+      console.log('Socket connecté dans SectionAlbum');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Erreur de connexion socket dans SectionAlbum:', error);
+    });
+
+    // Charger l'album quand selectedId change
     if (selectedId) {
       getAlbumById(selectedId)
         .then((album) => setAlbum(album))
         .catch(console.error);
     }
+
+    // Événements pour les playlists
+    socket.on('recentlyPlayedUpdated', () => {
+      socket.emit('getRecentlyPlayed');
+    });
+
+    socket.on('mostPlayedUpdated', () => {
+      socket.emit('getMostPlayed');
+    });
+
+    return () => {
+      socketService.disconnect();
+    };
   }, [selectedId]);
 
   const handleItemClick = (id) => {
     setSelectedMusicId(id);
+    socketService.emit('playTrack', id);
+    console.log('Track joué:', id);
   };
-
   const getFullImageUrl = (url) => {
     if (!url) return '/images/default-placeholder.png';
     return url.startsWith('http') ? url : `${baseUrl}/${url}`;

@@ -34,3 +34,11 @@ export const deletePlaylist = async (id) => {
     method: 'DELETE',
   });
 };
+
+export const getRecentlyPlayedPlaylist = async () => {
+  return await fetchAPI('/playlist/recently-played');
+};
+
+export const getMostPlayedPlaylist = async () => {
+  return await fetchAPI('/playlist/most-played');
+};

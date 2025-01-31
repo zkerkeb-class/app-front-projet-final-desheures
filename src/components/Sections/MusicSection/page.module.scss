@@ -1,0 +1,333 @@
+// ------------------------------+
+//
+//        Music Section
+//
+// ------------------------------+
+
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 100%;
+  padding: 100px 0;
+  transition: var(--transition);
+  padding-right: var(--big-margin-padding);
+
+  &.expanded {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    padding: 0 0;
+    margin: 0;
+    z-index: 100;
+
+    .music_section {
+      position: relative;
+      backdrop-filter: blur(100px);
+      transform: scale(1.2);
+
+      .expandButton {
+        top: 20%;
+        right: 20%;
+        transform: translate(-80%, -80%);
+      }
+
+      .music_CD {
+        height: 500px;
+        width: 500px;
+
+        .waveformContainer {
+          width: 600px;
+          height: 600px;
+        }
+
+        .image_CD {
+          width: 80%;
+          height: 80%;
+        }
+      }
+
+      .trackDetails {
+        .trackTitle {
+          font-size: 2rem;
+        }
+        .artist {
+          font-size: 1.5rem;
+        }
+        .album {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  .music_section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    border-radius: var(--small-border-radius);
+    animation: fadeIn var(--text-animation) ease-in-out;
+    transition: var(--transition);
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(var(--text-animation-margin));
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .music_CD {
+      position: relative;
+      height: 300px;
+      width: 300px;
+      border-radius: var(--circle-border-radius);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin-bottom: var(--margin-padding);
+      transition: var(--transition);
+      overflow: visible;
+
+      &.spinning {
+        .image_CD {
+          animation: spin 20s linear infinite;
+        }
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .image_CD {
+        position: relative;
+        z-index: 2;
+        width: 80%;
+        height: 80%;
+        border-radius: var(--circle-border-radius);
+        border: var(--big-border-width) solid var(--white-color);
+        object-fit: cover;
+        transition: var(--transition);
+      }
+
+      .waveformContainer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        z-index: 1;
+        pointer-events: none;
+      }
+    }
+
+    .trackDetails {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      margin: var(--margin-padding) 0;
+
+      .trackTitle {
+        font-weight: bold;
+        margin-bottom: var(--small-margin-padding);
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+      }
+
+      .artist {
+        color: var(--second-color);
+        margin-bottom: var(--small-margin-padding);
+      }
+
+      .album {
+        color: var(--third-color);
+      }
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: var(--margin-padding);
+      margin: var(--margin-padding) 0;
+
+      button {
+        width: 40px;
+        height: 40px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-color);
+        border-radius: var(--circle-border-radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+
+        &:hover {
+          transform: scale(1.1);
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
+      }
+    }
+
+    .sound,
+    .progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--margin-padding);
+      width: 400px;
+      height: 40px;
+      transition: var(--transition);
+
+      span {
+        width: 20%;
+        text-align: center;
+      }
+
+      button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0 var(--small-margin-padding);
+        transition: var(--transition);
+
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+
+      input[type='range'] {
+        width: 80%;
+        margin: 0 var(--margin-padding);
+        -webkit-appearance: none;
+        height: 4px;
+        border-radius: var(--small-border-radius);
+        transition: var(--transition);
+
+        &:hover {
+          height: 6px;
+        }
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          background: var(--second-color);
+          height: 20px;
+          width: 20px;
+          border-radius: var(--circle-border-radius);
+          cursor: pointer;
+        }
+      }
+    }
+
+    .expandButton {
+      width: 100px;
+      height: 40px;
+      position: absolute;
+      top: var(--margin-padding);
+      right: var(--margin-padding);
+      background: var(--main-color);
+      color: var(--white-color);
+      padding: var(--small-margin-padding) var(--margin-padding);
+      border-radius: var(--small-border-radius);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+
+      &:hover {
+        background: var(--second-color);
+      }
+    }
+  }
+}
+
+// ------------------------------+
+//
+//        Light Dark Mode
+//
+// ------------------------------+
+
+.music_section {
+  &.dark {
+    .music_CD {
+      background: transparent;
+
+      .waveformContainer {
+        canvas {
+          filter: invert(0);
+          opacity: 0.6;
+        }
+      }
+    }
+
+    .controls button {
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .sound,
+    .progress {
+      input[type='range'] {
+        background: var(--third-color);
+
+        &:hover {
+          background: var(--second-color);
+        }
+      }
+    }
+  }
+
+  &.light {
+    .music_CD {
+      background: transparent;
+
+      .waveformContainer {
+        canvas {
+          filter: invert(1);
+          opacity: 0.4;
+        }
+      }
+    }
+
+    .controls button {
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .sound,
+    .progress {
+      input[type='range'] {
+        background: var(--main-color);
+
+        &:hover {
+          background: var(--second-color);
+        }
+      }
+    }
+  }
+}

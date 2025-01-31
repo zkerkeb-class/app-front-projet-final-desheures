@@ -15,6 +15,7 @@ const SectionRoomMulti = ({
   onTrackChange,
 }) => {
   const [socket, setSocket] = useState(null);
+  const [roomIdInput, setRoomIdInput] = useState('');
   const [roomId, setRoomId] = useState('');
   const [participants, setParticipants] = useState([]);
   const [isHost, setIsHost] = useState(false);
@@ -22,8 +23,10 @@ const SectionRoomMulti = ({
   const [username, setUsername] = useState('');
   const [connectionStatus, setConnectionStatus] = useState('disconnected');
   const [error, setError] = useState('');
+  const [queue, setQueue] = useState([]);
+  const [currentQueueIndex, setCurrentQueueIndex] = useState(-1);
 
-  // Initialisation du socket
+  // Socket initialization
   useEffect(() => {
     const newSocket = io(`${baseUrl}`, {
       reconnectionAttempts: 5,
@@ -51,22 +54,55 @@ const SectionRoomMulti = ({
     };
   }, []);
 
-  // Gestion des événements de room
+  // Room event handlers
   useEffect(() => {
     if (!socket) return;
 
-    socket.on('roomCreated', ({ roomId: createdRoomId }) => {
-      setRoomId(createdRoomId);
-      setParticipants([{ id: socket.id, name: username }]);
-    });
+    socket.on(
+      'roomCreated',
+      ({
+        roomId: createdRoomId,
+        participants: initialParticipants,
+        queue: initialQueue,
+        currentQueueIndex: initialIndex,
+      }) => {
+        setRoomId(createdRoomId);
+        setParticipants(initialParticipants);
+        setQueue(initialQueue || []);
+        setCurrentQueueIndex(initialIndex || -1);
+        setError('');
+      }
+    );
 
-    socket.on('roomJoined', ({ participants: roomParticipants }) => {
-      setParticipants(roomParticipants);
-    });
+    socket.on(
+      'roomJoined',
+      ({
+        participants: roomParticipants,
+        currentTrack: roomTrack,
+        queue: roomQueue,
+        currentQueueIndex: roomIndex,
+      }) => {
+        setParticipants(roomParticipants);
+        setQueue(roomQueue || []);
+        setCurrentQueueIndex(roomIndex || -1);
+        if (roomTrack) {
+          setCurrentTrack(roomTrack);
+          onTrackChange(roomTrack.id);
+        }
+        setError('');
+      }
+    );
+
+    socket.on(
+      'queueUpdated',
+      ({ queue: newQueue, currentQueueIndex: newIndex }) => {
+        setQueue(newQueue);
+        setCurrentQueueIndex(newIndex);
+      }
+    );
 
     socket.on('userJoined', (newParticipant) => {
       setParticipants((prev) => [...prev, newParticipant]);
-      // Si je suis l'hôte, j'envoie l'état actuel
       if (isHost && currentTrack) {
         syncCurrentTrack(newParticipant.id);
       }
@@ -76,6 +112,10 @@ const SectionRoomMulti = ({
       setParticipants((prev) => prev.filter((p) => p.id !== userId));
     });
 
+    socket.on('hostChanged', ({ newHostId }) => {
+      setIsHost(newHostId === socket.id);
+    });
+
     socket.on('error', ({ message }) => {
       setError(message);
     });
@@ -83,13 +123,15 @@ const SectionRoomMulti = ({
     return () => {
       socket.off('roomCreated');
       socket.off('roomJoined');
+      socket.off('queueUpdated');
       socket.off('userJoined');
       socket.off('userLeft');
+      socket.off('hostChanged');
       socket.off('error');
     };
-  }, [socket, isHost, currentTrack, username]);
+  }, [socket, isHost, currentTrack, onTrackChange]);
 
-  // Gestion de la synchronisation audio
+  // Playback sync handlers
   useEffect(() => {
     if (!socket) return;
 
@@ -101,7 +143,7 @@ const SectionRoomMulti = ({
 
           audioRef.current.currentTime = currentTime;
           if (newIsPlaying && audioRef.current.paused) {
-            audioRef.current.play();
+            audioRef.current.play().catch(console.error);
             setIsPlaying(true);
           } else if (!newIsPlaying && !audioRef.current.paused) {
             audioRef.current.pause();
@@ -111,11 +153,13 @@ const SectionRoomMulti = ({
       }
     );
 
-    socket.on('trackChange', ({ audioData }) => {
-      if (!isHost && onTrackChange) {
+    socket.on('trackChange', ({ audioData, queueIndex, queue: newQueue }) => {
+      if (!isHost) {
         setCurrentTrack(audioData);
         onTrackChange(audioData.id);
       }
+      if (newQueue) setQueue(newQueue);
+      setCurrentQueueIndex(queueIndex);
     });
 
     return () => {
@@ -124,7 +168,7 @@ const SectionRoomMulti = ({
     };
   }, [socket, isHost, audioRef, currentTrack, setIsPlaying, onTrackChange]);
 
-  // Mise à jour du state local quand l'audio change
+  // Track change handler
   useEffect(() => {
     if (audio) {
       setCurrentTrack(audio);
@@ -134,7 +178,64 @@ const SectionRoomMulti = ({
     }
   }, [audio, isHost, socket, roomId]);
 
+  // Queue management functions
+  const addToQueue = (track) => {
+    if (!socket || !roomId) return;
+    socket.emit('addToQueue', { roomId, track });
+  };
+
+  const playNext = () => {
+    if (!socket || !roomId || !isHost) return;
+    socket.emit('nextTrack', { roomId });
+  };
+
+  const playPrevious = () => {
+    if (!socket || !roomId || !isHost) return;
+    socket.emit('previousTrack', { roomId });
+  };
+
+  // Auto-add current track to queue
+  useEffect(() => {
+    if (audio && roomId) {
+      addToQueue(audio);
+    }
+  }, [audio, roomId]);
+
+  // Room management functions
+  const createRoom = () => {
+    if (!username) {
+      setError("Veuillez entrer un nom d'utilisateur");
+      return;
+    }
+    if (!audio) {
+      setError('Veuillez sélectionner une piste audio');
+      return;
+    }
+    const newRoomId = Math.random().toString(36).substring(7);
+    socket.emit('createRoom', { roomId: newRoomId, username });
+    setIsHost(true);
+  };
+
+  const joinRoom = () => {
+    if (!username) {
+      setError("Veuillez entrer un nom d'utilisateur");
+      return;
+    }
+    if (!roomIdInput) {
+      setError('Veuillez entrer un ID de room');
+      return;
+    }
+    if (!audio) {
+      setError('Veuillez sélectionner une piste audio');
+      return;
+    }
+    socket.emit('joinRoom', { roomId: roomIdInput, username });
+    setRoomId(roomIdInput);
+  };
+
   const syncCurrentTrack = (targetUserId = null) => {
+    if (!audio) return;
+
     const audioData = {
       id: audio.id,
       title: audio.title,
@@ -159,28 +260,6 @@ const SectionRoomMulti = ({
     }
   };
 
-  const createRoom = () => {
-    if (!username) {
-      setError("Veuillez entrer un nom d'utilisateur");
-      return;
-    }
-    const newRoomId = Math.random().toString(36).substring(7);
-    socket.emit('createRoom', { roomId: newRoomId, username });
-    setIsHost(true);
-  };
-
-  const joinRoom = () => {
-    if (!username) {
-      setError("Veuillez entrer un nom d'utilisateur");
-      return;
-    }
-    if (!roomId) {
-      setError('Veuillez entrer un ID de room');
-      return;
-    }
-    socket.emit('joinRoom', { roomId, username });
-  };
-
   const syncPlayback = () => {
     if (isHost && socket && audioRef.current) {
       socket.emit('syncPlayback', {
@@ -192,23 +271,28 @@ const SectionRoomMulti = ({
     }
   };
 
-  // Synchro de la lecture pour l'hôte
+  // Host playback sync listeners
   useEffect(() => {
     if (!isHost || !audioRef.current) return;
 
     const handlePlay = () => syncPlayback();
     const handlePause = () => syncPlayback();
     const handleSeek = () => syncPlayback();
+    const handleEnded = () => {
+      socket.emit('trackEnded', { roomId });
+    };
 
     audioRef.current.addEventListener('play', handlePlay);
     audioRef.current.addEventListener('pause', handlePause);
     audioRef.current.addEventListener('seeked', handleSeek);
+    audioRef.current.addEventListener('ended', handleEnded);
 
     return () => {
       if (audioRef.current) {
         audioRef.current.removeEventListener('play', handlePlay);
         audioRef.current.removeEventListener('pause', handlePause);
         audioRef.current.removeEventListener('seeked', handleSeek);
+        audioRef.current.removeEventListener('ended', handleEnded);
       }
     };
   }, [audioRef, isHost, roomId, audio]);
@@ -245,12 +329,13 @@ const SectionRoomMulti = ({
               <input
                 type="text"
                 placeholder="ID de la room"
-                onChange={(e) => setRoomId(e.target.value)}
+                value={roomIdInput}
+                onChange={(e) => setRoomIdInput(e.target.value)}
                 className={style.input}
               />
               <button
                 onClick={joinRoom}
-                disabled={!roomId || !audio || !username}
+                disabled={!roomIdInput || !audio || !username}
               >
                 Rejoindre
               </button>
@@ -266,7 +351,7 @@ const SectionRoomMulti = ({
                 className={style.copyButton}
                 onClick={() => navigator.clipboard.writeText(roomId)}
               >
-                Copier lID
+                Copier l'ID
               </button>
             </div>
             {isHost && <span className={style.hostBadge}>Host</span>}
@@ -295,18 +380,67 @@ const SectionRoomMulti = ({
       )}
 
       {roomId && (
-        <div className={style.participants}>
-          <h4>Participants ({participants.length})</h4>
-          <ul>
-            {participants.map((participant) => (
-              <li key={participant.id}>
-                {participant.name}
-                {participant.id === socket?.id && ' (Vous)'}
-                {isHost && participant.id === socket?.id && ' (Host)'}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <>
+          <div className={style.participants}>
+            <h4>Participants ({participants.length})</h4>
+            <ul>
+              {participants.map((participant) => (
+                <li key={participant.id}>
+                  {participant.name}
+                  {participant.id === socket?.id && ' (Vous)'}
+                  {isHost && participant.id === socket?.id && ' (Host)'}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className={style.queueSection}>
+            <h4>File d'attente ({queue.length})</h4>
+            <ul className={style.queueList}>
+              {queue.map((track, index) => (
+                <li
+                  key={`${track.id}-${index}`}
+                  className={`${style.queueItem} ${index === currentQueueIndex ? style.playing : ''}`}
+                >
+                  <Image
+                    src={
+                      track.album?.coverUrl
+                        ? `${baseUrl}/${track.album.coverUrl}`
+                        : '/images/default-placeholder.png'
+                    }
+                    alt={track.title}
+                    width={30}
+                    height={30}
+                    className={style.queueCover}
+                  />
+                  <div className={style.queueTrackInfo}>
+                    <span className={style.queueTrackTitle}>{track.title}</span>
+                    <span className={style.queueArtistName}>
+                      {track.artist?.name}
+                    </span>
+                  </div>
+                  {index === currentQueueIndex && (
+                    <span className={style.nowPlaying}>▶️</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {isHost && (
+            <div className={style.controls}>
+              <button onClick={playPrevious} disabled={currentQueueIndex <= 0}>
+                Précédent
+              </button>
+              <button
+                onClick={playNext}
+                disabled={currentQueueIndex >= queue.length - 1}
+              >
+                Suivant
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {roomId && !isHost && (
