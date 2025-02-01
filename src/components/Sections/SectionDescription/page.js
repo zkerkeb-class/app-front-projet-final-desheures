@@ -5,6 +5,7 @@ import { useTheme } from '@/context/ThemeContext.js';
 import Backaground_Img from 'images/background/shadow_lion.png';
 
 import { getAllAudios } from '@/services/api/audio.api';
+import logger from '@/utils/logger';
 
 const SectionDescription = () => {
   const { darkMode } = useTheme();
@@ -18,7 +19,7 @@ const SectionDescription = () => {
     getAllAudios()
       .then((data) => setAudios(data))
       .catch((error) =>
-        console.error('Erreur lors du chargement des audios:', error)
+        logger.error('Erreur lors du chargement des audios:', error)
       );
   }, []);
 
@@ -59,12 +60,12 @@ const SectionDescription = () => {
           {audios.map((item) => (
             <button
               className={style.item}
-              key={item._id} // Utilisation de _id comme clé unique
+              key={item._id}
               onClick={() => handleItemClick(item._id)}
             >
               <div className={style.item_head}>
                 <Image
-                  src={getFullImageUrl(item.album?.coverUrl)} // Tu peux changer ça pour item.album.cover si tu as une image dans l'API
+                  src={getFullImageUrl(item.album?.coverUrl)}
                   alt={item.title}
                   width={60}
                   height={60}

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { getAlbumById } from '@/services/api/album.api';
 import Backaground_Img from 'images/background/shadow_lion.png';
 import socketService from '@/services/sockets/socketsService';
+import logger from '@/utils/logger';
 const SectionAlbum = () => {
   const { darkMode, selectedId, setSelectedMusicId } = useTheme();
   const [album, setAlbum] = useState(null);
@@ -14,20 +15,16 @@ const SectionAlbum = () => {
   useEffect(() => {
     const socket = socketService.connect();
 
-    // Gérer la connexion socket
-    socket.on('connect', () => {
-      console.log('Socket connecté dans SectionAlbum');
-    });
+    socket.on('connect', () => {});
 
     socket.on('connect_error', (error) => {
-      console.error('Erreur de connexion socket dans SectionAlbum:', error);
+      logger.error('Erreur de connexion socket dans SectionAlbum:', error);
     });
 
-    // Charger l'album quand selectedId change
     if (selectedId) {
       getAlbumById(selectedId)
         .then((album) => setAlbum(album))
-        .catch(console.error);
+        .catch(logger.error);
     }
 
     // Événements pour les playlists
@@ -47,7 +44,6 @@ const SectionAlbum = () => {
   const handleItemClick = (id) => {
     setSelectedMusicId(id);
     socketService.emit('playTrack', id);
-    console.log('Track joué:', id);
   };
   const getFullImageUrl = (url) => {
     if (!url) return '/images/default-placeholder.png';

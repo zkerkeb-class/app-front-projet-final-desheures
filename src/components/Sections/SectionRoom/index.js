@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Image from 'next/image';
 import style from './index.module.scss';
+import logger from '@/utils/logger';
 
 const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -26,7 +27,6 @@ const SectionRoomMulti = ({
   const [queue, setQueue] = useState([]);
   const [currentQueueIndex, setCurrentQueueIndex] = useState(-1);
 
-  // Socket initialization
   useEffect(() => {
     const newSocket = io(`${baseUrl}`, {
       reconnectionAttempts: 5,
@@ -131,7 +131,6 @@ const SectionRoomMulti = ({
     };
   }, [socket, isHost, currentTrack, onTrackChange]);
 
-  // Playback sync handlers
   useEffect(() => {
     if (!socket) return;
 
@@ -143,7 +142,7 @@ const SectionRoomMulti = ({
 
           audioRef.current.currentTime = currentTime;
           if (newIsPlaying && audioRef.current.paused) {
-            audioRef.current.play().catch(console.error);
+            audioRef.current.play().catch(logger.error);
             setIsPlaying(true);
           } else if (!newIsPlaying && !audioRef.current.paused) {
             audioRef.current.pause();
@@ -168,7 +167,6 @@ const SectionRoomMulti = ({
     };
   }, [socket, isHost, audioRef, currentTrack, setIsPlaying, onTrackChange]);
 
-  // Track change handler
   useEffect(() => {
     if (audio) {
       setCurrentTrack(audio);
@@ -178,7 +176,6 @@ const SectionRoomMulti = ({
     }
   }, [audio, isHost, socket, roomId]);
 
-  // Queue management functions
   const addToQueue = (track) => {
     if (!socket || !roomId) return;
     socket.emit('addToQueue', { roomId, track });
@@ -194,14 +191,12 @@ const SectionRoomMulti = ({
     socket.emit('previousTrack', { roomId });
   };
 
-  // Auto-add current track to queue
   useEffect(() => {
     if (audio && roomId) {
       addToQueue(audio);
     }
   }, [audio, roomId]);
 
-  // Room management functions
   const createRoom = () => {
     if (!username) {
       setError("Veuillez entrer un nom d'utilisateur");
@@ -271,7 +266,6 @@ const SectionRoomMulti = ({
     }
   };
 
-  // Host playback sync listeners
   useEffect(() => {
     if (!isHost || !audioRef.current) return;
 
@@ -351,7 +345,7 @@ const SectionRoomMulti = ({
                 className={style.copyButton}
                 onClick={() => navigator.clipboard.writeText(roomId)}
               >
-                Copier l'ID
+                Copier l&apos;ID
               </button>
             </div>
             {isHost && <span className={style.hostBadge}>Host</span>}
@@ -395,7 +389,7 @@ const SectionRoomMulti = ({
           </div>
 
           <div className={style.queueSection}>
-            <h4>File d'attente ({queue.length})</h4>
+            <h4>File d&apos;attente ({queue.length})</h4>
             <ul className={style.queueList}>
               {queue.map((track, index) => (
                 <li

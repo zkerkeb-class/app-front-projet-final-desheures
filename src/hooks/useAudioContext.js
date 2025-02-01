@@ -1,4 +1,5 @@
 // hooks/useAudioContext.js
+import logger from '@/utils/logger';
 import { useEffect, useRef, useState } from 'react';
 
 export const useAudioContext = (audioRef) => {
@@ -8,7 +9,6 @@ export const useAudioContext = (audioRef) => {
   const isConnectedRef = useRef(false);
   const [analyzer, setAnalyzer] = useState(null);
 
-  // Fonction d'initialisation qui sera appelée après une interaction utilisateur
   const initializeAudioContext = async () => {
     if (!audioRef.current || isConnectedRef.current) return;
 
@@ -18,7 +18,6 @@ export const useAudioContext = (audioRef) => {
         audioContextRef.current = new AudioContext();
       }
 
-      // Vérifie si le contexte est suspendu et le reprend si nécessaire
       if (audioContextRef.current.state === 'suspended') {
         await audioContextRef.current.resume();
       }
@@ -38,11 +37,10 @@ export const useAudioContext = (audioRef) => {
         setAnalyzer(analyzerRef.current);
       }
     } catch (error) {
-      console.error('Error initializing audio context:', error);
+      logger.error('Error initializing audio context:', error);
     }
   };
 
-  // Initialise le contexte audio lors du premier clic sur play
   useEffect(() => {
     const handlePlay = () => {
       if (!isConnectedRef.current) {
@@ -50,7 +48,6 @@ export const useAudioContext = (audioRef) => {
       }
     };
 
-    // Écoute les événements de lecture sur l'élément audio
     if (audioRef.current) {
       audioRef.current.addEventListener('play', handlePlay);
     }
@@ -62,7 +59,6 @@ export const useAudioContext = (audioRef) => {
     };
   }, [audioRef.current]);
 
-  // Nettoyage lors du démontage
   useEffect(() => {
     return () => {
       if (sourceNodeRef.current) {

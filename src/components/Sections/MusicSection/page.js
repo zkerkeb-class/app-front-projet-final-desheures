@@ -26,7 +26,6 @@ const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 const MusicSection = () => {
   const { darkMode, isExpanded, setIsExpanded, selectedMusicId } = useTheme();
 
-  // Audio states
   const [audio, setAudio] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -42,18 +41,15 @@ const MusicSection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [displayRemaining, setDisplayRemaining] = useState(false);
 
-  // Playlist states
   const [playlist, setPlaylist] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [playbackMode, setPlaybackMode] = useState(() => {
     return localStorage.getItem('playbackMode') || 'normal';
   });
 
-  // Refs
   const audioRef = useRef(null);
   const previousVolume = useRef(volume);
 
-  // Save preferences
   useEffect(() => {
     localStorage.setItem('audioVolume', volume.toString());
   }, [volume]);
@@ -62,7 +58,6 @@ const MusicSection = () => {
     localStorage.setItem('playbackMode', playbackMode);
   }, [playbackMode]);
 
-  // Load initial audio
   useEffect(() => {
     if (!selectedMusicId) return;
 
@@ -157,7 +152,6 @@ const MusicSection = () => {
     };
   }, [audio, volume]);
 
-  // Handle play state changes
   useEffect(() => {
     if (!audioRef.current || !audio) return;
 
@@ -177,10 +171,8 @@ const MusicSection = () => {
     playAudio();
   }, [isPlaying, audio]);
 
-  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyPress = (e) => {
-      // Handle Escape key globally
       if (e.key === KEYBOARD_SHORTCUTS.ESCAPE && isExpanded) {
         e.preventDefault();
         setIsExpanded(false);
@@ -248,7 +240,6 @@ const MusicSection = () => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [volume, audio, isExpanded, setIsExpanded]);
 
-  // Handlers
   const handlePlaybackModeChange = () => {
     const modes = ['normal', 'repeat-one', 'repeat-all', 'shuffle'];
     const currentIndex = modes.indexOf(playbackMode);

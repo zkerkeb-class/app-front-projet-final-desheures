@@ -5,6 +5,7 @@ import style from './index.module.scss';
 import Image from 'next/image';
 import { getAlbumsByArtist } from '@/services/api/filter.api';
 import { getArtistById } from '@/services/api/artist.api';
+import logger from '@/utils/logger';
 
 const SectionArtist = () => {
   const { darkMode, selectedId, setSectionName, setSelectedId } = useTheme();
@@ -14,8 +15,8 @@ const SectionArtist = () => {
 
   useEffect(() => {
     if (selectedId) {
-      getAlbumsByArtist(selectedId).then(setAlbums).catch(console.error);
-      getArtistById(selectedId).then(setArtist).catch(console.error);
+      getAlbumsByArtist(selectedId).then(setAlbums).catch(logger.error);
+      getArtistById(selectedId).then(setArtist).catch(logger.error);
     }
   }, [selectedId]);
 

@@ -16,7 +16,6 @@ const WaveformVisualizer = ({ analyzer, isPlaying, darkMode }) => {
       const draw = () => {
         analyzer.getByteFrequencyData(dataArray);
 
-        // Clear with transparency
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         const barWidth = (canvas.width / bufferLength) * 2.5;
@@ -27,9 +26,9 @@ const WaveformVisualizer = ({ analyzer, isPlaying, darkMode }) => {
           const barHeight = (dataArray[i] / 255) * canvas.height;
 
           const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
-          // Bleu clair à foncé avec transparence
-          gradient.addColorStop(0, 'rgba(33, 150, 243, 0.8)'); // Bleu clair
-          gradient.addColorStop(1, 'rgba(25, 118, 210, 0.6)'); // Bleu foncé
+
+          gradient.addColorStop(0, 'rgba(33, 150, 243, 0.8)');
+          gradient.addColorStop(1, 'rgba(25, 118, 210, 0.6)');
 
           ctx.fillStyle = gradient;
           ctx.fillRect(
@@ -56,7 +55,7 @@ const WaveformVisualizer = ({ analyzer, isPlaying, darkMode }) => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      // Clear canvas with transparency when not playing
+
       if (canvasRef.current) {
         const ctx = canvasRef.current.getContext('2d');
         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);

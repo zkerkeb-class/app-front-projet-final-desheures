@@ -15,12 +15,10 @@ const NavBar = () => {
 
   return (
     <div className={`${style.nav_bar} ${darkMode ? style.dark : style.light}`}>
-      {/* App title */}
       <h1 onClick={handleResetSection} className={style.title_app}>
         Des Heures
       </h1>
 
-      {/* Search Bar */}
       <div className={style.search}>
         <div className={style.search_left}>
           <svg
@@ -55,7 +53,6 @@ const NavBar = () => {
       </div>
 
       <div className={style.nav_bar_button_wrapper}>
-        {/* Toggle for Language change */}
         <select
           className={style.select_language}
           onChange={(e) => setLanguage(e.target.value.toUpperCase())}
@@ -66,7 +63,6 @@ const NavBar = () => {
           <option value="ar">AR</option>
         </select>
 
-        {/* Toggle for Dark and Light mode */}
         <label className={style.switch}>
           <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
           {darkMode ? (

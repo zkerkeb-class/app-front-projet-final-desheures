@@ -11,7 +11,6 @@ export const ThemeProvider = ({ children }) => {
   const [selectedMusicId, setSelectedMusicId] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Log l'état initial du thème et du loader lors du montage
   useEffect(() => {
     logger.info(`Theme initialized: ${darkMode ? 'Dark Mode' : 'Light Mode'}`);
     logger.info(`Loader initialized: ${isLoading ? 'Active' : 'Inactive'}`);
@@ -25,37 +24,31 @@ export const ThemeProvider = ({ children }) => {
     setDarkMode((prev) => {
       const newMode = !prev;
 
-      // Log chaque changement de mode
       logger.info(`Dark mode toggled to: ${newMode ? 'Enabled' : 'Disabled'}`);
       return newMode;
     });
   };
 
-  // Log les changements d'état du loader
   const setLoaderWithLog = (state) => {
     logger.info(`Loader state changed to: ${state ? 'Active' : 'Inactive'}`);
     setLoader(state);
   };
 
-  // Log les changements de la section
   const setSectionNameWithLog = (name) => {
     logger.info(`Section name changed to: ${name}`);
     setSectionName(name);
   };
 
-  // Log les changements de l'ID sélectionné
   const setSelectedIdWithLog = (id) => {
     logger.info(`Selected ID changed to: ${id}`);
     setSelectedId(id);
   };
 
-  // Log les changements de l'ID Music sélectionné
   const setSelectedMusicIdWithLog = (id) => {
     logger.info(`Selected Music ID changed to: ${id}`);
     setSelectedMusicId(id);
   };
 
-  // Log la mise en plein ecran
   const setIsExpandedLog = (bool) => {
     logger.info(`Is Expanded changed to: ${bool}`);
     setIsExpanded(bool);
@@ -75,7 +68,7 @@ export const ThemeProvider = ({ children }) => {
         selectedMusicId,
         setSelectedMusicId: setSelectedMusicIdWithLog,
         isExpanded,
-        setIsExpanded : setIsExpandedLog,
+        setIsExpanded: setIsExpandedLog,
       }}
     >
       {children}

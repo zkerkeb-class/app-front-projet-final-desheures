@@ -1,4 +1,5 @@
 // services/socketService.js
+import logger from '@/utils/logger';
 import io from 'socket.io-client';
 
 const SOCKET_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -23,13 +24,12 @@ const socketService = {
         query: { sessionId },
       });
 
-      // Ajouter des listeners de debug
       this.socket.on('connect', () => {
-        console.log('Socket connecté avec sessionId:', sessionId);
+        logger.info('Socket connecté avec sessionId:', sessionId);
       });
 
       this.socket.on('connect_error', (error) => {
-        console.error('Erreur de connexion socket:', error);
+        logger.error('Erreur de connexion socket:', error);
       });
     }
     return this.socket;
@@ -48,7 +48,6 @@ const socketService = {
     }
   },
 
-  // Vous pouvez aussi ajouter des méthodes spécifiques pour les événements communs
   onRecentlyPlayedTracks(callback) {
     if (this.socket) {
       this.socket.on('recentlyPlayedTracks', callback);

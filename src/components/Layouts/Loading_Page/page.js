@@ -23,7 +23,6 @@ const Loader = () => {
     if (percentage === 100) {
       clearInterval(interval);
 
-      // Animation GSAP
       gsap.to(loaderRef.current, {
         y: '-100%',
         opacity: 0,

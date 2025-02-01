@@ -9,6 +9,7 @@ import {
 } from '@/services/api/sort.api';
 import { getAudioById } from '@/services/api/audio.api';
 import socketService from '@/services/sockets/socketsService';
+import logger from '@/utils/logger';
 
 const SectionAccueil = () => {
   const { darkMode, setSectionName, setSelectedId, setSelectedMusicId } =
@@ -93,7 +94,7 @@ const SectionAccueil = () => {
           artists.slice(0, 10).map((artist) => normalizeItem(artist, 'Artiste'))
         );
       } catch (error) {
-        console.error('Erreur lors de la récupération des données:', error);
+        logger.error('Erreur lors de la récupération des données:', error);
       }
     };
 
@@ -116,7 +117,7 @@ const SectionAccueil = () => {
           setRecentlyPlayedTracks([]);
         }
       } catch (error) {
-        console.error('Erreur récupération dernières écoutes:', error);
+        logger.error('Erreur récupération dernières écoutes:', error);
         setRecentlyPlayedTracks([]);
       }
     });
@@ -138,7 +139,7 @@ const SectionAccueil = () => {
           setMostPlayedTracks([]);
         }
       } catch (error) {
-        console.error('Erreur récupération titres plus écoutés:', error);
+        logger.error('Erreur récupération titres plus écoutés:', error);
         setMostPlayedTracks([]);
       }
     });
@@ -155,7 +156,6 @@ const SectionAccueil = () => {
     if (type === 'Titre') {
       setSelectedMusicId(id);
       socketService.emit('playTrack', id);
-      console.log('Track joué:', id);
     } else {
       setSectionName(type);
       setSelectedId(id);
