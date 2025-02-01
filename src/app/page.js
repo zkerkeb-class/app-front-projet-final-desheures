@@ -26,7 +26,7 @@ const Home = () => {
   const { darkMode } = useTheme();
   const { isLoading, setLoader } = useTheme();
   const { sectionName } = useTheme();
-  console.log(sectionName);
+  // console.log(sectionName);
 
   const { isExpanded } = useTheme();
 
@@ -72,8 +72,8 @@ const Home = () => {
     if (isMobile) {
       PlaneWidth = 50;
       PlaneHeight = 100;
-      PlaneWidthSegments = 20;
-      PlaneHeightSegments = 20;
+      PlaneWidthSegments = 8;
+      PlaneHeightSegments = 8;
     }
 
     let planeGeometry = new THREE.PlaneGeometry(

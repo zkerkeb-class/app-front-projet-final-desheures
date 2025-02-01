@@ -84,7 +84,7 @@ const SectionAlbum = () => {
               key={item._id}
               onClick={() => handleItemClick(item._id)}
             >
-              <div className={style.item_head}>
+              <div className={style.item_part}>
                 <Image
                   src={getFullImageUrl(album?.coverUrl)}
                   alt={item.title}
@@ -94,16 +94,22 @@ const SectionAlbum = () => {
                 />
                 <p className={style.item_text}>{item.title}</p>
               </div>
-              <p className={style.item_text}>
-                {album?.artist?.name || 'Artiste inconnu'}
-              </p>
-              <p className={style.item_text}>
-                {album?.title || 'Album inconnu'}
-              </p>
-              <p className={style.item_text}>
-                {Math.floor(item.duration / 60)}:
-                {(item.duration % 60).toFixed(0).padStart(2, '0')}
-              </p>
+              <div className={style.item_part}>
+                <p className={style.item_text}>
+                  {album?.artist?.name || 'Artiste inconnu'}
+                </p>
+              </div>
+              <div className={style.item_part}>
+                <p className={style.item_text}>
+                  {album?.title || 'Album inconnu'}
+                </p>
+              </div>
+              <div className={style.item_part}>
+                <p className={style.item_text}>
+                  {Math.floor(item.duration / 60)}:
+                  {(item.duration % 60).toFixed(0).padStart(2, '0')}
+                </p>
+              </div>
             </button>
           ))}
         </div>

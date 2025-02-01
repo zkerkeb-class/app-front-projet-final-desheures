@@ -59,7 +59,7 @@ const SectionArtist = () => {
               className={style.item}
               onClick={() => handleAlbumClick(album._id)}
             >
-              <div className={style.item_head}>
+              <div className={style.item_part}>
                 <Image
                   src={getFullImageUrl(album.coverUrl)}
                   alt={album.title}
@@ -68,11 +68,17 @@ const SectionArtist = () => {
                   className={style.item_image}
                 />
               </div>
-              <p className={style.item_text}>{album.title}</p>
-              <p className={style.item_text}>
-                {artist?.name || 'Artiste inconnu'}
-              </p>
-              <p className={style.item_text}>{album.tracks.length} Titres</p>
+              <div className={style.item_part}>
+                <p className={style.item_text}>{album.title}</p>
+              </div>
+              <div className={style.item_part}>
+                <p className={style.item_text}>
+                  {artist?.name || 'Artiste inconnu'}
+                </p>
+              </div>
+              <div className={style.item_part}>
+                <p className={style.item_text}>{album.tracks.length} Titres</p>
+              </div>
             </button>
           ))}
         </div>

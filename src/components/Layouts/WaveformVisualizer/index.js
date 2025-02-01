@@ -27,8 +27,13 @@ const WaveformVisualizer = ({ analyzer, isPlaying, darkMode }) => {
 
           const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
 
-          gradient.addColorStop(0, 'rgba(33, 150, 243, 0.8)');
-          gradient.addColorStop(1, 'rgba(25, 118, 210, 0.6)');
+          if (darkMode) {
+            gradient.addColorStop(0, 'rgba(0, 191, 255, 0.8)');
+            gradient.addColorStop(1, 'rgba(210, 25, 155, 0.8)');
+          } else {
+            gradient.addColorStop(0, 'rgba(0, 0, 139, 0.8)');
+            gradient.addColorStop(1, 'rgba(128, 0, 128, 0.8)');
+          }
 
           ctx.fillStyle = gradient;
           ctx.fillRect(
@@ -69,14 +74,7 @@ const WaveformVisualizer = ({ analyzer, isPlaying, darkMode }) => {
     };
   }, [isPlaying, darkMode, analyzer]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="w-full h-24 mt-4 rounded-lg"
-      width={800}
-      height={100}
-    />
-  );
+  return <canvas ref={canvasRef} />;
 };
 
 export default WaveformVisualizer;

@@ -18,7 +18,6 @@ const NavBar = () => {
       <h1 onClick={handleResetSection} className={style.title_app}>
         Des Heures
       </h1>
-
       <div className={style.search}>
         <div className={style.search_left}>
           <svg

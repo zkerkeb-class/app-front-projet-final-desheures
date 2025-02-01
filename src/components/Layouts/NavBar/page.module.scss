@@ -18,10 +18,17 @@ $search_logo_dark: '/images/navbar/search_dark.svg';
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--margin-padding);
+  padding: 0 var(--big-margin-padding);
   z-index: var(--top-zindex);
   backdrop-filter: blur(10px);
   animation: fadeIn var(--text-animation) ease-in-out;
+
+  @media (max-width: 1250px) {
+    height: 120px;
+    align-items: flex-end;
+    padding: var(--small-margin-padding) var(--margin-padding);
+    justify-content: center;
+  }
 
   @keyframes fadeIn {
     from {
@@ -41,6 +48,11 @@ $search_logo_dark: '/images/navbar/search_dark.svg';
     -webkit-background-clip: text;
     overflow: hidden;
     cursor: pointer;
+
+    @media (max-width: 1250px) {
+      position: absolute;
+      top: var(--margin-padding);
+    }
   }
 
   .search {

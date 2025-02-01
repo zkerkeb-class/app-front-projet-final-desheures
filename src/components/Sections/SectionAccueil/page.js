@@ -27,18 +27,25 @@ const SectionAccueil = () => {
       if (!url) return '/images/default-placeholder.png';
       return url.startsWith('http') ? url : `${baseUrl}/${url}`;
     };
+    const MAX_TITLE_LENGTH = 30;
 
     switch (type) {
       case 'Album':
         return {
           id: item._id,
-          title: item.title,
+          title:
+            item.title.length > MAX_TITLE_LENGTH
+              ? item.title.slice(0, MAX_TITLE_LENGTH) + '...'
+              : item.title,
           imageUrl: getFullImageUrl(item.coverUrl),
         };
       case 'Titre':
         return {
           id: item._id,
-          title: item.title,
+          title:
+            item.title.length > MAX_TITLE_LENGTH
+              ? item.title.slice(0, MAX_TITLE_LENGTH) + '...'
+              : item.title,
           // Priorité à l'image de l'album, puis à l'image de l'artiste, puis placeholder
           imageUrl: getFullImageUrl(
             item.album?.coverUrl ||
@@ -50,7 +57,10 @@ const SectionAccueil = () => {
       case 'Artiste':
         return {
           id: item._id,
-          title: item.name,
+          title:
+            item.name.length > MAX_TITLE_LENGTH
+              ? item.name.slice(0, MAX_TITLE_LENGTH) + '...'
+              : item.name,
           imageUrl: getFullImageUrl(item.imageUrl),
         };
       default:

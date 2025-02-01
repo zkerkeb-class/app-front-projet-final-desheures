@@ -14,39 +14,44 @@
   transition: var(--transition);
   padding-right: var(--big-margin-padding);
 
+  @media (max-width: 1250px) {
+    display: none;
+  }
+
   &.expanded {
     position: fixed;
     width: 100vw;
     height: 100vh;
     padding: 0;
     margin: 0;
-    z-index: 100;
+    z-index: 98;
+
+    .waveformContainer {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    // .waveformContainer {
+    //   width: 100%;
+    //   height: 100%;
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   z-index: 99;
+    // }
 
     .music_section {
       position: relative;
       backdrop-filter: blur(100px);
-      transform: scale(1.2);
-
-      .expandButton {
-        top: 20%;
-        right: 20%;
-        transform: translate(-80%, -80%);
-      }
+      z-index: 100;
 
       .music_CD {
-        height: 500px;
-        width: 500px;
-
-        .waveformContainer {
-          width: 600px;
-          height: 600px;
-
-          .waveform-canvas {
-            width: 600px;
-            height: 600px;
-            transform: scale(1.2);
-          }
-        }
+        height: 400px;
+        width: 400px;
 
         .image_CD {
           width: 80%;
@@ -84,6 +89,15 @@
 
       &.spinning .image_CD {
         animation: spin 20s linear infinite;
+
+        @keyframes spin {
+          from {
+            transform: rotate(0);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
       }
 
       .image_CD {
@@ -117,6 +131,7 @@
         }
       }
     }
+
     .trackDetails {
       display: flex;
       flex-direction: column;
@@ -134,9 +149,11 @@
       .artist {
         color: var(--second-color);
         margin-bottom: var(--small-margin-padding);
+        font-weight: var(--font-weight-bold);
       }
 
       .album {
+        font-weight: var(--font-weight-bold);
         color: var(--third-color);
       }
     }
@@ -146,29 +163,25 @@
       align-items: center;
       gap: var(--margin-padding);
       margin: var(--margin-padding) 0;
+    }
 
-      button {
-        width: 40px;
-        height: 40px;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: var(--text-color);
-        border-radius: var(--circle-border-radius);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: var(--transition);
+    .interactTrack {
+      width: 40px;
+      height: 40px;
+      border: none;
+      font-size: var(--medium-font-size);
+      cursor: pointer;
+      color: var(--white-color);
+      border-radius: var(--circle-border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      padding: 0;
+      margin: 0;
 
-        &:hover {
-          transform: scale(1.1);
-          background: rgba(255, 255, 255, 0.1);
-        }
-
-        &:active {
-          transform: scale(0.95);
-        }
+      &:hover {
+        transform: scale(1.1);
       }
     }
 
@@ -182,22 +195,18 @@
       height: 40px;
       transition: var(--transition);
 
-      span {
-        width: 20%;
-        text-align: center;
+      .timeDisplay {
+        border: none;
+        background: none;
+        font-size: var(--font-size);
+        font-family: var(--second-font);
       }
 
-      button {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0 var(--small-margin-padding);
-        transition: var(--transition);
-
-        &:hover {
-          transform: scale(1.1);
-        }
+      .text_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10%;
       }
 
       input[type='range'] {
@@ -222,25 +231,6 @@
         }
       }
     }
-
-    .expandButton {
-      width: 100px;
-      height: 40px;
-      position: absolute;
-      top: var(--margin-padding);
-      right: var(--margin-padding);
-      background: var(--main-color);
-      color: var(--white-color);
-      padding: var(--small-margin-padding) var(--margin-padding);
-      border-radius: var(--small-border-radius);
-      border: none;
-      cursor: pointer;
-      transition: var(--transition);
-
-      &:hover {
-        background: var(--second-color);
-      }
-    }
   }
 }
 
@@ -263,10 +253,12 @@
       }
     }
 
-    .controls button {
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
+    .interactTrack {
+      background: var(--black-color);
+    }
+
+    .timeDisplay {
+      color: var(--white-color);
     }
 
     .sound,
@@ -293,10 +285,12 @@
       }
     }
 
-    .controls button {
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
-      }
+    .interactTrack {
+      background: var(--white-color);
+    }
+
+    .timeDisplay {
+      color: var(--black-color);
     }
 
     .sound,
