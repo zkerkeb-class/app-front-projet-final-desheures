@@ -19,6 +19,7 @@ import Loader from 'components/Layouts/Loading_Page/page.js';
 import MusicSection from '@/components/Sections/MusicSection/page';
 import SectionAlbum from '@/components/Sections/SectionAlbum';
 import SectionArtist from '@/components/Sections/SectionArtist';
+import SectionFiltre from '@/components/Sections/SectionFiltre/page';
 
 // import { useTranslation } from 'next-i18next';
 
@@ -269,6 +270,7 @@ const Home = () => {
         <>
           {!isExpanded && <NavBar />}
           <div className={style.app_wrapper}>
+            <SectionFiltre />
             {sectionName === 'Album' && <SectionAlbum />}
             {sectionName === 'Artiste' && <SectionArtist />}
             {sectionName === 'Description' && <SectionDescription />}

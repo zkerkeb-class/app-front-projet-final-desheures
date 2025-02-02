@@ -1,0 +1,123 @@
+// ------------------------------+
+//
+//        Filtre
+//
+// ------------------------------+
+
+.container {
+  width: 60%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  @media (max-width: 1250px) {
+    width: 100%;
+    align-items: center;
+  }
+
+  .section {
+    width: 100%;
+    height: auto;
+    margin-top: var(--big-margin-padding);
+    padding-left: var(--big-margin-padding);
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1250px) {
+      padding-left: 0;
+      padding: 0 var(--small-margin-padding);
+    }
+
+    // Bouton pour ouvrir les filtres
+    .filter_button {
+      background-color: var(--main-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      transition: 0.3s ease-in-out;
+
+      &:hover {
+        // background-color: darken(var(--main-color), 10%);
+      }
+    }
+
+    // Conteneur des filtres
+    .filter_section {
+      background: red;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+
+      .filter {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        label {
+          font-weight: bold;
+          color: var(--text-color);
+        }
+
+        select,
+        input {
+          width: 100%;
+          padding: 8px;
+          border-radius: 4px;
+          border: 1px solid var(--main-color);
+          background-color: green;
+          color: var(--text-color);
+        }
+      }
+    }
+  }
+}
+
+// ------------------------------+
+//
+//        Light Dark Mode
+//
+// ------------------------------+
+
+.section.dark {
+  // background-color: var(--dark-background);
+  // color: var(--dark-text);
+
+  .filter_section {
+    // background: var(--dark-container);
+  }
+
+  .filter_button {
+    // background-color: var(--dark-main-color);
+    // color: var(--dark-text);
+
+    &:hover {
+      // background-color: lighten(var(--dark-main-color), 10%);
+    }
+  }
+}
+
+.section.light {
+  // background-color: var(--light-background);
+  // color: var(--light-text);
+
+  .filter_section {
+    // background: var(--light-container);
+  }
+
+  .filter_button {
+    // background-color: var(--light-main-color);
+    // color: var(--light-text);
+
+    &:hover {
+      // background-color: darken(var(--light-main-color), 10%);
+    }
+  }
+}

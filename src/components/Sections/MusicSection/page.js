@@ -61,15 +61,6 @@ const MusicSection = () => {
 
   return (
     <div className={`${styles.container} ${isExpanded ? styles.expanded : ''}`}>
-      {isExpanded && analyzer && (
-        <div className={styles.waveformContainer}>
-          <WaveformVisualizer
-            analyzer={analyzer}
-            isPlaying={isPlaying}
-            darkMode={darkMode}
-          />
-        </div>
-      )}
       <div
         className={`${styles.music_section} ${darkMode ? styles.dark : styles.light}`}
       >
@@ -77,6 +68,16 @@ const MusicSection = () => {
           <div className={styles.error}>
             {error}
             <button onClick={() => setError(null)}>×</button>
+          </div>
+        )}
+
+        {isExpanded && analyzer && (
+          <div className={styles.waveformContainer}>
+            <WaveformVisualizer
+              analyzer={analyzer}
+              isPlaying={isPlaying}
+              darkMode={darkMode}
+            />
           </div>
         )}
 

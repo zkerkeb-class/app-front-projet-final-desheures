@@ -24,39 +24,41 @@
     height: 100vh;
     padding: 0;
     margin: 0;
-    z-index: 98;
-
-    .waveformContainer {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    // .waveformContainer {
-    //   width: 100%;
-    //   height: 100%;
-    //   position: absolute;
-    //   top: 0;
-    //   left: 0;
-    //   z-index: 99;
-    // }
+    z-index: 99;
 
     .music_section {
       position: relative;
       backdrop-filter: blur(100px);
-      z-index: 100;
+
+      .waveformContainer {
+        width: 100%;
+        height: 60%;
+        position: absolute;
+        bottom: 0%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+        
+        canvas {
+          width: 100%;
+          height: 100%;
+        }
+      }
 
       .music_CD {
         height: 400px;
         width: 400px;
+        z-index: 100;
 
         .image_CD {
           width: 80%;
           height: 80%;
         }
+      }
+
+      .sound,
+      .controls,
+      .progress {
+        z-index: 100;
       }
     }
   }

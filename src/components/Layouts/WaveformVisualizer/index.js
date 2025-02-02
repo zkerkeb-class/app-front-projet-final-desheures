@@ -28,11 +28,11 @@ const WaveformVisualizer = ({ analyzer, isPlaying, darkMode }) => {
           const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
 
           if (darkMode) {
-            gradient.addColorStop(0, 'rgba(0, 191, 255, 0.8)');
-            gradient.addColorStop(1, 'rgba(210, 25, 155, 0.8)');
+            gradient.addColorStop(0, 'rgba(0, 191, 255, 0.4)');
+            gradient.addColorStop(1, 'rgba(210, 25, 155, 0.4)');
           } else {
-            gradient.addColorStop(0, 'rgba(0, 0, 139, 0.8)');
-            gradient.addColorStop(1, 'rgba(128, 0, 128, 0.8)');
+            gradient.addColorStop(0, 'rgba(0, 0, 139, 0.4)');
+            gradient.addColorStop(1, 'rgba(128, 0, 128, 0.4)');
           }
 
           ctx.fillStyle = gradient;
