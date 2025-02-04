@@ -1,8 +1,10 @@
+import logger from '@/utils/logger';
+
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL; // Remplace par l'URL de ton API
 
 export const fetchAPI = async (endpoint, options = {}) => {
   try {
-    const response = await fetch(`${BASE_URL}/${endpoint}`, {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -15,7 +17,7 @@ export const fetchAPI = async (endpoint, options = {}) => {
 
     return response.json();
   } catch (error) {
-    console.error('Erreur lors de la requête API:', error);
+    logger.error('Erreur lors de la requête API:', error);
     throw error;
   }
 };
