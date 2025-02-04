@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './page.module.scss';
-import { useTheme } from '@/context/ThemeContext.js';
+import { useTheme } from '@/context/ThemeContext.js'
 
 const NavBar = () => {
   const { darkMode, toggleDarkMode } = useTheme();
@@ -44,11 +44,11 @@ const NavBar = () => {
             />
           </svg>
         </div>
-            <input
-              className={style.search_input}
-              type="text"
-                 placeholder="Rechercher..."
-            />
+        <input
+          className={style.search_input}
+          type="text"
+          placeholder="Rechercher..."
+        />
       </div>
 
       <div className={style.nav_bar_button_wrapper}>
