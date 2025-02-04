@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import { useState, useEffect, useRef } from 'react';
 import { getAudioById, getAllAudios } from '@/services/api/audio.api';
 import logger from '@/utils/logger';

@@ -23,6 +23,12 @@ import SectionFiltre from '@/components/Sections/SectionFiltre/page';
 
 // import { useTranslation } from 'next-i18next';
 
+// function testHusky() {
+//      const test = 'pas de guillemets simples';
+//       var mauvaisVar = 123;
+//         console.log(test)
+//   return mauvaisVar;
+// }
 const Home = () => {
   const { darkMode } = useTheme();
   const { isLoading, setLoader } = useTheme();

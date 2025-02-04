@@ -12,6 +12,12 @@
     "prepare": "husky",
     "test": "echo \"No tests specified\" && exit 0"
   },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "prettier --write",
+      "eslint ."
+    ]
+  },
   "dependencies": {
     "dat.gui": "^0.7.9",
     "gsap": "^3.12.5",
@@ -40,11 +46,5 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
     "prettier": "^3.3.3"
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
   }
 }

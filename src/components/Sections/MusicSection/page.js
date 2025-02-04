@@ -33,7 +33,7 @@ const MusicSection = () => {
     playbackMode,
     audioRef,
     playlist,
-    currentTrackIndex,
+    //currentTrackIndex,
     handleProgressChange,
     handleVolumeChange,
     toggleMute,
