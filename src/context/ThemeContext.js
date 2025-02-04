@@ -10,6 +10,7 @@ export const ThemeProvider = ({ children }) => {
   const [selectedId, setSelectedId] = useState('');
   const [selectedMusicId, setSelectedMusicId] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
+  const [language, setLanguage] = useState(false);
 
   useEffect(() => {
     logger.info(`Theme initialized: ${darkMode ? 'Dark Mode' : 'Light Mode'}`);
@@ -18,6 +19,7 @@ export const ThemeProvider = ({ children }) => {
     logger.info(`Selected ID initialized: ${selectedId}`);
     logger.info(`Selected Music ID initialized: ${selectedMusicId}`);
     logger.info(`Is Expanded: ${isExpanded}`);
+    logger.info(`Language is: ${language}`);
   }, []);
 
   const toggleDarkMode = () => {
@@ -54,6 +56,11 @@ export const ThemeProvider = ({ children }) => {
     setIsExpanded(bool);
   };
 
+  const setLanguageLog = (name) => {
+    logger.info(`Language changed to: ${name}`);
+    setLanguage(name);
+  };
+
   return (
     <ThemeContext.Provider
       value={{
@@ -69,6 +76,8 @@ export const ThemeProvider = ({ children }) => {
         setSelectedMusicId: setSelectedMusicIdWithLog,
         isExpanded,
         setIsExpanded: setIsExpandedLog,
+        language,
+        setLanguage : setLanguageLog,
       }}
     >
       {children}

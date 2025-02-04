@@ -31,49 +31,109 @@
 
     // Bouton pour ouvrir les filtres
     .filter_button {
-      background-color: var(--main-color);
-      color: white;
+      width: 40px;
+      height: 40px;
       border: none;
-      padding: 10px 15px;
+      font-size: var(--medium-font-size);
       cursor: pointer;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      transition: 0.3s ease-in-out;
+      color: var(--white-color);
+      border-radius: var(--circle-border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      padding: 0;
+      margin: 0;
 
       &:hover {
-        // background-color: darken(var(--main-color), 10%);
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  // Conteneur des filtres
+  .filter_section {
+    width: 100%;
+    height: auto;
+    margin-top: var(--big-margin-padding);
+    padding-left: var(--big-margin-padding);
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1250px) {
+      padding-left: 0;
+      padding: 0 var(--small-margin-padding);
+    }
+
+    .section_title {
+      font-size: var(--big-font-size);
+      margin-bottom: var(--small-margin-padding);
+      font-weight: var(--font-weight-regular);
+      animation: fadeIn var(--text-animation) ease-in-out;
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateX(var(--text-animation-negative-margin));
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     }
 
-    // Conteneur des filtres
-    .filter_section {
-      background: red;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+    .filter_wrapper {
       width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 var(--big-margin-padding);
+
+      @media (max-width: 1250px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      @media (max-width: 1250px) {
+        padding: 0 var(--small-margin-padding);
+      }
 
       .filter {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: var(--small-margin-padding);
+        margin-left: var(--margin-padding);
 
-        label {
-          font-weight: bold;
-          color: var(--text-color);
+        @media (max-width: 1250px) {
+          margin-left: 0;
+          margin-top: var(--margin-padding);
         }
 
-        select,
-        input {
+        label {
+          font-size: var(--font-size);
+          font-weight: var(--font-weight-regular);
+          animation: appear var(--text-animation) ease-in-out;
+          transition: var(--transition);
+        }
+
+        .select_input {
           width: 100%;
-          padding: 8px;
-          border-radius: 4px;
-          border: 1px solid var(--main-color);
-          background-color: green;
-          color: var(--text-color);
+          padding: var(--small-margin-padding);
+          border-radius: var(--small-border-radius);
+          animation: appear var(--text-animation) ease-in-out;
+          transition: var(--transition);
+          outline: none;
+          border: none;
+        }
+
+        @keyframes appear {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
       }
     }
@@ -87,37 +147,35 @@
 // ------------------------------+
 
 .section.dark {
-  // background-color: var(--dark-background);
-  // color: var(--dark-text);
-
-  .filter_section {
-    // background: var(--dark-container);
-  }
-
   .filter_button {
-    // background-color: var(--dark-main-color);
-    // color: var(--dark-text);
-
-    &:hover {
-      // background-color: lighten(var(--dark-main-color), 10%);
-    }
+    background: var(--black-color);
   }
 }
 
 .section.light {
-  // background-color: var(--light-background);
-  // color: var(--light-text);
-
-  .filter_section {
-    // background: var(--light-container);
-  }
-
   .filter_button {
-    // background-color: var(--light-main-color);
-    // color: var(--light-text);
+    background: var(--white-color);
+  }
+}
 
-    &:hover {
-      // background-color: darken(var(--light-main-color), 10%);
+.filter_section.dark {
+  .filter_wrapper {
+    .filter {
+      .select_input {
+        background-color: var(--black-color);
+        color: var(--white-color);
+      }
+    }
+  }
+}
+
+.filter_section.light {
+  .filter_wrapper {
+    .filter {
+      .select_input {
+        background-color: var(--white-color);
+        color: var(--black-color);
+      }
     }
   }
 }
