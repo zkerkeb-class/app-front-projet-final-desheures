@@ -1,5 +1,5 @@
 import React from 'react';
-import style from './page.module.scss';
+import style from './page.module.scss'
 import { useTheme } from '@/context/ThemeContext.js'
 
 const NavBar = () => {
