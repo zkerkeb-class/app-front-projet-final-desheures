@@ -44,11 +44,11 @@ const NavBar = () => {
             />
           </svg>
         </div>
-        <input
-          className={style.search_input}
-          type="text"
-          placeholder="Rechercher..."
-        />
+            <input
+              className={style.search_input}
+              type="text"
+                 placeholder="Rechercher..."
+            />
       </div>
 
       <div className={style.nav_bar_button_wrapper}>
