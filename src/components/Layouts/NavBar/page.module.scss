@@ -118,6 +118,23 @@ $search_logo_dark: '/images/navbar/search_dark.svg';
       justify-content: center;
       border-radius: var(--border-radius);
       transition: var(--transition);
+      cursor: pointer;
+
+      &:hover {
+        animation: jumpScale var(--transition-time) ease-in-out reverse;
+        @keyframes jumpScale {
+          0% {
+            transform: translateY(0) scale(1);
+          }
+          50% {
+            transform: translateY(calc(var(--small-margin-padding) * -1))
+              scale(1.2);
+          } // Saut + agrandissement
+          100% {
+            transform: translateY(0) scale(1);
+          }
+        }
+      }
 
       input {
         opacity: 0;

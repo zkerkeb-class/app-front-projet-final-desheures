@@ -123,6 +123,14 @@ const MusicSection = () => {
 
         <div className={styles.controls}>
           <button
+            onClick={handlePlaybackModeChange}
+            disabled={isLoading || playlist.length <= 1}
+            title={`Mode de lecture: ${playbackMode}`}
+            className={styles.interactTrack}
+          >
+            {getPlaybackModeIcon()}
+          </button>
+          <button
             onClick={playPreviousTrack}
             className={styles.interactTrack}
             disabled={isLoading || playlist.length <= 1}
@@ -193,14 +201,6 @@ const MusicSection = () => {
                 fill="#F8F8FF"
               />
             </svg>
-          </button>
-          <button
-            onClick={handlePlaybackModeChange}
-            disabled={isLoading || playlist.length <= 1}
-            title={`Mode de lecture: ${playbackMode}`}
-            className={styles.interactTrack}
-          >
-            {getPlaybackModeIcon()}
           </button>
           <button onClick={toggleExpand} className={styles.interactTrack}>
             {isExpanded ? (

@@ -14,6 +14,10 @@ $padding_multiplicator: 2;
   flex-direction: column;
   padding-bottom: var(--margin-padding);
 
+  @media (max-width: 1250px) {
+    padding-bottom: calc(var(--margin-padding) + 100px);
+  }
+
   .webgl {
     position: fixed;
     top: 0;

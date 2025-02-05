@@ -11,6 +11,10 @@ export const ThemeProvider = ({ children }) => {
   const [selectedMusicId, setSelectedMusicId] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
   const [language, setLanguage] = useState(false);
+  const [filterDuration, setFilterDuration] = useState('all');
+  const [filterArtist, setFilterArtist] = useState('all');
+  const [filterCategorie, setFilterCategorie] = useState('all');
+  const [filterSearch, setFilterSearch] = useState('');
 
   useEffect(() => {
     logger.info(`Theme initialized: ${darkMode ? 'Dark Mode' : 'Light Mode'}`);
@@ -20,6 +24,10 @@ export const ThemeProvider = ({ children }) => {
     logger.info(`Selected Music ID initialized: ${selectedMusicId}`);
     logger.info(`Is Expanded: ${isExpanded}`);
     logger.info(`Language is: ${language}`);
+    logger.info(`Filter duration: ${filterDuration}`);
+    logger.info(`Filter Artist: ${filterArtist}`);
+    logger.info(`Filter Categorie: ${filterCategorie}`);
+    logger.info(`Filter Search: ${filterSearch}`);
   }, []);
 
   const toggleDarkMode = () => {
@@ -61,6 +69,26 @@ export const ThemeProvider = ({ children }) => {
     setLanguage(name);
   };
 
+  const setFilterDurationLog = (name) => {
+    logger.info(`Filter Duration changed to: ${name}`);
+    setFilterDuration(name);
+  };
+
+  const setFilterArtistLog = (name) => {
+    logger.info(`Filter Artist changed to: ${name}`);
+    setFilterArtist(name);
+  };
+
+  const setFilterCategorieLog = (name) => {
+    logger.info(`Filter Categorie changed to: ${name}`);
+    setFilterCategorie(name);
+  };
+
+  const setFilterSearchLog = (name) => {
+    logger.info(`Filter Search changed to: ${name}`);
+    setFilterSearch(name);
+  };
+
   return (
     <ThemeContext.Provider
       value={{
@@ -77,7 +105,15 @@ export const ThemeProvider = ({ children }) => {
         isExpanded,
         setIsExpanded: setIsExpandedLog,
         language,
-        setLanguage : setLanguageLog,
+        setLanguage: setLanguageLog,
+        filterDuration,
+        setFilterDuration: setFilterDurationLog,
+        filterArtist,
+        setFilterArtist: setFilterArtistLog,
+        filterCategorie,
+        setFilterCategorie: setFilterCategorieLog,
+        filterSearch,
+        setFilterSearch: setFilterSearchLog,
       }}
     >
       {children}

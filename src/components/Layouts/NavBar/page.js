@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import style from './page.module.scss';
 import { useTheme } from '@/context/ThemeContext.js';
 
@@ -7,11 +7,28 @@ const NavBar = () => {
   const { setLanguage } = useTheme();
   const { setSectionName } = useTheme();
   const { setSelectedId } = useTheme();
+  const { setFilterSearch } = useTheme();
+
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleResetSection = () => {
     setSectionName('');
     setSelectedId('');
   };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchTerm.trim()) {
+        setSectionName('Filter');
+        setFilterSearch(searchTerm);
+      } else {
+        setSectionName('');
+        setFilterSearch('');
+      }
+    }, 300); // Délais de 300ms
+
+    return () => clearTimeout(timeoutId); // Nettoie le timeout à chaque changement
+  }, [searchTerm]);
 
   return (
     <div className={`${style.nav_bar} ${darkMode ? style.dark : style.light}`}>
@@ -48,6 +65,7 @@ const NavBar = () => {
           className={style.search_input}
           type="text"
           placeholder="Rechercher..."
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 

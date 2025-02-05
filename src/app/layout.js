@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <html>
+    <html lang="fr">
       {/* <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'}> */}
       <body>
         <Head />

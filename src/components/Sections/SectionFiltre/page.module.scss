@@ -46,7 +46,20 @@
       margin: 0;
 
       &:hover {
-        transform: scale(1.1);
+        transition: var(--transition) all;
+        animation: jumpScale var(--transition-time) ease-in-out reverse;
+        @keyframes jumpScale {
+          0% {
+            transform: translateY(0) scale(1);
+          }
+          50% {
+            transform: translateY(calc(var(--small-margin-padding) * -1))
+              scale(1.2);
+          } // Saut + agrandissement
+          100% {
+            transform: translateY(0) scale(1);
+          }
+        }
       }
     }
   }
@@ -89,6 +102,16 @@
       justify-content: flex-start;
       align-items: center;
       padding: 0 var(--big-margin-padding);
+      animation: appear var(--text-animation) ease-in-out;
+
+      @keyframes appear {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
 
       @media (max-width: 1250px) {
         flex-direction: column;
@@ -121,18 +144,47 @@
           width: 100%;
           padding: var(--small-margin-padding);
           border-radius: var(--small-border-radius);
-          animation: appear var(--text-animation) ease-in-out;
           transition: var(--transition);
           outline: none;
           border: none;
         }
+      }
 
-        @keyframes appear {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
+      // Bouton pour ouvrir les filtres
+      .filter_button {
+        width: 40px;
+        height: 40px;
+        border: none;
+        font-size: var(--medium-font-size);
+        cursor: pointer;
+        color: var(--white-color);
+        border-radius: var(--circle-border-radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        padding: 0;
+        margin: 0;
+        margin-left: var(--margin-padding);
+
+        @media (max-width: 1250px) {
+          margin-left: 0;
+          margin-top: var(--margin-padding);
+        }
+
+        &:hover {
+          animation: jumpScale var(--transition-time) ease-in-out reverse;
+          @keyframes jumpScale {
+            0% {
+              transform: translateY(0) scale(1);
+            }
+            50% {
+              transform: translateY(calc(var(--small-margin-padding) * -1))
+                scale(1.2);
+            } // Saut + agrandissement
+            100% {
+              transform: translateY(0) scale(1);
+            }
           }
         }
       }
@@ -146,12 +198,14 @@
 //
 // ------------------------------+
 
+.filter_section.dark,
 .section.dark {
   .filter_button {
     background: var(--black-color);
   }
 }
 
+.filter_section.light,
 .section.light {
   .filter_button {
     background: var(--white-color);
