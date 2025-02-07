@@ -3,18 +3,34 @@ import Image from 'next/image';
 import style from './page.module.scss';
 import { useTheme } from '@/context/ThemeContext.js';
 import {
-  getAudiosSortedByPopularity,
-  getAlbumsSortedByPopularity,
-  getArtistsSortedByPopularity,
-} from '@/services/api/sort.api';
+  getTracksByDuration,
+  getTracksByGenre,
+  getTracksByArtist,
+  getAlbumsByArtist,
+  getAlbumsByGenre,
+  getArtistsByGenre,
+} from '@/services/api/filter.api';
+import { getArtistById } from '@/services/api/artist.api';
 import logger from '@/utils/logger';
 
 const SectionSearch = () => {
-  const { darkMode, setSectionName, setSelectedId, setSelectedMusicId } =
-    useTheme();
-  const [searchAlbums, setSearchAlbums] = useState([]);
-  const [searchTracks, setSearchTracks] = useState([]);
-  const [searchArtists, setSearchArtists] = useState([]);
+  const {
+    darkMode,
+    setSectionName,
+    setSelectedId,
+    setSelectedMusicId,
+    filterArtist,
+    filterCategorie,
+    filterDuration,
+    setFilterDuration,
+    setFilterArtist,
+    setFilterCategorie,
+    setFilterSearch,
+  } = useTheme();
+
+  const [topAlbums, setTopAlbums] = useState([]);
+  const [topArtist, setTopArtist] = useState([]);
+  const [topTrack, setTopTrack] = useState([]);
 
   const normalizeItem = (item, type) => {
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
@@ -42,7 +58,6 @@ const SectionSearch = () => {
             item.title.length > MAX_TITLE_LENGTH
               ? item.title.slice(0, MAX_TITLE_LENGTH) + '...'
               : item.title,
-          // Priorité à l'image de l'album, puis à l'image de l'artiste, puis placeholder
           imageUrl: getFullImageUrl(
             item.album?.coverUrl ||
               item.artist?.imageUrl ||
@@ -64,46 +79,170 @@ const SectionSearch = () => {
     }
   };
 
+  const fetchArtists = async () => {
+    const promises = [];
+    const seenIds = new Set();
+    const uniqueArtist = [];
+
+    if (filterCategorie !== '') {
+      const genreArtist = await getArtistsByGenre(filterCategorie);
+      promises.push(genreArtist);
+    }
+
+    if (filterArtist !== '') {
+      const artistArtist = await getArtistById(filterArtist);
+      promises.push(artistArtist);
+    }
+
+    const results = await Promise.all(promises);
+    const allArtist = results.flat();
+
+    allArtist.forEach((artist) => {
+      if (!seenIds.has(artist._id)) {
+        seenIds.add(artist._id);
+        uniqueArtist.push(artist);
+      }
+    });
+
+    return uniqueArtist;
+  };
+
+  const fetchAlbums = async () => {
+    const promises = [];
+    const seenIds = new Set();
+    const uniqueAlbums = [];
+
+    if (filterCategorie !== '') {
+      const genreAlbums = await getAlbumsByGenre(filterCategorie);
+      promises.push(genreAlbums);
+    }
+
+    if (filterArtist !== '') {
+      const artistAlbums = await getAlbumsByArtist(filterArtist);
+      promises.push(artistAlbums);
+    }
+
+    const results = await Promise.all(promises);
+    const allAlbums = results.flat();
+
+    allAlbums.forEach((album) => {
+      if (!seenIds.has(album._id)) {
+        seenIds.add(album._id);
+        uniqueAlbums.push(album);
+      }
+    });
+
+    return uniqueAlbums;
+  };
+
+  const fetchTrack = async () => {
+    const promises = [];
+    const seenIds = new Set();
+    const uniqueTrack = [];
+
+    if (filterCategorie !== '') {
+      const genreTrack = await getTracksByGenre(filterCategorie);
+      promises.push(genreTrack);
+    }
+
+    if (filterArtist !== '') {
+      const artistTrack = await getTracksByArtist(filterArtist);
+      promises.push(artistTrack);
+    }
+
+    if (filterDuration !== '') {
+      const trackTrack = await getTracksByDuration(filterDuration);
+      promises.push(trackTrack);
+    }
+
+    const results = await Promise.all(promises);
+    const allTracks = results.flat();
+
+    allTracks.forEach((track) => {
+      if (!seenIds.has(track._id)) {
+        seenIds.add(track._id);
+        uniqueTrack.push(track);
+      }
+    });
+
+    return uniqueTrack;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [albums, tracks, artists] = await Promise.all([
-          getAlbumsSortedByPopularity('desc'),
-          getAudiosSortedByPopularity('desc'),
-          getArtistsSortedByPopularity('desc'),
-        ]);
+        if (
+          filterArtist == '' &&
+          filterDuration == '' &&
+          filterCategorie == ''
+        ) {
+          setSectionName('');
+          setSelectedId('');
+          setFilterDuration('');
+          setFilterArtist('');
+          setFilterCategorie('');
+          setFilterSearch('');
 
-        const albumMap = albums.reduce((acc, album) => {
-          acc[album._id] = normalizeItem(album, 'Album');
-          return acc;
-        }, {});
+          document.getElementById('search_input').value = '';
+          document.getElementById('select_duration').value = '';
+          document.getElementById('select_artist').value = '';
+          document.getElementById('select_genre').value = '';
+        }
 
-        setSearchAlbums(
-          albums.slice(0, 10).map((album) => normalizeItem(album, 'Album'))
-        );
+        const albums = await fetchAlbums();
+        if (albums?.length) {
+          const normalizedAlbums = albums.map((album) =>
+            normalizeItem(album, 'Album')
+          );
+          setTopAlbums(normalizedAlbums);
+        } else {
+          setTopAlbums([]);
+        }
 
-        setSearchTracks(
-          tracks.slice(0, 10).map((track) => {
-            const normalizedTrack = normalizeItem(track, 'Titre');
-            if (!track.imageUrl && track.album) {
-              normalizedTrack.imageUrl =
-                albumMap[track.album]?.imageUrl ||
-                '/images/default-placeholder.png';
-            }
-            return normalizedTrack;
-          })
-        );
+        const artists = await fetchArtists();
+        if (artists?.length) {
+          const normalizedArtist = artists.map((artist) =>
+            normalizeItem(artist, 'Artiste')
+          );
+          setTopArtist(normalizedArtist);
+        } else {
+          setTopArtist([]);
+        }
 
-        setSearchArtists(
-          artists.slice(0, 10).map((artist) => normalizeItem(artist, 'Artiste'))
-        );
+        // const albumMap = albums.reduce((acc, album) => {
+        //   acc[album._id] = normalizeItem(album, 'Album');
+        //   return acc;
+        // }, {});
+
+        const tracks = await fetchTrack();
+        if (tracks?.length) {
+          // const normalizedTrack = tracks.map((track) => {
+          //   normalizeItem(track, 'Titre');
+          //   if (!track.imageUrl && track.album) {
+          //     normalizedTrack.imageUrl = '/images/default-placeholder.png';
+          //     // normalizedTrack.imageUrl =
+          //     //   albumMap[track.album]?.imageUrl ||
+          //     //   '/images/default-placeholder.png';
+          //   }
+          // });
+          const normalizedTrack = tracks.map((track) =>
+            normalizeItem(track, 'Titre')
+          );
+
+          setTopTrack(normalizedTrack);
+        } else {
+          setTopTrack([]);
+        }
       } catch (error) {
-        logger.error('Erreur lors de la récupération des données:', error);
+        logger.error('Error fetching data:', error);
+        setTopAlbums([]);
+        setTopArtist([]);
+        setTopTrack([]);
       }
     };
 
     fetchData();
-  }, []);
+  }, [filterCategorie, filterArtist, filterDuration]);
 
   const handleItemClick = (type, id) => {
     if (type === 'Titre') {
@@ -140,13 +279,9 @@ const SectionSearch = () => {
 
   return (
     <div className={style.container}>
-      {renderSection('Albums associés à la recherche', searchAlbums, 'Album')}
-      {renderSection('Titres associés à la recherche', searchTracks, 'Titre')}
-      {renderSection(
-        'Artistes associés à la recherche',
-        searchArtists,
-        'Artiste'
-      )}
+      {renderSection('Albums associés à la recherche', topAlbums, 'Album')}
+      {renderSection('Artiste associés à la recherche', topArtist, 'Artiste')}
+      {renderSection('Titre associés à la recherche', topTrack, 'Titre')}
     </div>
   );
 };

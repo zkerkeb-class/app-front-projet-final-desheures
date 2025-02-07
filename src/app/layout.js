@@ -4,16 +4,11 @@ import React, { useEffect } from 'react';
 import 'styles/globals.scss';
 import 'styles/variables.scss';
 
-// import { appWithTranslation } from 'next-i18next';
-// import { useRouter } from 'next/router';
 import { ThemeProvider } from '@/context/ThemeContext.js';
 import logger from '@/utils/logger';
 import Head from './head.js';
 
-export default function RootLayout({ children }) {
-  // const { locale } = useRouter();
-  // const isRtl = locale === 'ar'; // Vérifie si la langue est arabe
-
+function RootLayout({ children }) {
   useEffect(() => {
     logger.info('Application is starting...');
 
@@ -24,7 +19,6 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="fr">
-      {/* <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'}> */}
       <body>
         <Head />
         <ThemeProvider>{children}</ThemeProvider>
@@ -32,3 +26,5 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+export default RootLayout;

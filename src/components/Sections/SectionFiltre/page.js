@@ -1,7 +1,10 @@
 /* eslint-disable react/no-unknown-property */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import style from './page.module.scss';
 import { useTheme } from '@/context/ThemeContext.js';
+import { getAllGenres } from '@/services/api/filter.api';
+import { getAllArtists } from '@/services/api/artist.api';
+import logger from '@/utils/logger';
 
 const SectionFiltre = () => {
   const {
@@ -14,9 +17,11 @@ const SectionFiltre = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   // États pour stocker les valeurs des filtres
-  const [duration, setDuration] = useState('all');
-  const [artist, setArtist] = useState('all');
-  const [categorie, setCategorie] = useState('all');
+  const [duration, setDuration] = useState('');
+  const [artist, setArtist] = useState('');
+  const [categorie, setCategorie] = useState('');
+  const [genres, setGenres] = useState([]);
+  const [artists, setArtists] = useState([]);
 
   const handleItemClick = (type) => {
     setSectionName(type);
@@ -24,6 +29,44 @@ const SectionFiltre = () => {
     setFilterArtist(artist);
     setFilterCategorie(categorie);
   };
+
+  // Fonction pour récupérer les artistes musicaux
+  useEffect(() => {
+    if (showFilters) {
+      setFilterDuration('');
+      setFilterArtist('');
+      setFilterCategorie('');
+
+      document.getElementById('select_duration').value = '';
+      document.getElementById('select_artist').value = '';
+      document.getElementById('select_genre').value = '';
+    }
+  }, [showFilters]);
+
+  useEffect(() => {
+    const fetchArtists = async () => {
+      try {
+        const artistsData = await getAllArtists();
+        setArtists(artistsData); // Mettre à jour l'état des artists
+      } catch (error) {
+        logger.error('Erreur lors de la récupération des artistes:', error);
+      }
+    };
+    fetchArtists();
+  }, []);
+
+  // Fonction pour récupérer les genres musicaux
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const genresData = await getAllGenres();
+        setGenres(genresData); // Mettre à jour l'état des genres
+      } catch (error) {
+        logger.error('Erreur lors de la récupération des genres:', error);
+      }
+    };
+    fetchGenres();
+  }, []);
 
   return (
     <div className={style.container}>
@@ -60,10 +103,11 @@ const SectionFiltre = () => {
             <div className={style.filter}>
               <label>Durée</label>
               <select
+                id="select_duration"
                 className={style.select_input}
                 onChange={(e) => setDuration(e.target.value)}
               >
-                <option value="all">Toutes</option>
+                <option value="">Toutes</option>
                 <option value="short">0-3 min</option>
                 <option value="medium">3-5 min</option>
                 <option value="long">5 min +</option>
@@ -73,27 +117,36 @@ const SectionFiltre = () => {
             {/* Filtre par artiste */}
             <div className={style.filter}>
               <label>Artiste</label>
-              <input
-                type="text"
-                placeholder="Rechercher un artiste..."
+              <select
+                id="select_artist"
                 className={style.select_input}
                 onChange={(e) => setArtist(e.target.value)}
-              />
+              >
+                <option value="">Tous</option>
+                {artists &&
+                  artists.map((item, index) => (
+                    <option key={index} value={item._id}>
+                      {item.name}
+                    </option>
+                  ))}
+              </select>
             </div>
 
             {/* Filtre par genre */}
             <div className={style.filter}>
               <label>Genre musical</label>
               <select
+                id="select_genre"
                 className={style.select_input}
                 onChange={(e) => setCategorie(e.target.value)}
               >
-                <option value="all">Tous</option>
-                <option value="pop">Pop</option>
-                <option value="rock">Rock</option>
-                <option value="jazz">Jazz</option>
-                <option value="rap">Rap</option>
-                <option value="electro">Electro</option>
+                <option value="">Tous</option>
+                {genres &&
+                  genres.map((genre, index) => (
+                    <option key={index} value={genre}>
+                      {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                    </option>
+                  ))}
               </select>
             </div>
 
@@ -110,8 +163,8 @@ const SectionFiltre = () => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M21.546 5.11107C21.8272 5.39236 21.9852 5.77382 21.9852 6.17157C21.9852 6.56931 21.8272 6.95077 21.546 7.23207L10.303 18.4751C10.1544 18.6237 9.97805 18.7416 9.7839 18.822C9.58976 18.9024 9.38167 18.9438 9.17153 18.9438C8.96138 18.9438 8.75329 18.9024 8.55915 18.822C8.365 18.7416 8.1886 18.6237 8.04003 18.4751L2.45403 12.8901C2.31076 12.7517 2.19649 12.5862 2.11787 12.4032C2.03926 12.2202 1.99788 12.0233 1.99615 11.8242C1.99442 11.625 2.03237 11.4275 2.10779 11.2431C2.18322 11.0588 2.29459 10.8913 2.43543 10.7505C2.57627 10.6096 2.74375 10.4983 2.92809 10.4228C3.11244 10.3474 3.30996 10.3095 3.50913 10.3112C3.7083 10.3129 3.90513 10.3543 4.08813 10.4329C4.27114 10.5115 4.43666 10.6258 4.57503 10.7691L9.17103 15.3651L19.424 5.11107C19.5633 4.97168 19.7287 4.8611 19.9108 4.78566C20.0928 4.71022 20.288 4.67139 20.485 4.67139C20.6821 4.67139 20.8772 4.71022 21.0593 4.78566C21.2413 4.8611 21.4067 4.97168 21.546 5.11107Z"
                   fill="#F8F8FF"
                 />

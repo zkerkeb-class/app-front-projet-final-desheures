@@ -11,9 +11,9 @@ export const ThemeProvider = ({ children }) => {
   const [selectedMusicId, setSelectedMusicId] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
   const [language, setLanguage] = useState(false);
-  const [filterDuration, setFilterDuration] = useState('all');
-  const [filterArtist, setFilterArtist] = useState('all');
-  const [filterCategorie, setFilterCategorie] = useState('all');
+  const [filterDuration, setFilterDuration] = useState('');
+  const [filterArtist, setFilterArtist] = useState('');
+  const [filterCategorie, setFilterCategorie] = useState('');
   const [filterSearch, setFilterSearch] = useState('');
 
   useEffect(() => {

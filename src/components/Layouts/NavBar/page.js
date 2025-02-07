@@ -7,13 +7,27 @@ const NavBar = () => {
   const { setLanguage } = useTheme();
   const { setSectionName } = useTheme();
   const { setSelectedId } = useTheme();
-  const { setFilterSearch } = useTheme();
+  const {
+    setFilterSearch,
+    setFilterDuration,
+    setFilterArtist,
+    setFilterCategorie,
+  } = useTheme();
 
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleResetSection = () => {
     setSectionName('');
     setSelectedId('');
+    setFilterDuration('');
+    setFilterArtist('');
+    setFilterCategorie('');
+    setFilterSearch('');
+
+    document.getElementById('search_input').value = '';
+    document.getElementById('select_duration').value = '';
+    document.getElementById('select_artist').value = '';
+    document.getElementById('select_genre').value = '';
   };
 
   useEffect(() => {
@@ -62,6 +76,7 @@ const NavBar = () => {
           </svg>
         </div>
         <input
+          id="search_input"
           className={style.search_input}
           type="text"
           placeholder="Rechercher..."

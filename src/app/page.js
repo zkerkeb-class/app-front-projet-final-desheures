@@ -152,13 +152,6 @@ const Home = () => {
       pixelRatio: Math.min(window.devicePixelRatio, 2),
     };
 
-    // window.addEventListener('resize', () => {
-    //   sizes.width = window.innerWidth;
-    //   sizes.height = window.innerHeight;
-    //   sizes.pixelRatio = Math.min(window.devicePixelRatio, 2);
-    // });
-
-    // Redimensionner la scène et la caméra lorsque la fenêtre est redimensionnée
     window.addEventListener('resize', () => {
       sizes.width = window.innerWidth;
       sizes.height = window.innerHeight;
@@ -289,6 +282,11 @@ const Home = () => {
         <>
           {!isExpanded && <NavBar />}
           <div className={style.app_wrapper}>
+            {/* <div className={style.global_container}>
+              <h1>{t('welcome')}</h1>
+              <h2>{t('title')}</h2>
+              <p>{t('description')}</p>
+            </div> */}
             <SectionFiltre />
             {sectionName === 'Album' && <SectionAlbum />}
             {sectionName === 'Artiste' && <SectionArtist />}
