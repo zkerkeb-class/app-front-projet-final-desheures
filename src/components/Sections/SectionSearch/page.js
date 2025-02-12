@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import style from './page.module.scss';
@@ -12,6 +13,7 @@ import {
 } from '@/services/api/filter.api';
 import { getArtistById } from '@/services/api/artist.api';
 import logger from '@/utils/logger';
+import { getAlbumById } from '@/services/api/album.api';
 
 const SectionSearch = () => {
   const {
@@ -33,13 +35,13 @@ const SectionSearch = () => {
   const [topTrack, setTopTrack] = useState([]);
 
   const normalizeItem = (item, type) => {
+    const MAX_TITLE_LENGTH = 30;
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
 
     const getFullImageUrl = (url) => {
       if (!url) return '/images/default-placeholder.png';
       return url.startsWith('http') ? url : `${baseUrl}/${url}`;
     };
-    const MAX_TITLE_LENGTH = 30;
 
     switch (type) {
       case 'Album':
@@ -51,20 +53,24 @@ const SectionSearch = () => {
               : item.title,
           imageUrl: getFullImageUrl(item.coverUrl),
         };
-      case 'Titre':
+
+      case 'Titre': {
+        const imageUrl = getFullImageUrl(
+          item.album?.coverUrl || item.artist?.imageUrl || null
+        );
+
         return {
           id: item._id,
           title:
             item.title.length > MAX_TITLE_LENGTH
               ? item.title.slice(0, MAX_TITLE_LENGTH) + '...'
               : item.title,
-          imageUrl: getFullImageUrl(
-            item.album?.coverUrl ||
-              item.artist?.imageUrl ||
-              '/images/default-placeholder.png'
-          ),
-          albumId: item.album?._id,
+          imageUrl,
+          albumId:
+            typeof item.album === 'string' ? item.album : item.album?._id,
         };
+      }
+
       case 'Artiste':
         return {
           id: item._id,
@@ -74,11 +80,11 @@ const SectionSearch = () => {
               : item.name,
           imageUrl: getFullImageUrl(item.imageUrl),
         };
+
       default:
         return item;
     }
   };
-
   const fetchArtists = async () => {
     const promises = [];
     const seenIds = new Set();
@@ -158,14 +164,46 @@ const SectionSearch = () => {
     const results = await Promise.all(promises);
     const allTracks = results.flat();
 
+    const albumIds = new Set();
+    allTracks.forEach((track) => {
+      if (track.album) {
+        const albumId =
+          typeof track.album === 'string' ? track.album : track.album._id;
+        albumIds.add(albumId);
+      }
+    });
+
+    const albumPromises = Array.from(albumIds).map((albumId) =>
+      getAlbumById(albumId)
+    );
+    const albumsData = await Promise.all(albumPromises);
+
+    const albumMap = albumsData.reduce((acc, album) => {
+      if (album) {
+        acc[album._id] = {
+          _id: album._id,
+          coverUrl: album.coverUrl,
+          title: album.title,
+        };
+      }
+      return acc;
+    }, {});
+
     allTracks.forEach((track) => {
       if (!seenIds.has(track._id)) {
         seenIds.add(track._id);
+
+        const albumId =
+          typeof track.album === 'string' ? track.album : track.album?._id;
+        if (albumId && albumMap[albumId]) {
+          track.album = albumMap[albumId];
+        }
+
         uniqueTrack.push(track);
       }
     });
 
-    return uniqueTrack;
+    return uniqueTrack.map((track) => normalizeItem(track, 'Titre'));
   };
 
   useEffect(() => {
@@ -209,27 +247,9 @@ const SectionSearch = () => {
           setTopArtist([]);
         }
 
-        // const albumMap = albums.reduce((acc, album) => {
-        //   acc[album._id] = normalizeItem(album, 'Album');
-        //   return acc;
-        // }, {});
-
         const tracks = await fetchTrack();
         if (tracks?.length) {
-          // const normalizedTrack = tracks.map((track) => {
-          //   normalizeItem(track, 'Titre');
-          //   if (!track.imageUrl && track.album) {
-          //     normalizedTrack.imageUrl = '/images/default-placeholder.png';
-          //     // normalizedTrack.imageUrl =
-          //     //   albumMap[track.album]?.imageUrl ||
-          //     //   '/images/default-placeholder.png';
-          //   }
-          // });
-          const normalizedTrack = tracks.map((track) =>
-            normalizeItem(track, 'Titre')
-          );
-
-          setTopTrack(normalizedTrack);
+          setTopTrack(tracks);
         } else {
           setTopTrack([]);
         }

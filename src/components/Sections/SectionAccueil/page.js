@@ -116,7 +116,6 @@ const SectionAccueil = () => {
     socket.on('recentlyPlayedTracks', async (tracks) => {
       try {
         if (Array.isArray(tracks)) {
-          // Les tracks ont déjà les informations de base, on a juste besoin des informations complètes
           const tracksData = await Promise.all(
             tracks.map((track) => getAudioById(track._id))
           );
