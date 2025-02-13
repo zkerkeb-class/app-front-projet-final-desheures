@@ -14,7 +14,7 @@ import {
 import { getArtistById } from '@/services/api/artist.api';
 import logger from '@/utils/logger';
 import { getAlbumById } from '@/services/api/album.api';
-
+import { useTranslation } from 'react-i18next';
 const SectionSearch = () => {
   const {
     darkMode,
@@ -29,7 +29,7 @@ const SectionSearch = () => {
     setFilterCategorie,
     setFilterSearch,
   } = useTheme();
-
+  const { t } = useTranslation();
   const [topAlbums, setTopAlbums] = useState([]);
   const [topArtist, setTopArtist] = useState([]);
   const [topTrack, setTopTrack] = useState([]);
@@ -299,9 +299,9 @@ const SectionSearch = () => {
 
   return (
     <div className={style.container}>
-      {renderSection('Albums associés à la recherche', topAlbums, 'Album')}
-      {renderSection('Artiste associés à la recherche', topArtist, 'Artiste')}
-      {renderSection('Titre associés à la recherche', topTrack, 'Titre')}
+      {renderSection(t('filterAlbum'), topAlbums, 'Album')}
+      {renderSection(t('filterArtist'), topArtist, 'Artiste')}
+      {renderSection(t('filterTrack'), topTrack, 'Titre')}
     </div>
   );
 };

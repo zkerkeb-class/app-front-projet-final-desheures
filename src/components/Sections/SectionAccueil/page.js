@@ -10,10 +10,11 @@ import {
 import { getAudioById } from '@/services/api/audio.api';
 import socketService from '@/services/sockets/socketsService';
 import logger from '@/utils/logger';
-
+import { useTranslation } from 'react-i18next';
 const SectionAccueil = () => {
   const { darkMode, setSectionName, setSelectedId, setSelectedMusicId } =
     useTheme();
+  const { t } = useTranslation();
   const [topAlbums, setTopAlbums] = useState([]);
   const [topTracks, setTopTracks] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
@@ -197,11 +198,11 @@ const SectionAccueil = () => {
 
   return (
     <div className={style.container}>
-      {renderSection('Top 10 Albums', topAlbums, 'Album')}
-      {renderSection('Top 10 Titres', topTracks, 'Titre')}
-      {renderSection('Top 10 Artistes', topArtists, 'Artiste')}
-      {renderSection('Dernières écoutes', recentlyPlayedTracks, 'Titre')}
-      {renderSection('Les plus écoutées', mostPlayedTracks, 'Titre')}
+      {renderSection(t('topAlbums'), topAlbums, 'Album')}
+      {renderSection(t('topArtists'), topTracks, 'Titre')}
+      {renderSection(t('topTracks'), topArtists, 'Artiste')}
+      {renderSection(t('lastListened'), recentlyPlayedTracks, 'Titre')}
+      {renderSection(t('mostListened'), mostPlayedTracks, 'Titre')}
     </div>
   );
 };

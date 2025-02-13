@@ -6,9 +6,10 @@ import Backaground_Img from 'images/background/shadow_lion.png';
 
 import { getAllAudios } from '@/services/api/audio.api';
 import logger from '@/utils/logger';
-
+import { useTranslation } from 'react-i18next';
 const SectionDescription = () => {
   const { darkMode } = useTheme();
+  const { t } = useTranslation();
   const { setSelectedMusicId } = useTheme();
   const { sectionName } = useTheme();
 
@@ -46,7 +47,7 @@ const SectionDescription = () => {
             className={style.head_image}
           />
           <div className={style.head_presentation}>
-            <h2 className={style.section_title}> Titre</h2>
+            <h2 className={style.section_title}> {t('generalTitle')}</h2>
             <p>{sectionName}</p>
             <p>Description</p>
             <p>

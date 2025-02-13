@@ -5,9 +5,10 @@ import 'styles/globals.scss';
 import 'styles/variables.scss';
 
 import { ThemeProvider } from '@/context/ThemeContext.js';
+import { I18nProvider } from '@/components/i18nProvider';
 import logger from '@/utils/logger';
 import Head from './head.js';
-
+import i18n from '../i18n';
 function RootLayout({ children }) {
   useEffect(() => {
     logger.info('Application is starting...');
@@ -21,7 +22,9 @@ function RootLayout({ children }) {
     <html lang="fr">
       <body>
         <Head />
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <I18nProvider i18n={i18n}>{children}</I18nProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

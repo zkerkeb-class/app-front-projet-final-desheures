@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import style from './page.module.scss';
 import { useTheme } from '@/context/ThemeContext.js';
-
+import { useTranslation } from 'react-i18next';
 const NavBar = () => {
   const { darkMode, toggleDarkMode } = useTheme();
   const { setLanguage } = useTheme();
   const { setSectionName } = useTheme();
   const { setSelectedId } = useTheme();
+  const { i18n } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   const {
     setFilterSearch,
     setFilterDuration,
@@ -87,7 +93,11 @@ const NavBar = () => {
       <div className={style.nav_bar_button_wrapper}>
         <select
           className={style.select_language}
-          onChange={(e) => setLanguage(e.target.value.toUpperCase())}
+          value={i18n.language}
+          onChange={(e) => {
+            changeLanguage(e.target.value);
+            setLanguage(e.target.value.toUpperCase());
+          }}
         >
           <option value="fr">FR</option>
           <option value="en">EN</option>

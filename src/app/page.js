@@ -34,11 +34,8 @@ const Home = () => {
   const { darkMode } = useTheme();
   const { isLoading, setLoader } = useTheme();
   const { sectionName } = useTheme();
-  // console.log(sectionName);
 
   const { isExpanded } = useTheme();
-
-  // const { t } = useTranslation('common');
 
   const darkModeRef = useRef(darkMode);
 
@@ -282,11 +279,6 @@ const Home = () => {
         <>
           {!isExpanded && <NavBar />}
           <div className={style.app_wrapper}>
-            {/* <div className={style.global_container}>
-              <h1>{t('welcome')}</h1>
-              <h2>{t('title')}</h2>
-              <p>{t('description')}</p>
-            </div> */}
             <SectionFiltre />
             {sectionName === 'Album' && <SectionAlbum />}
             {sectionName === 'Artiste' && <SectionArtist />}

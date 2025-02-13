@@ -5,7 +5,7 @@ import { useTheme } from '@/context/ThemeContext.js';
 import { getAllGenres } from '@/services/api/filter.api';
 import { getAllArtists } from '@/services/api/artist.api';
 import logger from '@/utils/logger';
-
+import { useTranslation } from 'react-i18next';
 const SectionFiltre = () => {
   const {
     darkMode,
@@ -15,8 +15,8 @@ const SectionFiltre = () => {
     setFilterCategorie,
   } = useTheme();
   const [showFilters, setShowFilters] = useState(false);
+  const { t } = useTranslation();
 
-  // États pour stocker les valeurs des filtres
   const [duration, setDuration] = useState('');
   const [artist, setArtist] = useState('');
   const [categorie, setCategorie] = useState('');
@@ -30,7 +30,6 @@ const SectionFiltre = () => {
     setFilterCategorie(categorie);
   };
 
-  // Fonction pour récupérer les artistes musicaux
   useEffect(() => {
     if (showFilters) {
       setFilterDuration('');
@@ -47,7 +46,7 @@ const SectionFiltre = () => {
     const fetchArtists = async () => {
       try {
         const artistsData = await getAllArtists();
-        setArtists(artistsData); // Mettre à jour l'état des artists
+        setArtists(artistsData);
       } catch (error) {
         logger.error('Erreur lors de la récupération des artistes:', error);
       }
@@ -55,7 +54,6 @@ const SectionFiltre = () => {
     fetchArtists();
   }, []);
 
-  // Fonction pour récupérer les genres musicaux
   useEffect(() => {
     const fetchGenres = async () => {
       try {
@@ -97,17 +95,17 @@ const SectionFiltre = () => {
         <div
           className={`${style.filter_section} ${darkMode ? style.dark : style.light}`}
         >
-          <h2 className={style.section_title}>Filtres</h2>
+          <h2 className={style.section_title}>{t('Filter')}</h2>
           <div className={style.filter_wrapper}>
             {/* Filtre par durée */}
             <div className={style.filter}>
-              <label>Durée</label>
+              <label>{t('durationFilter')}</label>
               <select
                 id="select_duration"
                 className={style.select_input}
                 onChange={(e) => setDuration(e.target.value)}
               >
-                <option value="">Toutes</option>
+                <option value="">{t('allDuration')}</option>
                 <option value="short">0-3 min</option>
                 <option value="medium">3-5 min</option>
                 <option value="long">5 min +</option>
@@ -116,13 +114,13 @@ const SectionFiltre = () => {
 
             {/* Filtre par artiste */}
             <div className={style.filter}>
-              <label>Artiste</label>
+              <label>{t('artistFilter')}</label>
               <select
                 id="select_artist"
                 className={style.select_input}
                 onChange={(e) => setArtist(e.target.value)}
               >
-                <option value="">Tous</option>
+                <option value="">{t('allArtist')}</option>
                 {artists &&
                   artists.map((item, index) => (
                     <option key={index} value={item._id}>
@@ -132,9 +130,8 @@ const SectionFiltre = () => {
               </select>
             </div>
 
-            {/* Filtre par genre */}
             <div className={style.filter}>
-              <label>Genre musical</label>
+              <label>{t('genreFilter')}</label>
               <select
                 id="select_genre"
                 className={style.select_input}
@@ -150,7 +147,6 @@ const SectionFiltre = () => {
               </select>
             </div>
 
-            {/* Bouton pour valider les filtres */}
             <button
               className={style.filter_button}
               onClick={() => handleItemClick('Filter')}

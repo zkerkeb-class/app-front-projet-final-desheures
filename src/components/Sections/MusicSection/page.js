@@ -6,10 +6,11 @@ import WaveformVisualizer from '@/components/Layouts/WaveformVisualizer';
 import Backaground_Img from 'images/background/shadow_lion.png';
 import styles from './page.module.scss';
 import { useMusicPlayer } from '@/hooks/useMusicPlayer';
-
+import { useTranslation } from 'react-i18next';
 const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const MusicSection = () => {
+  const { t } = useTranslation();
   const {
     darkMode,
     isExpanded,
@@ -84,14 +85,14 @@ const MusicSection = () => {
         <div
           className={`${styles.music_CD} ${isPlaying && !isLoading ? styles.spinning : ''}`}
         >
-          {isLoading && <div className={styles.loader}>Chargement...</div>}
+          {isLoading && <div className={styles.loader}>{t('loading')}.</div>}
           <Image
             src={
               audio?.album?.coverUrl
                 ? `${baseUrl}/${audio.album.coverUrl}`
                 : Backaground_Img
             }
-            alt={audio?.title || 'Album cover'}
+            alt={audio?.title || t('albumCover')}
             width={isExpanded ? 400 : 240}
             height={isExpanded ? 400 : 240}
             className={styles.image_CD}
@@ -101,11 +102,9 @@ const MusicSection = () => {
         </div>
 
         <div className={styles.trackDetails}>
-          <p className={styles.trackTitle}>
-            {audio?.title || 'Titre de la musique'}
-          </p>
+          <p className={styles.trackTitle}>{audio?.title || t('titleMusic')}</p>
           <p className={styles.artist}>
-            {audio?.artist?.name || "Nom de l'artiste"}
+            {audio?.artist?.name || t('artistName')}
           </p>
           {isExpanded && audio?.album && (
             <p className={styles.album}>{audio.album.name}</p>
@@ -125,7 +124,7 @@ const MusicSection = () => {
           <button
             onClick={handlePlaybackModeChange}
             disabled={isLoading || playlist.length <= 1}
-            title={`Mode de lecture: ${playbackMode}`}
+            title={`${playbackMode}`}
             className={styles.interactTrack}
           >
             {getPlaybackModeIcon()}
@@ -134,7 +133,7 @@ const MusicSection = () => {
             onClick={playPreviousTrack}
             className={styles.interactTrack}
             disabled={isLoading || playlist.length <= 1}
-            title="Piste précédente"
+            title={t('lastTrack')}
           >
             <svg
               width="20"
@@ -153,7 +152,7 @@ const MusicSection = () => {
             onClick={togglePlayPause}
             disabled={isLoading || !audio}
             className={styles.interactTrack}
-            title={isPlaying ? 'Pause' : 'Lecture'}
+            title={isPlaying ? t('pause') : t('play')}
           >
             {isPlaying ? (
               <svg
@@ -187,7 +186,7 @@ const MusicSection = () => {
             onClick={playNextTrack}
             disabled={isLoading || playlist.length <= 1}
             className={styles.interactTrack}
-            title="Piste suivante"
+            title={t('nextTrack')}
           >
             <svg
               width="20"

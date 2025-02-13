@@ -7,7 +7,9 @@ import { getAlbumById } from '@/services/api/album.api';
 import Backaground_Img from 'images/background/shadow_lion.png';
 import socketService from '@/services/sockets/socketsService';
 import logger from '@/utils/logger';
+import { useTranslation } from 'react-i18next';
 const SectionAlbum = () => {
+  const { t } = useTranslation();
   const { darkMode, selectedId, setSelectedMusicId } = useTheme();
   const [album, setAlbum] = useState(null);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
@@ -62,18 +64,22 @@ const SectionAlbum = () => {
         <div className={style.head_wrapper}>
           <Image
             src={getFullImageUrl(album?.coverUrl) || Backaground_Img}
-            alt={album?.title || 'Titre'}
+            alt={album?.title || t('generalTitle')}
             width={140}
             height={140}
             className={style.head_image}
           />
           <div className={style.head_presentation}>
-            <h2 className={style.section_title}>{album?.title || 'Titre'}</h2>
-            <p>{album?.artist?.name || 'Artiste inconnu'}</p>
+            <h2 className={style.section_title}>
+              {album?.title || t('generalTitle')}
+            </h2>
+            <p>{album?.artist?.name || t('unkwownArtist')}</p>
             <p>
-              Nombre de Titres <span>{album?.tracks?.length || 0}</span>
+              {t('titleLenght')} <span>{album?.tracks?.length || 0}</span>
             </p>
-            <p>Durée : {formattedDuration}</p>
+            <p>
+              {t('durationFilter')} : {formattedDuration}
+            </p>
           </div>
         </div>
 
@@ -96,12 +102,12 @@ const SectionAlbum = () => {
               </div>
               <div className={style.item_part}>
                 <p className={style.item_text}>
-                  {album?.artist?.name || 'Artiste inconnu'}
+                  {album?.artist?.name || t('unkwownArtist')}
                 </p>
               </div>
               <div className={style.item_part}>
                 <p className={style.item_text}>
-                  {album?.title || 'Album inconnu'}
+                  {album?.title || t('unkwownAlbum')}
                 </p>
               </div>
               <div className={style.item_part}>

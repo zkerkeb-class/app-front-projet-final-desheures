@@ -6,10 +6,11 @@ import Image from 'next/image';
 import { getAlbumsByArtist } from '@/services/api/filter.api';
 import { getArtistById } from '@/services/api/artist.api';
 import logger from '@/utils/logger';
-
+import { useTranslation } from 'react-i18next';
 const SectionArtist = () => {
   const { darkMode, selectedId, setSectionName, setSelectedId } = useTheme();
   const [albums, setAlbums] = useState([]);
+  const { t } = useTranslation();
   const [artist, setArtist] = useState(null);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
 
@@ -73,11 +74,13 @@ const SectionArtist = () => {
               </div>
               <div className={style.item_part}>
                 <p className={style.item_text}>
-                  {artist?.name || 'Artiste inconnu'}
+                  {artist?.name || t('unkwownArtist')}
                 </p>
               </div>
               <div className={style.item_part}>
-                <p className={style.item_text}>{album.tracks.length} Titres</p>
+                <p className={style.item_text}>
+                  {album.tracks.length} {t('titles')}
+                </p>
               </div>
             </button>
           ))}
