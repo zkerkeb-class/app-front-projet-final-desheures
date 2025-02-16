@@ -15,9 +15,6 @@
   "unkwownArtist": "فنان مجهول",
   "unkwownAlbum": "ألبوم مجهول",
   "unkwownGenre": "نوع مجهول",
-  "filterAlbum": "الألبومات المرتبطة بالبحث",
-  "filterArtist": "الفنانون المرتبطون بالبحث",
-  "filterTrack": "المقطوعات المرتبطة بالبحث",
   "topAlbums": "أفضل 10 ألبومات",
   "topArtists": "أفضل 10 فنانين",
   "topTracks": "أفضل 10 مقطوعات",
@@ -25,5 +22,12 @@
   "mostListened": "الأكثر استماعاً",
   "titleMusic": "عنوان الأغنية",
   "artistName": "اسم الفنان",
-  "search": "بحث..."
+  "search": "بحث...",
+  "filterAlbum": "الألبومات المرتبطة بالفلاتر",
+  "filterArtist": "الفنانين المرتبطين بالفلاتر",
+  "filterTrack": "المسارات المرتبطة بالفلاتر",
+  "filterSearchAlbums": "الألبومات المرتبطة بالبحث",
+  "filterSearchArtists": "الفنانين المرتبطين بالبحث",
+  "filterSearchTracks": "المسارات المرتبطة بالبحث",
+  "NoResult":"لا توجد نتائج"
 }

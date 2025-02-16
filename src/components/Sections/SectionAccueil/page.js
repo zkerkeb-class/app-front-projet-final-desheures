@@ -172,29 +172,37 @@ const SectionAccueil = () => {
     }
   };
 
-  const renderSection = (title, data, type) => (
-    <div className={`${style.section} ${darkMode ? style.dark : style.light}`}>
-      <h2 className={style.section_title}>{title}</h2>
-      <div className={style.items_container}>
-        {data.map((item, index) => (
-          <button
-            className={style.item}
-            key={index}
-            onClick={() => handleItemClick(type, item.id)}
-          >
-            <Image
-              src={item.imageUrl}
-              alt={item.title}
-              width={140}
-              height={140}
-              className={style.item_image}
-            />
-            <p className={style.item_title}>{item.title}</p>
-          </button>
-        ))}
+  const renderSection = (title, data, type) => {
+    return (
+      <div
+        className={`${style.section} ${darkMode ? style.dark : style.light}`}
+      >
+        <h2 className={style.section_title}>{title}</h2>
+        {data.length > 0 ? (
+          <div className={style.items_container}>
+            {data.map((item, index) => (
+              <button
+                className={style.item}
+                key={index}
+                onClick={() => handleItemClick(type, item.id)}
+              >
+                <Image
+                  src={item.imageUrl}
+                  alt={item.title}
+                  width={140}
+                  height={140}
+                  className={style.item_image}
+                />
+                <p className={style.item_title}>{item.title}</p>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <p>{t('NoResult')}</p>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className={style.container}>

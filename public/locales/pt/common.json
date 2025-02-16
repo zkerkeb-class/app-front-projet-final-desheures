@@ -15,9 +15,6 @@
   "unkwownArtist": "Artista Desconhecido",
   "unkwownAlbum": "Álbum Desconhecido",
   "unkwownGenre": "Gênero Desconhecido",
-  "filterAlbum": "Álbuns relacionados à pesquisa",
-  "filterArtist": "Artistas relacionados à pesquisa",
-  "filterTrack": "Faixas relacionadas à pesquisa",
   "topAlbums": "Top 10 Álbuns",
   "topArtists": "Top 10 Artistas",
   "topTracks": "Top 10 Faixas",
@@ -32,5 +29,12 @@
   "lastTrack": "Faixa Anterior",
   "pause": "Pausar",
   "play": "Reproduzir",
-  "nextTrack": "Próxima Faixa"
+  "nextTrack": "Próxima Faixa",
+  "filterAlbum": "Álbuns associados aos filtros",
+  "filterArtist": "Artistas associados aos filtros",
+  "filterTrack": "Faixas associadas aos filtros",
+  "filterSearchAlbums": "Álbuns associados à pesquisa",
+  "filterSearchArtists": "Artistas associados à pesquisa",
+  "filterSearchTracks": "Faixas associadas à pesquisa",
+  "NoResult": "Nenhum resultado"
 }

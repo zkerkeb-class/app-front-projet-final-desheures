@@ -10,7 +10,7 @@ export const ThemeProvider = ({ children }) => {
   const [selectedId, setSelectedId] = useState('');
   const [selectedMusicId, setSelectedMusicId] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
-  const [language, setLanguage] = useState(false);
+  const [language, setLanguage] = useState('FR');
   const [filterDuration, setFilterDuration] = useState('');
   const [filterArtist, setFilterArtist] = useState('');
   const [filterCategorie, setFilterCategorie] = useState('');

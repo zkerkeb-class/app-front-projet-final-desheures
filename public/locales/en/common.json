@@ -15,9 +15,6 @@
   "unkwownArtist": "Unknown Artist",
   "unkwownAlbum": "Unknown Album",
   "unkwownGenre": "Unknown Genre",
-  "filterAlbum": "Albums related to search",
-  "filterArtist": "Artists related to search",
-  "filterTrack": "Tracks related to search",
   "topAlbums": "Top 10 Albums",
   "topArtists": "Top 10 Artists",
   "topTracks": "Top 10 Tracks",
@@ -32,5 +29,12 @@
   "lastTrack": "Previous Track",
   "pause": "Pause",
   "play": "Play",
-  "nextTrack": "Next Track"
+  "nextTrack": "Next Track",
+  "filterAlbum": "Albums associated with filters",
+  "filterArtist": "Artists associated with filters",
+  "filterTrack": "Tracks associated with filters",
+  "filterSearchAlbums": "Albums associated with search",
+  "filterSearchArtists": "Artists associated with search",
+  "filterSearchTracks": "Tracks associated with search",
+  "NoResult":"No result"
 }

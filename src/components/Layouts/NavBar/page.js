@@ -3,24 +3,24 @@ import style from './page.module.scss';
 import { useTheme } from '@/context/ThemeContext.js';
 import { useTranslation } from 'react-i18next';
 const NavBar = () => {
-  const { darkMode, toggleDarkMode } = useTheme();
-  const { setLanguage } = useTheme();
-  const { setSectionName } = useTheme();
-  const { setSelectedId } = useTheme();
   const { i18n } = useTranslation();
-
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-  };
-
   const {
+    darkMode,
+    toggleDarkMode,
+    setLanguage,
+    setSectionName,
+    setSelectedId,
     setFilterSearch,
     setFilterDuration,
     setFilterArtist,
     setFilterCategorie,
   } = useTheme();
-
   const [searchTerm, setSearchTerm] = useState('');
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setLanguage(lng.toUpperCase());
+  };
 
   const handleResetSection = () => {
     setSectionName('');
@@ -39,7 +39,7 @@ const NavBar = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchTerm.trim()) {
-        setSectionName('Filter');
+        setSectionName('SearchBar');
         setFilterSearch(searchTerm);
       } else {
         setSectionName('');
@@ -94,10 +94,7 @@ const NavBar = () => {
         <select
           className={style.select_language}
           value={i18n.language}
-          onChange={(e) => {
-            changeLanguage(e.target.value);
-            setLanguage(e.target.value.toUpperCase());
-          }}
+          onChange={(e) => changeLanguage(e.target.value)}
         >
           <option value="fr">FR</option>
           <option value="en">EN</option>

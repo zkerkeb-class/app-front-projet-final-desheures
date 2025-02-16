@@ -21,6 +21,7 @@ import SectionAlbum from '@/components/Sections/SectionAlbum';
 import SectionArtist from '@/components/Sections/SectionArtist';
 import SectionFiltre from '@/components/Sections/SectionFiltre/page';
 import SectionSearch from '@/components/Sections/SectionSearch/page';
+import SectionSearchBar from '@/components/Sections/SectionSearchBar/page';
 
 // import { useTranslation } from 'next-i18next';
 
@@ -284,6 +285,7 @@ const Home = () => {
             {sectionName === 'Artiste' && <SectionArtist />}
             {sectionName === 'Description' && <SectionDescription />}
             {sectionName === 'Filter' && <SectionSearch />}
+            {sectionName === 'SearchBar' && <SectionSearchBar />}
             {sectionName === '' && <SectionAccueil />}
 
             <MusicSection />
