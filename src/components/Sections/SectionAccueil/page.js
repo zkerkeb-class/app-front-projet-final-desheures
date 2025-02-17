@@ -207,8 +207,8 @@ const SectionAccueil = () => {
   return (
     <div className={style.container}>
       {renderSection(t('topAlbums'), topAlbums, 'Album')}
-      {renderSection(t('topArtists'), topTracks, 'Titre')}
-      {renderSection(t('topTracks'), topArtists, 'Artiste')}
+      {renderSection(t('topTracks'), topTracks, 'Titre')}
+      {renderSection(t('topArtists'), topArtists, 'Artiste')}
       {renderSection(t('lastListened'), recentlyPlayedTracks, 'Titre')}
       {renderSection(t('mostListened'), mostPlayedTracks, 'Titre')}
     </div>
