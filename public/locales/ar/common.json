@@ -29,5 +29,7 @@
   "filterSearchAlbums": "الألبومات المرتبطة بالبحث",
   "filterSearchArtists": "الفنانين المرتبطين بالبحث",
   "filterSearchTracks": "المسارات المرتبطة بالبحث",
-  "NoResult":"لا توجد نتائج"
+  "noResult": "لا توجد نتائج",
+  "offline": "غير متصل",
+  "online": "متصل"
 }

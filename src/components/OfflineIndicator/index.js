@@ -1,10 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './index.module.scss';
+import { useTranslation } from 'react-i18next';
 
 export default function OfflineIndicator() {
   const [isOnline, setIsOnline] = useState(true);
   const [showIndicator, setShowIndicator] = useState(false);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleOnline = () => {
@@ -34,7 +37,7 @@ export default function OfflineIndicator() {
       className={`${styles.indicator} ${isOnline ? styles.online : styles.offline}`}
     >
       <div className={styles.content}>
-        {isOnline ? 'Connexion rétablie' : 'Vous êtes hors ligne'}
+        <p>{isOnline ? t('online') : t('offline')}</p>
         <div className={styles.statusDot}></div>
       </div>
     </div>

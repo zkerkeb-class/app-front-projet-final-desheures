@@ -1,57 +1,62 @@
-// src/components/ConnectionIndicator/index.module.scss
+// ------------------------------+
+//
+//      Offline Indicator
+//
+// ------------------------------+
+
 .indicator {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 12px 20px;
-  border-radius: 8px;
+  bottom: var(--margin-padding);
+  right: var(--margin-padding);
+  padding: var(--margin-padding);
+  border-radius: var(--border-radius);
   z-index: 1000;
-  animation: slideIn 0.3s ease-out;
+  animation: slideIn var(--transition-time) ease-out;
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 
   &.online {
-    background-color: var(--success-color, #4caf50);
-    color: #fff;
+    background: var(--gradient-color-to-right-light);
+    color: var(--white-color);
   }
 
   &.offline {
-    background-color: var(--error-color, #f44336);
-    color: #fff;
+    background: var(--gradient-color-to-right-dark);
+    color: var(--white-color);
   }
 }
 
 .content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--small-margin-padding);
 }
 
 .statusDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: var(--small-margin-padding);
+  height: var(--small-margin-padding);
+  border-radius: var(--circle-border-radius);
   background-color: currentColor;
-  animation: pulse 2s infinite;
-}
+  animation: pulse var(--transition-time) infinite;
 
-@keyframes slideIn {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }

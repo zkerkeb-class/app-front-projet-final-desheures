@@ -297,7 +297,7 @@ const SectionSearch = () => {
             ))}
           </div>
         ) : (
-          <p>{t('NoResult')}</p>
+          <p>{t('noResult')}</p>
         )}
       </div>
     );

@@ -36,5 +36,7 @@
   "filterSearchAlbums": "Álbuns associados à pesquisa",
   "filterSearchArtists": "Artistas associados à pesquisa",
   "filterSearchTracks": "Faixas associadas à pesquisa",
-  "NoResult": "Nenhum resultado"
+  "noResult": "Nenhum resultado",
+  "offline": "Off-line",
+  "online": "On-line"
 }
