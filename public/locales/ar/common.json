@@ -31,5 +31,21 @@
   "filterSearchTracks": "المسارات المرتبطة بالبحث",
   "noResult": "لا توجد نتائج",
   "offline": "غير متصل",
-  "online": "متصل"
+  "online": "متصل",
+  "joinRoom": "الانضمام إلى غرفة",
+  "yourName": "اسمك",
+  "createRoom": "إنشاء غرفة",
+  "roomId": "معرف الغرفة",
+  "join": "انضمام",
+  "host": "المضيف",
+  "guest": "ضيف",
+  "participants": "المشاركون",
+  "leave": "مغادرة الغرفة",
+  "playbackControl": "التحكم في التشغيل",
+  "volume": "مستوى الصوت",
+  "mute": "كتم الصوت",
+  "unmute": "تشغيل الصوت",
+  "expand": "توسيع",
+  "collapse": "تصغير",
+  "roomStatus": "حالة الغرفة"
 }

@@ -38,5 +38,21 @@
   "filterSearchTracks": "Faixas associadas à pesquisa",
   "noResult": "Nenhum resultado",
   "offline": "Off-line",
-  "online": "On-line"
+  "online": "On-line",
+  "joinRoom": "Entrar em uma Sala",
+  "yourName": "Seu Nome",
+  "createRoom": "Criar Sala",
+  "roomId": "ID da Sala",
+  "join": "Entrar",
+  "host": "Anfitrião",
+  "guest": "Convidado",
+  "participants": "Participantes",
+  "leave": "Sair da Sala",
+  "playbackControl": "Controles de Reprodução",
+  "volume": "Volume",
+  "mute": "Silenciar",
+  "unmute": "Ativar Som",
+  "expand": "Expandir",
+  "collapse": "Recolher",
+  "roomStatus": "Status da Sala"
 }
