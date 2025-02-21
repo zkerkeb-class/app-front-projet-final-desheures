@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import Image from 'next/image';
 import Backaground_Img from 'images/background/shadow_lion.png';
 import styles from './page.module.scss';
+import logger from '@/utils/logger';
 
 const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -98,7 +99,7 @@ const MultiRoomPage = () => {
           if (isPlaying && audioRef.current.paused) {
             audioRef.current
               .play()
-              .catch((err) => console.log('Playback error:', err));
+              .catch((err) => logger.error('Playback error:', err));
           } else if (!isPlaying && !audioRef.current.paused) {
             audioRef.current.pause();
           }
@@ -115,7 +116,7 @@ const MultiRoomPage = () => {
         if (isPlaying) {
           audioRef.current
             .play()
-            .catch((err) => console.log('Initial playback error:', err));
+            .catch((err) => logger.error('Initial playback error:', err));
         }
       }
     });
