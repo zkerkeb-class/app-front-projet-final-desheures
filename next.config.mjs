@@ -50,9 +50,9 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '3030',
+        protocol: 'https',
+        hostname: 'back-end-projet-final-desheures.onrender.com',
+        port: '',
         pathname: '/**',
       },
     ],
