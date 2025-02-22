@@ -27,7 +27,7 @@ const SectionArtist = () => {
   };
 
   const getFullImageUrl = (url) => {
-    if (!url) return '/images/default-placeholder.png';
+    if (!url) return '/images/background/shadow_lion.png';
     return url.startsWith('http') ? url : `${baseUrl}/${url}`;
   };
 
