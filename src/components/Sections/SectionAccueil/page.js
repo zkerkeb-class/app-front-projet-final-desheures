@@ -21,11 +21,19 @@ const SectionAccueil = () => {
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
   const [mostPlayedTracks, setMostPlayedTracks] = useState([]);
 
+  function isWebPSupported() {
+    const canvas = document.createElement('canvas');
+    if (canvas.getContext && canvas.getContext('2d')) {
+      return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+    }
+    return false;
+  }
+
   const normalizeItem = (item, type) => {
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
 
     const getFullImageUrl = (url) => {
-      if (!url) return '/images/default-placeholder.png';
+      if (!url) return '/images/background/shadow_lion.png';
       return url.startsWith('http') ? url : `${baseUrl}/${url}`;
     };
     const MAX_TITLE_LENGTH = 30;
@@ -38,7 +46,11 @@ const SectionAccueil = () => {
             item.title.length > MAX_TITLE_LENGTH
               ? item.title.slice(0, MAX_TITLE_LENGTH) + '...'
               : item.title,
-          imageUrl: getFullImageUrl(item.coverUrl),
+          imageUrl: getFullImageUrl(
+            isWebPSupported() && item.coverUrls.webp
+              ? item.coverUrls.jpg
+              : item.coverUrls.jpg
+          ),
         };
       case 'Titre':
         return {
@@ -51,7 +63,7 @@ const SectionAccueil = () => {
           imageUrl: getFullImageUrl(
             item.album?.coverUrl ||
               item.artist?.imageUrl ||
-              '/images/default-placeholder.png'
+              '/images/background/shadow_lion.png'
           ),
           albumId: item.album?._id,
         };
@@ -95,7 +107,7 @@ const SectionAccueil = () => {
             if (!track.imageUrl && track.album) {
               normalizedTrack.imageUrl =
                 albumMap[track.album]?.imageUrl ||
-                '/images/default-placeholder.png';
+                '/images/background/shadow_lion.png';
             }
             return normalizedTrack;
           })
