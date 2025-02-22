@@ -1,18 +1,27 @@
 import pino from 'pino';
 
 const logger = pino({
+  level: 'info',
   browser: {
     asObject: true,
-  },
-  transport: {
-    target: 'pino-pretty',
-    options: {
-      colorize: true,
-      translateTime: true,
-      ignore: 'pid,hostname',
+    write: {
+      info: (...args) => console.log(...args),
+      error: (...args) => console.error(...args),
+      warn: (...args) => console.warn(...args),
+      debug: (...args) => console.debug(...args),
+      trace: (...args) => console.trace(...args),
     },
   },
-  level: 'info',
+  ...(process.env.NODE_ENV === 'development'
+    ? {
+        formatters: {
+          level: (label) => ({ level: label.toUpperCase() }),
+          bindings: () => ({}),
+          log: (object) => object,
+        },
+        timestamp: () => `,"time":"${new Date().toISOString()}"`,
+      }
+    : {}),
 });
 
 export default logger;

@@ -23,16 +23,16 @@
     "gsap": "^3.12.5",
     "i18next": "^24.2.2",
     "i18next-browser-languagedetector": "^8.0.2",
-    "next": "^14.2.23",
+    "next": "^14.1.0",
     "next-i18next": "^15.4.1",
     "next-intl": "^3.26.3",
     "next-pwa": "^5.6.0",
-    "pino": "^9.5.0",
-    "pino-pretty": "^13.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "pino": "^8.19.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-i18next": "^15.4.0",
     "sass": "^1.81.0",
+    "sharp": "^0.33.5",
     "socket.io-client": "^4.8.1",
     "three": "^0.171.0"
   },
@@ -48,6 +48,7 @@
     "globals": "^15.12.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
+    "pino-pretty": "^10.3.1",
     "prettier": "^3.3.3"
   }
 }
