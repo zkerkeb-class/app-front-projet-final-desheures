@@ -28,6 +28,7 @@ $search_logo_dark: '/images/navbar/search_dark.svg';
     align-items: flex-end;
     padding: var(--small-margin-padding) var(--margin-padding);
     justify-content: center;
+    z-index: var(--top-zindex);
   }
 
   @keyframes fadeIn {
