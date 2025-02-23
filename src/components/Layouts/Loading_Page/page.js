@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import style from './page.module.scss';
 
-import { useTheme } from '@/app/ThemeContext.js';
+import { useTheme } from '@/context/ThemeContext.js';
 
 const Loader = () => {
   const [percentage, setPercentage] = useState(0);
@@ -23,7 +23,6 @@ const Loader = () => {
     if (percentage === 100) {
       clearInterval(interval);
 
-      // Animation GSAP
       gsap.to(loaderRef.current, {
         y: '-100%',
         opacity: 0,

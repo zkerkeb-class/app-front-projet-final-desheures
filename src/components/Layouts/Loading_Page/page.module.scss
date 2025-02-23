@@ -37,6 +37,11 @@
       padding: 0;
       margin: 0;
       overflow: hidden;
+
+      @media (max-width: 1250px) {
+        font-size: var(--big-font-size);
+
+      }
     }
 
     .progress_container {

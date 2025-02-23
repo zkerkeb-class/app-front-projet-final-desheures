@@ -10,17 +10,33 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
 import style from 'styles/page.module.scss';
+import { useTheme } from '@/context/ThemeContext.js';
+
 import NavBar from 'components/Layouts/NavBar/page.js';
 import SectionAccueil from 'components/Sections/SectionAccueil/page.js';
+import SectionDescription from 'components/Sections/SectionDescription/page.js';
 import Loader from 'components/Layouts/Loading_Page/page.js';
-import { useTheme } from '@/app/ThemeContext.js';
+import SectionAlbum from '@/components/Sections/SectionAlbum';
+import SectionArtist from '@/components/Sections/SectionArtist';
+import SectionFiltre from '@/components/Sections/SectionFiltre/page';
+import SectionRoom from '@/components/Sections/SectionRoom/';
+import SectionSearch from '@/components/Sections/SectionSearch/page';
+import SectionSearchBar from '@/components/Sections/SectionSearchBar/page';
 
 // import { useTranslation } from 'next-i18next';
 
+// function testHusky() {
+//      const test = 'pas de guillemets simples';
+//       var mauvaisVar = 123;
+//         console.log(test)
+//   return mauvaisVar;
+// }
 const Home = () => {
   const { darkMode } = useTheme();
   const { isLoading, setLoader } = useTheme();
-  // const { t } = useTranslation('common');
+  const { sectionName } = useTheme();
+
+  const { isExpanded } = useTheme();
 
   const darkModeRef = useRef(darkMode);
 
@@ -34,10 +50,10 @@ const Home = () => {
 
     if (darkModeRef.current) {
       rgbColor = 2;
-      rgbColorHover = [0, 1];
+      rgbColorHover = [0, 2];
     } else {
-      rgbColor = 0.04;
-      rgbColorHover = [0.8, 2];
+      rgbColor = 0.05;
+      rgbColorHover = [1, 2];
     }
 
     const world = {
@@ -61,9 +77,9 @@ const Home = () => {
 
     if (isMobile) {
       PlaneWidth = 50;
-      PlaneHeight = 50;
-      PlaneWidthSegments = 20;
-      PlaneHeightSegments = 20;
+      PlaneHeight = 100;
+      PlaneWidthSegments = 8;
+      PlaneHeightSegments = 8;
     }
 
     let planeGeometry = new THREE.PlaneGeometry(
@@ -95,11 +111,11 @@ const Home = () => {
       const randomValues = [];
       for (let i = 0; i < array.length; i++) {
         if (i % 3 === 0) {
-          array[i] += (Math.random() - 0.5) * 3;
-          array[i + 1] += (Math.random() - 0.5) * 3;
-          array[i + 2] += (Math.random() - 0.5) * 5;
+          array[i] += (Math.random() - 0.5) * 2;
+          array[i + 1] += (Math.random() - 0.5) * 2;
+          array[i + 2] += (Math.random() - 0.5) * 3;
         }
-        randomValues.push(Math.random() * Math.PI * 2);
+        randomValues.push(Math.random() * Math.PI * 4);
       }
       planeMesh.geometry.attributes.position.randomValues = randomValues;
       planeMesh.geometry.attributes.position.originalPosition = array;
@@ -138,6 +154,11 @@ const Home = () => {
       sizes.width = window.innerWidth;
       sizes.height = window.innerHeight;
       sizes.pixelRatio = Math.min(window.devicePixelRatio, 2);
+
+      camera.aspect = sizes.width / sizes.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(sizes.pixelRatio);
     });
 
     const camera = new THREE.PerspectiveCamera(
@@ -198,9 +219,9 @@ const Home = () => {
         planeMesh.geometry.attributes.position;
       for (let i = 0; i < array.length; i += 3) {
         array[i] =
-          originalPosition[i] + Math.cos(frame + randomValues[i]) * 0.01;
+          originalPosition[i] + Math.cos(frame + randomValues[i]) * 0.005;
         array[i + 1] =
-          originalPosition[i + 1] + Math.sin(frame + randomValues[i]) * 0.001;
+          originalPosition[i + 1] + Math.sin(frame + randomValues[i]) * 0.0005;
       }
       planeMesh.geometry.attributes.position.needsUpdate = true;
 
@@ -256,11 +277,19 @@ const Home = () => {
       {isLoading ? (
         <Loader setLoader={setLoader} />
       ) : (
-        <div className={style.app_wrapper}>
-          <div className={style.background_img}></div>
-          <NavBar />
-          <SectionAccueil />
-        </div>
+        <>
+          {!isExpanded && <NavBar />}
+          <div className={style.app_wrapper}>
+            <SectionFiltre />
+            <SectionRoom />
+            {sectionName === 'Album' && <SectionAlbum />}
+            {sectionName === 'Artiste' && <SectionArtist />}
+            {sectionName === 'Description' && <SectionDescription />}
+            {sectionName === 'Filter' && <SectionSearch />}
+            {sectionName === 'SearchBar' && <SectionSearchBar />}
+            {sectionName === '' && <SectionAccueil />}
+          </div>
+        </>
       )}
     </div>
   );

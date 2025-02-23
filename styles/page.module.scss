@@ -8,12 +8,15 @@ $padding_multiplicator: 2;
 
 .global_container {
   width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  height: auto;
   position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  padding-bottom: var(--margin-padding);
+
+  @media (max-width: 1250px) {
+    padding-bottom: calc(var(--margin-padding) + 100px);
+  }
 
   .webgl {
     position: fixed;
@@ -26,34 +29,12 @@ $padding_multiplicator: 2;
   .app_wrapper {
     position: relative;
     z-index: 4;
-    width: calc(100% - (var(--big-margin-padding) * $padding_multiplicator));
-    height: calc(100% - (var(--big-margin-padding) * $padding_multiplicator));
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     border-radius: var(--border-radius);
-
-    .background_img {
-      width: 100%;
-      height: 100%;
-      transition:
-        background-image var(--transition-time),
-        color var(--transition-time);
-      opacity: var(--less-opacity);
-      border-radius: var(--border-radius);
-      animation: fadeIn var(--text-animation) ease-in-out;
-      position: absolute;
-
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: var(--less-opacity);
-        }
-      }
-    }
   }
 }
 
@@ -63,32 +44,32 @@ $padding_multiplicator: 2;
 //
 // ------------------------------+
 
-$dark_background: '/images/background/dark_background.png';
-$light_background: '/images/background/light_background.png';
-
 .global_container.dark {
+  label,
   h4,
   h3,
   h2,
+  span,
   p {
     color: var(--white-color);
   }
-
-  .background_img {
-    // background: url(#{$dark_background}) no-repeat center center;
-    background-size: cover;
-    background-image: var(--gradient-color-to-right-dark);
+  svg path {
+    fill: var(--third-color);
+    stroke: var(--third-color);
   }
 }
 
 .global_container.light {
+  label,
+  h4,
+  h3,
+  h2,
+  span,
   p {
     color: var(--black-color);
   }
-
-  .background_img {
-    // background: url(#{$light_background}) no-repeat center center;
-    background-size: cover;
-    background-image: var(--gradient-color-to-right-light);
+  svg path {
+    fill: var(--main-color);
+    stroke: var(--main-color);
   }
 }

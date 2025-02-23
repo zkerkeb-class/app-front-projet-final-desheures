@@ -1,0 +1,414 @@
+// ------------------------------+
+//
+//        Music Section
+//
+// ------------------------------+
+
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 100%;
+  padding: 100px 0;
+  transition: var(--transition);
+  padding-right: var(--big-margin-padding);
+
+  @media (max-width: 1250px) {
+    top: calc(100% - 100px);
+    height: 100px;
+    width: 100%;
+    padding: 0 0;
+    padding-right: 0;
+    z-index: var(--top-zindex);
+  }
+
+  &.expanded {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    z-index: 99;
+
+    @media (max-width: 1250px) {
+      top: 0;
+      height: 100%;
+      width: 100%;
+      padding: 0 0;
+      padding-right: 0;
+    }
+
+    .music_section {
+      position: relative;
+      backdrop-filter: blur(100px);
+
+      .waveformContainer {
+        width: 100%;
+        height: 60%;
+        position: absolute;
+        bottom: 0%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+
+        canvas {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .music_CD {
+        height: 400px;
+        width: 400px;
+        z-index: 100;
+
+        @media (max-width: 1250px) {
+          width: 300px;
+          height: 300px;
+          display: flex;
+        }
+
+        .image_CD {
+          width: 80%;
+          height: 80%;
+        }
+      }
+
+      .sound,
+      .controls,
+      .progress {
+        z-index: 100;
+        transform: scale(1.1);
+
+        @media (max-width: 1250px) {
+          margin: var(--margin-padding) 0;
+        }
+      }
+
+      .sound,
+      .progress {
+        @media (max-width: 1250px) {
+          margin: 0 0;
+          display: flex;
+          width: 80%;
+
+          .text_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 20%;
+          }
+
+          input[type='range'] {
+            width: 50%;
+          }
+
+          button,
+          label,
+          p,
+          span {
+            font-size: var(--small-font-size);
+          }
+        }
+      }
+    }
+  }
+
+  .music_section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    border-radius: var(--small-border-radius);
+    animation: fadeIn var(--text-animation) ease-in-out;
+    transition: var(--transition);
+
+    .music_CD {
+      position: relative;
+      height: 300px;
+      width: 300px;
+      border-radius: var(--circle-border-radius);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin-bottom: var(--margin-padding);
+      transition: var(--transition);
+      overflow: visible;
+
+      @media (max-width: 1250px) {
+        display: none;
+      }
+
+      &.spinning .image_CD {
+        animation: spin 20s linear infinite;
+
+        @keyframes spin {
+          from {
+            transform: rotate(0);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      }
+
+      .image_CD {
+        position: relative;
+        z-index: 2;
+        width: 80%;
+        height: 80%;
+        border-radius: var(--circle-border-radius);
+        border: var(--big-border-width) solid var(--white-color);
+        object-fit: cover;
+        transition: var(--transition);
+      }
+
+      .waveformContainer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        z-index: 1;
+        pointer-events: none;
+
+        .waveform-canvas {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          transition: var(--transition);
+        }
+      }
+    }
+
+    .trackDetails {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      margin: var(--margin-padding) 0;
+
+      @media (max-width: 1250px) {
+        margin: 0 0;
+      }
+
+      .trackTitle {
+        font-weight: bold;
+        margin-bottom: var(--small-margin-padding);
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+
+        @media (max-width: 1250px) {
+          font-size: var(--small-font-size);
+          margin: 0 0;
+        }
+      }
+
+      .artist {
+        margin-bottom: var(--small-margin-padding);
+        font-weight: var(--font-weight-bold);
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+
+        @media (max-width: 1250px) {
+          font-size: var(--small-font-size);
+          margin: 0 0;
+        }
+      }
+
+      .album {
+        font-weight: var(--font-weight-bold);
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+        color: var(--third-color);
+
+        @media (max-width: 1250px) {
+          font-size: var(--small-font-size);
+          margin: 0 0;
+        }
+      }
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: var(--margin-padding);
+      margin: var(--margin-padding) 0;
+
+      @media (max-width: 1250px) {
+        margin: 0 0;
+        margin-top: var(--small-margin-padding);
+        gap: var(--small-margin-padding);
+      }
+    }
+
+    .interactTrack {
+      width: 40px;
+      height: 40px;
+      border: none;
+      font-size: var(--medium-font-size);
+      cursor: pointer;
+      color: var(--white-color);
+      border-radius: var(--circle-border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      padding: 0;
+      margin: 0;
+
+      &:hover {
+        transition: var(--transition) all;
+        animation: jumpScale var(--transition-time) ease-in-out reverse;
+        @keyframes jumpScale {
+          0% {
+            transform: translateY(0) scale(1);
+          }
+          50% {
+            transform: translateY(calc(var(--small-margin-padding) * -1))
+              scale(1.2);
+          } // Saut + agrandissement
+          100% {
+            transform: translateY(0) scale(1);
+          }
+        }
+      }
+    }
+
+    .sound,
+    .progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--margin-padding);
+      width: 400px;
+      height: 40px;
+      transition: var(--transition);
+
+      @media (max-width: 1250px) {
+        display: none;
+      }
+
+      .timeDisplay {
+        border: none;
+        background: none;
+        font-size: var(--font-size);
+        font-family: var(--second-font);
+      }
+
+      .text_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10%;
+      }
+
+      input[type='range'] {
+        width: 80%;
+        margin: 0 var(--margin-padding);
+        -webkit-appearance: none;
+        height: 4px;
+        border-radius: var(--small-border-radius);
+        transition: var(--transition);
+
+        &:hover {
+          height: 6px;
+        }
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          background: var(--second-color);
+          height: 20px;
+          width: 20px;
+          border-radius: var(--circle-border-radius);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+// ------------------------------+
+//
+//        Light Dark Mode
+//
+// ------------------------------+
+
+.music_section {
+  &.dark {
+    .music_CD {
+      background: transparent;
+
+      .waveformContainer {
+        canvas {
+          filter: invert(0);
+          opacity: 0.6;
+        }
+      }
+    }
+
+    .interactTrack {
+      background: var(--black-color);
+    }
+
+    .timeDisplay {
+      color: var(--white-color);
+    }
+
+    .sound,
+    .progress {
+      input[type='range'] {
+        background: var(--third-color);
+
+        &:hover {
+          background: var(--second-color);
+        }
+      }
+    }
+
+    .artist {
+      color: var(--third-color);
+    }
+  }
+
+  &.light {
+    .music_CD {
+      background: transparent;
+
+      .waveformContainer {
+        canvas {
+          filter: invert(1);
+          opacity: 0.4;
+        }
+      }
+    }
+
+    .interactTrack {
+      background: var(--white-color);
+    }
+
+    .timeDisplay {
+      color: var(--black-color);
+    }
+
+    .sound,
+    .progress {
+      input[type='range'] {
+        background: var(--main-color);
+
+        &:hover {
+          background: var(--second-color);
+        }
+      }
+    }
+    .artist {
+      color: var(--main-color);
+    }
+  }
+}
