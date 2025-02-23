@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Voici les implémentations demandé
 
-## Getting Started
+- Voici la playlist Youtube : https://www.youtube.com/watch?v=Kamam0pjjSU&list=PLGPjxaiRxKcQte6330dK8Y6qE9DJUP4gc
 
-First, run the development server:
+- Voici les liens :
+  - https://back-end-projet-final-desheures.onrender.com
+  - https://back-end-projet-final-desheures.onrender.com
+  - https://app-front-projet-final-desheures.onrender.com
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Frontend
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Fonctionnalités implémentées
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- [x] Filtres fonctionnels
+- [x] Recherche opérationnelle
+- [x] Progressive Web App (PWA)
+- [x] Responsive design (carré droit)
+- [x] Conversion des images en format WebP
+- [x] Images en format JPEG
+- [x] Prise en charge multilingue
+- [x] Lecture synchronisée
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Backoffice
 
-## Learn More
+### Tâches en cours
 
-To learn more about Next.js, take a look at the following resources:
+- [x] Tableau de bord des métriques
+- [x] Fonctionnalité de glisser-déposer (drag and drop)
+- [x] Validation lors de la suppression
+- [x] Bouton pour modifier l'album vers l'artiste
+- [x] Conversion des fichiers audio en format WAV
+- [x] Fonctionnalité d'ajout de fichiers audio
+- [x] Image par défaut pour les albums/artistes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Backend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Tâches en cours
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [x] Validation des formulaires
+- [x] Mise en place de l'intégration continue et du déploiement continu (CI/CD)
