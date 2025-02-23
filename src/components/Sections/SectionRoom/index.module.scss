@@ -1,0 +1,86 @@
+// ------------------------------+
+//
+//        Room
+//
+// ------------------------------+
+
+.container {
+  width: 60%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  @media (max-width: 1250px) {
+    width: 100%;
+    align-items: center;
+  }
+
+  .section {
+    width: 100%;
+    height: auto;
+    margin-top: var(--big-margin-padding);
+    padding-left: var(--big-margin-padding);
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1250px) {
+      padding-left: 0;
+      padding: 0 var(--small-margin-padding);
+    }
+
+    // Bouton pour ouvrir les filtres
+    .filter_button {
+      width: 40px;
+      height: 40px;
+      border: none;
+      font-size: var(--medium-font-size);
+      cursor: pointer;
+      color: var(--white-color);
+      border-radius: var(--circle-border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      padding: 0;
+      margin: 0;
+
+      &:hover {
+        transition: var(--transition) all;
+        animation: jumpScale var(--transition-time) ease-in-out reverse;
+        @keyframes jumpScale {
+          0% {
+            transform: translateY(0) scale(1);
+          }
+          50% {
+            transform: translateY(calc(var(--small-margin-padding) * -1))
+              scale(1.2);
+          } // Saut + agrandissement
+          100% {
+            transform: translateY(0) scale(1);
+          }
+        }
+      }
+    }
+  }
+}
+
+// ------------------------------+
+//
+//        Light Dark Mode
+//
+// ------------------------------+
+
+.filter_section.dark,
+.section.dark {
+  .filter_button {
+    background: var(--black-color);
+  }
+}
+
+.filter_section.light,
+.section.light {
+  .filter_button {
+    background: var(--white-color);
+  }
+}

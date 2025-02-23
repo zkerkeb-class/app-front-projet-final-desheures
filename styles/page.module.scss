@@ -1,0 +1,75 @@
+// ------------------------------+
+//
+//        Global Page
+//
+// ------------------------------+
+
+$padding_multiplicator: 2;
+
+.global_container {
+  width: 100vw;
+  height: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--margin-padding);
+
+  @media (max-width: 1250px) {
+    padding-bottom: calc(var(--margin-padding) + 100px);
+  }
+
+  .webgl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+    z-index: 1;
+  }
+
+  .app_wrapper {
+    position: relative;
+    z-index: 4;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    border-radius: var(--border-radius);
+  }
+}
+
+// ------------------------------+
+//
+//        Light Dark Mode
+//
+// ------------------------------+
+
+.global_container.dark {
+  label,
+  h4,
+  h3,
+  h2,
+  span,
+  p {
+    color: var(--white-color);
+  }
+  svg path {
+    fill: var(--third-color);
+    stroke: var(--third-color);
+  }
+}
+
+.global_container.light {
+  label,
+  h4,
+  h3,
+  h2,
+  span,
+  p {
+    color: var(--black-color);
+  }
+  svg path {
+    fill: var(--main-color);
+    stroke: var(--main-color);
+  }
+}

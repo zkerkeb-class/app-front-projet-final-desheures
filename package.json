@@ -1,0 +1,54 @@
+{
+  "name": "desheures-front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "eslint . --fix",
+    "start:prod": "node app.js | pino-pretty",
+    "prepare": "husky",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "prettier --write",
+      "eslint ."
+    ]
+  },
+  "dependencies": {
+    "dat.gui": "^0.7.9",
+    "gsap": "^3.12.5",
+    "i18next": "^24.2.2",
+    "i18next-browser-languagedetector": "^8.0.2",
+    "next": "^14.1.0",
+    "next-i18next": "^15.4.1",
+    "next-intl": "^3.26.3",
+    "next-pwa": "^5.6.0",
+    "pino": "^8.19.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^15.4.0",
+    "sass": "^1.81.0",
+    "sharp": "^0.33.5",
+    "socket.io-client": "^4.8.1",
+    "three": "^0.171.0"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.25.9",
+    "@eslint/js": "^9.15.0",
+    "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.0.3",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.12.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "pino-pretty": "^10.3.1",
+    "prettier": "^3.3.3"
+  }
+}

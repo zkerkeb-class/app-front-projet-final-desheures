@@ -1,0 +1,89 @@
+// ------------------------------+
+//
+//            FONT
+//
+// ------------------------------+
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
+// ------------------------------+
+//
+//            VARIABLE
+//
+// ------------------------------+
+
+:root {
+  /* Colors */
+  --white-color: #f8f8ff;
+  --black-color: #010101;
+  --main-color: darkblue;
+  --main-color-opacity: rgba(0, 0, 139, 0.5);
+  --second-color: deepskyblue;
+  --second-color-opacity: rgba(0, 191, 255, 0.5);
+  --third-color: lightskyblue;
+  --third-color-opacity: rgba(135, 206, 250, 0.5);
+  --gradient-color-to-right: linear-gradient(
+    to right,
+    var(--main-color),
+    var(--third-color),
+    var(--second-color)
+  );
+  --gradient-color-to-right-light: linear-gradient(
+    to right,
+    var(--main-color),
+    var(--second-color)
+  );
+  --gradient-color-to-right-dark: linear-gradient(
+    to right,
+    var(--third-color),
+    var(--second-color)
+  );
+
+  /* Borders */
+  --small-border-radius: 10px;
+  --border-radius: 20px;
+  --border-radius-big: 40px;
+  --circle-border-radius: 50%;
+  --border-width: 1px;
+  --border-width-big: 2px;
+
+  /* Fonts */
+  --first-font: 'Audiowide', sans-serif;
+  --second-font: 'Lexend', sans-serif;
+
+  /* Font Weight */
+  --font-weight-regular: 400;
+  --font-weight-bold: 600;
+
+  /* Font Size */
+  --small-small-font-size: 10px;
+  --small-font-size: 14px;
+  --font-size: 16px;
+  --medium-font-size: 18px;
+  --big-font-size: 32px;
+  --title-font-size: 48px;
+
+  /* Text */
+  --letter-spacing: normal;
+  --line-height: normal;
+
+  /* Animations */
+  --transition: 0.6s all;
+  --transition-time: 0.4s;
+
+  --text-animation: 1s;
+  --text-animation-margin: 26px;
+  --text-animation-negative-margin: -26px;
+
+  /* Margin & Padding */
+  --small-margin-padding: 10px;
+  --margin-padding: 20px;
+  --big-margin-padding: 40px;
+
+  /* Opacity */
+  --less-opacity: 0.1;
+
+  /* zIndex */
+  --top-zindex: 100;
+}

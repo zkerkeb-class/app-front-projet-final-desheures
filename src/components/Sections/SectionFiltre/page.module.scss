@@ -1,0 +1,235 @@
+// ------------------------------+
+//
+//        Filtre
+//
+// ------------------------------+
+
+.container {
+  width: 60%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  @media (max-width: 1250px) {
+    width: 100%;
+    align-items: center;
+  }
+
+  .section {
+    width: 100%;
+    height: auto;
+    margin-top: var(--big-margin-padding);
+    padding-left: var(--big-margin-padding);
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1250px) {
+      padding-left: 0;
+      padding: 0 var(--small-margin-padding);
+    }
+
+    // Bouton pour ouvrir les filtres
+    .filter_button {
+      width: 40px;
+      height: 40px;
+      border: none;
+      font-size: var(--medium-font-size);
+      cursor: pointer;
+      color: var(--white-color);
+      border-radius: var(--circle-border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      padding: 0;
+      margin: 0;
+
+      &:hover {
+        transition: var(--transition) all;
+        animation: jumpScale var(--transition-time) ease-in-out reverse;
+        @keyframes jumpScale {
+          0% {
+            transform: translateY(0) scale(1);
+          }
+          50% {
+            transform: translateY(calc(var(--small-margin-padding) * -1))
+              scale(1.2);
+          } // Saut + agrandissement
+          100% {
+            transform: translateY(0) scale(1);
+          }
+        }
+      }
+    }
+  }
+
+  // Conteneur des filtres
+  .filter_section {
+    width: 100%;
+    height: auto;
+    margin-top: var(--big-margin-padding);
+    padding-left: var(--big-margin-padding);
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1250px) {
+      padding-left: 0;
+      padding: 0 var(--small-margin-padding);
+    }
+
+    .section_title {
+      font-size: var(--big-font-size);
+      margin-bottom: var(--small-margin-padding);
+      font-weight: var(--font-weight-regular);
+      animation: fadeIn var(--text-animation) ease-in-out;
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateX(var(--text-animation-negative-margin));
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+
+    .filter_wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 var(--big-margin-padding);
+      animation: appear var(--text-animation) ease-in-out;
+
+      @keyframes appear {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 1250px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      @media (max-width: 1250px) {
+        padding: 0 var(--small-margin-padding);
+      }
+
+      .filter {
+        display: flex;
+        flex-direction: column;
+        gap: var(--small-margin-padding);
+        margin-left: var(--margin-padding);
+
+        @media (max-width: 1250px) {
+          margin-left: 0;
+          margin-top: var(--margin-padding);
+        }
+
+        label {
+          font-size: var(--font-size);
+          font-weight: var(--font-weight-regular);
+          animation: appear var(--text-animation) ease-in-out;
+          transition: var(--transition);
+        }
+
+        .select_input {
+          width: 100%;
+          padding: var(--small-margin-padding);
+          border-radius: var(--small-border-radius);
+          transition: var(--transition);
+          outline: none;
+          border: none;
+        }
+      }
+
+      // Bouton pour ouvrir les filtres
+      .filter_button {
+        width: 40px;
+        height: 40px;
+        border: none;
+        font-size: var(--medium-font-size);
+        cursor: pointer;
+        color: var(--white-color);
+        border-radius: var(--circle-border-radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        padding: 0;
+        margin: 0;
+        margin-left: var(--margin-padding);
+
+        @media (max-width: 1250px) {
+          margin-left: 0;
+          margin-top: var(--margin-padding);
+        }
+
+        &:hover {
+          animation: jumpScale var(--transition-time) ease-in-out reverse;
+          @keyframes jumpScale {
+            0% {
+              transform: translateY(0) scale(1);
+            }
+            50% {
+              transform: translateY(calc(var(--small-margin-padding) * -1))
+                scale(1.2);
+            } // Saut + agrandissement
+            100% {
+              transform: translateY(0) scale(1);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// ------------------------------+
+//
+//        Light Dark Mode
+//
+// ------------------------------+
+
+.filter_section.dark,
+.section.dark {
+  .filter_button {
+    background: var(--black-color);
+  }
+}
+
+.filter_section.light,
+.section.light {
+  .filter_button {
+    background: var(--white-color);
+  }
+}
+
+.filter_section.dark {
+  .filter_wrapper {
+    .filter {
+      .select_input {
+        background-color: var(--black-color);
+        color: var(--white-color);
+      }
+    }
+  }
+}
+
+.filter_section.light {
+  .filter_wrapper {
+    .filter {
+      .select_input {
+        background-color: var(--white-color);
+        color: var(--black-color);
+      }
+    }
+  }
+}

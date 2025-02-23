@@ -1,0 +1,200 @@
+// ------------------------------+
+//
+//        Nav Bar
+//
+// ------------------------------+
+
+$toggle_height: 40px;
+$toggle_width: 80px;
+$search_logo_light: '/images/navbar/search_light.svg';
+$search_logo_dark: '/images/navbar/search_dark.svg';
+
+.nav_bar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--big-margin-padding);
+  z-index: var(--top-zindex);
+  backdrop-filter: blur(10px);
+  animation: fadeIn var(--text-animation) ease-in-out;
+
+  @media (max-width: 1250px) {
+    height: 120px;
+    align-items: flex-end;
+    padding: var(--small-margin-padding) var(--margin-padding);
+    justify-content: center;
+    z-index: var(--top-zindex);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(var(--text-animation-negative-margin));
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .title_app {
+    font-size: var(--big-font-size);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    overflow: hidden;
+    cursor: pointer;
+
+    @media (max-width: 1250px) {
+      position: absolute;
+      top: var(--margin-padding);
+    }
+  }
+
+  .search {
+    position: relative;
+    width: 50%;
+    height: $toggle_height;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+
+    .search_left {
+      width: auto;
+      height: $toggle_height;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      left: 10px;
+    }
+
+    .search_input {
+      height: $toggle_height;
+      width: 100%;
+      border-radius: var(--border-radius);
+      border: none;
+      outline: none;
+      font-size: var(--font-size);
+      text-indent: var(--big-margin-padding);
+    }
+  }
+
+  .nav_bar_button_wrapper {
+    width: 200px;
+    gap: var(--margin-padding);
+    height: $toggle_height;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .select_language {
+      font-family: var(--first-font);
+      font-size: var(--font-size);
+      height: $toggle_height;
+      width: $toggle_width;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: var(--border-radius);
+      background-color: var(--white-color);
+      transition: var(--transition);
+      outline: none;
+      border: none;
+      text-indent: var(--small-margin-padding);
+      cursor: pointer;
+    }
+
+    .switch {
+      height: $toggle_height;
+      width: $toggle_height;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      cursor: pointer;
+
+      &:hover {
+        animation: jumpScale var(--transition-time) ease-in-out reverse;
+        @keyframes jumpScale {
+          0% {
+            transform: translateY(0) scale(1);
+          }
+          50% {
+            transform: translateY(calc(var(--small-margin-padding) * -1))
+              scale(1.2);
+          } // Saut + agrandissement
+          100% {
+            transform: translateY(0) scale(1);
+          }
+        }
+      }
+
+      input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+    }
+  }
+}
+
+// ------------------------------+
+//
+//        Light Dark Mode
+//
+// ------------------------------+
+
+$dark_logo: '/images/navbar/moon.svg';
+$light_logo: '/images/navbar/sun.svg';
+
+.nav_bar.dark {
+  .title_app {
+    background-image: var(--gradient-color-to-right-dark);
+  }
+
+  .search {
+    .search_input {
+      background-color: var(--black-color);
+      color: var(--white-color);
+    }
+  }
+
+  .switch {
+    background-color: var(--black-color);
+  }
+
+  .select_language {
+    background-color: var(--black-color);
+    color: var(--white-color);
+  }
+}
+
+.nav_bar.light {
+  .title_app {
+    background-image: var(--gradient-color-to-right-light);
+  }
+
+  .search {
+    .search_input {
+      background-color: var(--white-color);
+      color: var(--black-color);
+    }
+  }
+
+  .switch {
+    background-color: var(--white-color);
+  }
+
+  .select_language {
+    background-color: var(--white-color);
+    color: var(--black-color);
+  }
+}
